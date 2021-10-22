@@ -1,0 +1,40 @@
+{
+  "name": "@lib19f/server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/server.js",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon -e ts -w ./src -x npx ts-node -r tsconfig-paths/register src/server.ts",
+    "build": "rm -rf dist && nest build -p tsconfig.json",
+    "serve": "node dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nestjs/cli": "^8.1.2",
+    "@types/express": "^4.17.13",
+    "@types/express-jwt": "^6.0.2",
+    "@types/jsonwebtoken": "^8.5.5",
+    "@types/multer": "^1.4.7",
+    "@types/validator": "^13.6.4",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "moment": "^2.29.1",
+    "nodemon": "^2.0.14",
+    "onchange": "^7.1.0",
+    "ts-node": "^10.3.0",
+    "tsconfig-paths": "^3.11.0",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-jwt": "^6.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.10",
+    "mongoose-auto-increment": "^5.0.1",
+    "multer": "^1.4.3",
+    "validator": "^13.6.0"
+  }
+}

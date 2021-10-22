@@ -1,0 +1,27 @@
+{
+  "name": "@lib19f/web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^0.23.0",
+    "naive-ui": "^2.19.9",
+    "vue": "^3.2.16",
+    "vue-router": "^4.0.11"
+  },
+  "devDependencies": {
+    "@types/node": "14.17.21",
+    "@vitejs/plugin-vue": "^1.9.3",
+    "onchange": "^7.1.0",
+    "prettier": "2.4.1",
+    "sass": "^1.42.1",
+    "typescript": "^4.4.3",
+    "vfonts": "^0.1.0",
+    "vite": "^2.6.4",
+    "vue-tsc": "^0.3.0"
+  }
+}
