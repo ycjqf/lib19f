@@ -8,7 +8,19 @@ const staticRoutes: RouteRecordRaw[] = [
     name: "home",
     path: "/",
     meta: { defaultTitle: `${libraryName}：${librarySlogan}` },
-    component: () => import("@/pages/static/index.vue"),
+    component: () => {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+      const user = accessToken
+        ? JSON.parse(
+            decodeURIComponent(
+              escape(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))
+            )
+          )
+        : undefined;
+      if (user) return import("@/pages/static/index.vue");
+      return import("@/pages/static/homeUnlogged.vue");
+    },
   },
   {
     name: "login",
