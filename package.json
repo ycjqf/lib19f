@@ -1,6 +1,7 @@
 {
   "name": "lib19f",
   "version": "1.0.0",
+  "private": true,
   "description": "云共享资料库",
   "license": "GPL-3.0",
   "main": "index.js",

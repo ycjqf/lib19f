@@ -20,7 +20,7 @@ import { useRouter } from "vue-router";
 import { ApiAccountLoginRequest, ApiAccountLoginRespond } from "@typings/api";
 
 const loginFormRef = ref(null);
-const onlyLetterNumberUndescore = /^\w+$/;
+const onlyLetterNumberUnderscore = /^\w+$/;
 const containSpace = /\s/;
 const router = useRouter();
 
@@ -47,7 +47,7 @@ const loginFormRules: FormRules = {
     {
       trigger: "blur",
       validator: (rule, value) => {
-        return onlyLetterNumberUndescore.test(value);
+        return onlyLetterNumberUnderscore.test(value);
       },
       message: "登录名仅能含数字、字母及下划线",
     },
@@ -75,7 +75,7 @@ const loginFormRules: FormRules = {
     {
       trigger: "blur",
       validator: (rule, value) => {
-        return onlyLetterNumberUndescore.test(value);
+        return onlyLetterNumberUnderscore.test(value);
       },
       message: "密码仅能含数字、字母及下划线",
     },
@@ -139,36 +139,36 @@ function handleLogin() {
       ref="loginFormRef"
       :model="loginFormData"
       :rules="loginFormRules"
-      label-width="80px"
-      class="Login__Form"
       :show-require-mark="false"
-      label-placement="left"
+      class="Login__Form"
       label-align="left"
+      label-placement="left"
+      label-width="80px"
     >
       <div class="inner">
         <n-collapse-transition :collapsed="!!alertType">
-          <n-alert class="alert-message" :title="alertTitle" :type="alertType">
+          <n-alert :title="alertTitle" :type="alertType" class="alert-message">
             {{ alertMessage }}
           </n-alert>
         </n-collapse-transition>
-        <n-h1 class="title" :strong="true" v-text="libraryName" />
+        <n-h1 :strong="true" class="title" v-text="libraryName" />
         <n-p class="message" v-text="librarySlogan" />
-        <n-form-item class="formitem" first label="登陆名" path="name">
+        <n-form-item class="formItem" first label="登陆名" path="name">
           <n-input v-model:value="loginFormData.name" />
         </n-form-item>
 
-        <n-form-item class="formitem" first label="密码" path="password">
+        <n-form-item class="formItem" first label="密码" path="password">
           <n-input
-            :minlength="8"
-            :maxlength="16"
-            type="password"
-            show-password-on="click"
             v-model:value="loginFormData.password"
+            :maxlength="16"
+            :minlength="8"
+            show-password-on="click"
+            type="password"
           />
         </n-form-item>
       </div>
 
-      <div class="buttom">
+      <div class="bottom">
         <div class="buttons">
           <n-popconfirm @positive-click="handlePositiveClick">
             <template #trigger>
@@ -176,7 +176,7 @@ function handleLogin() {
             </template>
             确定重置数据
           </n-popconfirm>
-          <n-button @click="handleLogin" class="button" type="info" round>登陆</n-button>
+          <n-button class="button" round type="info" @click="handleLogin">登陆</n-button>
         </div>
       </div>
     </n-form>
@@ -203,7 +203,7 @@ function handleLogin() {
       padding: 80px 50px 60px 50px;
       width: 430px;
       border-radius: 4px;
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
       background-color: #f3f3f3;
     }
     @media screen and (max-width: 768px) {
@@ -228,7 +228,7 @@ function handleLogin() {
       }
     }
 
-    .formitem {
+    .formItem {
       margin-bottom: 8px;
       cursor: pointer;
     }
@@ -256,13 +256,13 @@ function handleLogin() {
 
   @keyframes gradient {
     0% {
-      background-position: 0% 50%;
+      background-position: 0 50%;
     }
     50% {
       background-position: 100% 50%;
     }
     100% {
-      background-position: 0% 50%;
+      background-position: 0 50%;
     }
   }
 }

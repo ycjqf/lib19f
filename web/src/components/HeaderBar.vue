@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { libraryName, librarySlogan } from "@/config";
-import { NAutoComplete } from "naive-ui";
+import { libraryName } from "@/config";
 import { ref } from "vue";
+import { NAutoComplete } from "naive-ui";
 
 const searchString = ref("");
 </script>
@@ -20,9 +20,9 @@ const searchString = ref("");
       <div class="HeaderBar__ContentRight">
         <div class="HeaderBarContent__Search">
           <n-auto-complete
-            style="border-radius: 6px"
             v-model:value="searchString"
             :placeholder="`搜索${libraryName}`"
+            style="border-radius: 6px"
           ></n-auto-complete>
         </div>
         <div class="HeaderBarContent__Log">
@@ -49,7 +49,7 @@ const searchString = ref("");
       align-items: center;
     }
     width: 80%;
-    margin: 0px auto;
+    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -77,8 +77,8 @@ const searchString = ref("");
   &__Link {
     color: white;
     font-size: 1rem;
-    &::hover {
-      color: red;
+    &:hover {
+      color: gray;
     }
   }
 }

@@ -11,7 +11,7 @@ const ready = ref(false);
 const loginButtonText = ref("注册");
 const loginButtonLevel = ref<Type>("info");
 const loginFormRef = ref(null);
-const onlyLetterNumberUndescore = /^\w+$/;
+const onlyLetterNumberUnderscore = /^\w+$/;
 const containSpace = /\s/;
 const hintText = ref("");
 const hintTextColor = ref("grey");
@@ -38,7 +38,7 @@ const registerFormRules: FormRules = {
     {
       trigger: "blur",
       validator: (rule, value) => {
-        return onlyLetterNumberUndescore.test(value);
+        return onlyLetterNumberUnderscore.test(value);
       },
       message: "登录名仅能含数字、字母及下划线",
     },
@@ -85,7 +85,7 @@ const registerFormRules: FormRules = {
     {
       trigger: "blur",
       validator: (rule, value) => {
-        return onlyLetterNumberUndescore.test(value);
+        return onlyLetterNumberUnderscore.test(value);
       },
       message: "密码仅能含数字、字母及下划线",
     },
@@ -120,34 +120,31 @@ function handlePositiveClick() {
 }
 function handleRegister() {
   // @ts-ignore
-  loginFormRef.value.validate((errors) => {
+  loginFormRef.value.validate(async (errors) => {
     if (!errors) {
-      console.log("验证成功");
-      axios
-        .post<ApiAccountRegisterRespond>("/api/account/register", {
+      const RegisterRawResult = await axios.post<ApiAccountRegisterRespond>(
+        "/api/account/register",
+        {
           name: registerFormData.name,
           nickname: registerFormData.nickname,
           password: registerFormData.password,
           passwordRepeat: registerFormData.passwordRepeat,
-        })
-        .then((result) => {
-          console.log(result.data);
-          if (result.data.code === 0) {
-            ready.value = true;
-            loginButtonLevel.value = "success";
-            loginButtonText.value = "成功";
-            let countdownSeconds = 5;
-            setInterval(() => {
-              countdownSeconds--;
-              hintText.value = `注册成功，${countdownSeconds}秒后返回登陆页面。`;
-              if (countdownSeconds === 0) router.push("/login");
-            }, 1000);
-          } else {
-            hintText.value = result.data.message;
-          }
-        });
+        }
+      );
+      if (RegisterRawResult.data.code === 0) {
+        ready.value = true;
+        loginButtonLevel.value = "success";
+        loginButtonText.value = "成功";
+        let countdownSeconds = 5;
+        setInterval(() => {
+          countdownSeconds--;
+          hintText.value = `注册成功，${countdownSeconds}秒后返回登陆页面。`;
+          if (countdownSeconds === 0) router.push("/login");
+        }, 1000);
+      } else {
+        hintText.value = RegisterRawResult.data.message;
+      }
     } else {
-      console.log(errors);
       hintText.value = "表单填写有误";
       setTimeout(() => {
         // @ts-ignore
@@ -165,44 +162,44 @@ function handleRegister() {
       ref="loginFormRef"
       :model="registerFormData"
       :rules="registerFormRules"
-      label-width="80px"
-      class="Register__Form"
       :show-require-mark="false"
-      label-placement="left"
+      class="Register__Form"
       label-align="left"
+      label-placement="left"
+      label-width="80px"
     >
       <div class="inner">
         <n-h1 :strong="true" v-text="libraryName" />
         <n-p class="Register__Form__Description" v-text="librarySlogan" />
-        <n-form-item class="formitem" first label="登陆名" path="name">
-          <n-input placeholder="登陆使用的名称，不可重复。" v-model:value="registerFormData.name" />
+        <n-form-item class="formItem" first label="登陆名" path="name">
+          <n-input v-model:value="registerFormData.name" placeholder="登陆使用的名称，不可重复。" />
         </n-form-item>
-        <n-form-item class="formitem" first label="显示名" path="nickname">
-          <n-input placeholder="仅供查看的名称" v-model:value="registerFormData.nickname" />
+        <n-form-item class="formItem" first label="显示名" path="nickname">
+          <n-input v-model:value="registerFormData.nickname" placeholder="仅供查看的名称" />
         </n-form-item>
-        <n-form-item class="formitem" first label="密码" path="password">
+        <n-form-item class="formItem" first label="密码" path="password">
           <n-input
-            :minlength="8"
-            :maxlength="16"
-            type="password"
-            show-password-on="click"
-            placeholder="8到16位的数字字母及下划线的组合"
             v-model:value="registerFormData.password"
+            :maxlength="16"
+            :minlength="8"
+            placeholder="8到16位的数字字母及下划线的组合"
+            show-password-on="click"
+            type="password"
           />
         </n-form-item>
-        <n-form-item class="formitem" first label="确认密码" path="passwordRepeat">
+        <n-form-item class="formItem" first label="确认密码" path="passwordRepeat">
           <n-input
-            :minlength="8"
-            :maxlength="16"
-            type="password"
-            show-password-on="click"
-            placeholder="确认密码以防忘记"
             v-model:value="registerFormData.passwordRepeat"
+            :maxlength="16"
+            :minlength="8"
+            placeholder="确认密码以防忘记"
+            show-password-on="click"
+            type="password"
           />
         </n-form-item>
       </div>
 
-      <div class="buttom">
+      <div class="bottom">
         <div class="buttons">
           <n-popconfirm @positive-click="handlePositiveClick">
             <template #trigger>
@@ -210,17 +207,17 @@ function handleRegister() {
             </template>
             确定重置数据
           </n-popconfirm>
-          <n-button @click="handleRegister" class="button" :type="loginButtonLevel" round>
+          <n-button :type="loginButtonLevel" class="button" round @click="handleRegister">
             {{ loginButtonText }}
           </n-button>
         </div>
         <div class="hint-area">
-          <n-p class="hint-text" :style="{ color: hintTextColor }">{{ hintText }}</n-p>
+          <n-p :style="{ color: hintTextColor }" class="hint-text">{{ hintText }}</n-p>
         </div>
       </div>
     </n-form>
   </div>
-  <div class="RegisterBackground" :class="{ 'RegisterBackground--executing': ready }"></div>
+  <div :class="{ 'RegisterBackground--executing': ready }" class="RegisterBackground"></div>
 </template>
 
 <style lang="scss">
@@ -243,7 +240,7 @@ function handleRegister() {
       width: 430px;
       border-radius: 4px;
       margin-right: 15vw;
-      box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
       background-color: #f3f3f3;
     }
     @media screen and (max-width: 768px) {
@@ -257,7 +254,7 @@ function handleRegister() {
       margin-bottom: 32px;
     }
 
-    .formitem {
+    .formItem {
       margin-bottom: 8px;
     }
     .buttons {
