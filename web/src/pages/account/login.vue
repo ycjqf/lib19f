@@ -97,19 +97,17 @@ function handleLogin() {
   // @ts-ignore
   loginFormRef.value.validate((errors) => {
     if (errors) return console.log(errors);
-    console.log("验证成功");
     axios
       .post<ApiAccountLoginRespond>("/api/account/auth", {
         name: loginFormData.name,
         password: loginFormData.password,
       })
       .then((result) => {
-        console.log(result.data);
         if (result.data.code === 0) {
           if (result.data.accessToken && result.data.refreshToken) {
             localStorage.setItem("access_token", result.data.accessToken);
             localStorage.setItem("refresh_token", result.data.refreshToken);
-            router.push("/");
+            window.location.href = "/";
           } else {
             alertType.value = "error";
             alertTitle.value = "服务器出错";

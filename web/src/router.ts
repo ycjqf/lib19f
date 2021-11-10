@@ -18,6 +18,7 @@ const staticRoutes: RouteRecordRaw[] = [
             )
           )
         : undefined;
+      console.log(user);
       if (user) return import("@/pages/static/index.vue");
       return import("@/pages/static/homeUnlogged.vue");
     },
