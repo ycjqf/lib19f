@@ -6,6 +6,7 @@ import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules } fr
 import { Type } from "naive-ui/lib/button/src/interface";
 import { useRouter } from "vue-router";
 import { ApiAccountRegisterRespond } from "@typings/api";
+import { default as backgroundImageURL } from "@/assets/register-background.jpg";
 
 const ready = ref(false);
 const loginButtonText = ref("注册");
@@ -217,7 +218,11 @@ function handleRegister() {
       </div>
     </n-form>
   </div>
-  <div :class="{ 'RegisterBackground--executing': ready }" class="RegisterBackground"></div>
+  <div
+    :class="{ 'RegisterBackground--executing': ready }"
+    :style="`background-image: url('${backgroundImageURL}')`"
+    class="RegisterBackground"
+  ></div>
 </template>
 
 <style lang="scss">
@@ -279,8 +284,6 @@ function handleRegister() {
 
   background-size: cover;
   background-position: center;
-  background-image: url("@/assets/register-background.jpg");
-
   filter: brightness(50%) saturate(70%);
   transition: filter 300ms ease-in;
   &--executing {
