@@ -1,18 +1,13 @@
-import express from "express";
-import { connect } from "mongoose";
+import express from 'express';
+import { connect } from 'mongoose';
 
-import ApiRouterAccount from "@/api/account/router";
-import ApiRouterFetch from "@/api/fetch/router";
-import { DATABASE__PASSWORD, DATABASE__USERNAME } from "@/psw.json";
+import ApiRouterAccount from '@/api/account/router';
+import ApiRouterFetch from '@/api/fetch/router';
+import { mongoServerString } from '@/utils/util';
 
-const mongoServer = "mongodb://localhost:27017";
-connect(mongoServer, {
-  dbName: "test",
-  user: DATABASE__USERNAME,
-  pass: DATABASE__PASSWORD,
-})
+connect(mongoServerString)
   .then(() => {
-    console.log(`🟢 数据库连接成功 ${mongoServer}`);
+    console.log(`🟢 数据库连接成功 ${mongoServerString}`);
     startServer();
   })
   .catch((error) => {

@@ -1,13 +1,9 @@
-import { createConnection, model, Schema } from "mongoose";
+import { createConnection, model, Schema } from 'mongoose';
 
-import { DATABASE__PASSWORD, DATABASE__USERNAME } from "@/psw.json";
+import { mongoServerString } from '@/utils/util';
 
 import autoIncrement = require("mongoose-auto-increment");
-const connection = createConnection("mongodb://localhost:27017", {
-  dbName: "test",
-  user: DATABASE__USERNAME,
-  pass: DATABASE__PASSWORD,
-});
+const connection = createConnection(mongoServerString)
 autoIncrement.initialize(connection);
 
 const userSchema = new Schema<UserDocument>({
