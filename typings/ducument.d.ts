@@ -1,7 +1,7 @@
 /**
  * 账户表
  */
-interface AccountDocument {
+export interface AccountDocument {
   /**
    * 账户全局标识符
    * @type 1～ +1
@@ -52,7 +52,7 @@ interface AccountDocument {
   updatedTime: Date;
 }
 
-interface ManagerDocument extends AccountDocument {
+export interface ManagerDocument extends AccountDocument {
   /**
    * 身份
    * @default 0-审查员 1-管理员
@@ -60,7 +60,7 @@ interface ManagerDocument extends AccountDocument {
   compacity: number;
 }
 
-interface ArticleDocument {
+export interface ArticleDocument {
   id: number;
   accountId: number;
   title: string;
@@ -75,7 +75,7 @@ interface ArticleDocument {
   }>;
 }
 
-interface ArticleCommentDocument {
+export interface ArticleCommentDocument {
   id: number;
   targetArticleId: number;
   targetCommentId: number;

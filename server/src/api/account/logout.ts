@@ -1,3 +1,4 @@
+import type { ApiAccountLogoutRespond, ApiAccountLogoutRequest } from "@typings/api";
 import { Router } from "express";
 
 import { sendJSONStatus } from "@/util";

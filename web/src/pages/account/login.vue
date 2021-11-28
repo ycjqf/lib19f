@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { ApiAccountLoginRequest, ApiAccountLoginRespond } from "@typings/api";
 import { libraryName, librarySlogan } from "@/config";
 import axios from "axios";
 import { ref, reactive } from "vue";

@@ -1,5 +1,7 @@
-import { Router } from "express";
+import type { ApiAccountRegisterRequest, ApiAccountRegisterRespond } from "@typings/api";
+import type { validationError, validationResult } from "@typings/validation";
 import type { Request, Response } from "express";
+import { Router } from "express";
 import validator from "validator";
 
 import User from "@/models/User";

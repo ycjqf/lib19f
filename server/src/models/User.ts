@@ -1,3 +1,4 @@
+import type { AccountDocument } from "@typings/ducument";
 import { createConnection, model, Schema } from "mongoose";
 
 import { mongoServerString } from "@/util";

@@ -7,6 +7,8 @@
 
  =============================================== */
 
+import { AccountDocument } from "./ducument";
+
 /**
  *  /api/account/register 请求体
  */
@@ -43,7 +45,7 @@ type ApiAccountLoginRequest =
 /**
  *  /api/account/login 响应体
  */
-interface ApiAccountLoginRespond {
+export interface ApiAccountLoginRespond {
   /** 0 登陆成功 1 密码错误或用户不存在 2 登陆时服务出错 */
   code: 0 | 1 | 2;
   message: string;

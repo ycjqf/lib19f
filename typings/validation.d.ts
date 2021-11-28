@@ -1,9 +1,9 @@
-interface validationResult {
+export interface validationResult {
   errors: Array<validationError>;
   isValid: boolean;
 }
 
-interface validationError {
+export interface validationError {
   field: string;
   message: string;
 }

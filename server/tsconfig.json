@@ -14,10 +14,9 @@
       "@typings/*": ["../typings/*"]
     }
   },
-  "include": ["src/**/*.ts", "../typing/**/*.d.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"],
   "ts-node": {
     "files": true
-  },
-  "references": [{ "path": "../typings" }]
+  }
 }
