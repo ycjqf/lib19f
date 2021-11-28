@@ -5,7 +5,6 @@ import { ref, reactive } from "vue";
 import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules } from "naive-ui";
 import { Type } from "naive-ui/lib/button/src/interface";
 import { useRouter } from "vue-router";
-import { ApiAccountRegisterRespond } from "@typings/api";
 import { default as backgroundImageURL } from "@/assets/register-background.jpg";
 
 const ready = ref(false);

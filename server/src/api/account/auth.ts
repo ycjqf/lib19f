@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 
 import User from "@/models/User";
 import { ACESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "@/psw.json";
-import { sendJSONStatus } from "@/utils/util";
+import { sendJSONStatus } from "@/util";
 import { ApiAccountLoginRequest, ApiAccountLoginRespond } from "@typings/api";
 
 const router = Router();
@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
     };
     const document = await User.findOne({ NameForLocate: loginBody.name });
 
-    if (!document || document.Password !== loginBody.password)
+    if (!document || document.password !== loginBody.password)
       return sendJSONStatus<ApiAccountLoginRespond>(res, {
         code: 1,
         message: "no such user or password wrong",

@@ -17,7 +17,6 @@ import {
 } from "naive-ui";
 import {} from "naive-ui/lib/alert/index";
 import { useRouter } from "vue-router";
-import { ApiAccountLoginRequest, ApiAccountLoginRespond } from "@typings/api";
 
 const loginFormRef = ref(null);
 const onlyLetterNumberUnderscore = /^\w+$/;

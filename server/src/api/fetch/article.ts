@@ -3,7 +3,7 @@ import jwt, { TokenExpiredError } from "jsonwebtoken";
 
 import User from "@/models/User";
 import { ACESS_TOKEN_SECRET } from "@/psw.json";
-import { sendJSONStatus } from "@/utils/util";
+import { sendJSONStatus } from "@/util";
 
 import type { NextFunction, Request, Response } from "express";
 const router = Router();

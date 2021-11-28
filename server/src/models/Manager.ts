@@ -7,16 +7,18 @@ import autoIncrement = require("mongoose-auto-increment");
 const connection = createConnection(mongoServerString);
 autoIncrement.initialize(connection);
 
-const userSchema = new Schema<AccountDocument>({
+const managerSchema = new Schema<ManagerDocument>({
   id: { type: Number, required: true, unique: true },
   name: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   gender: { type: Number, default: 0 },
   introduction: { type: String, default: "" },
-  avatar: { type: String, default: "/raw-images/avatars/_default-user.png" },
+  avatar: { type: String, default: "/raw-images/avatars/_default-manager.png" },
   createdTime: { type: Date, default: () => new Date() },
   updatedTime: { type: Date, default: () => new Date() },
+
+  compacity: { type: Number, required: true },
 });
-userSchema.plugin(autoIncrement.plugin, { model: "User", field: "id", startAt: 1 });
-export default model<AccountDocument>("User", userSchema);
+managerSchema.plugin(autoIncrement.plugin, { model: "Manager", field: "id", startAt: 1 });
+export default model<AccountDocument>("Manager", managerSchema);

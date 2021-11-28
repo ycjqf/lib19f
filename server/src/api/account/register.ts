@@ -1,16 +1,16 @@
 import { Router } from "express";
+import type { Request, Response } from "express";
 import validator from "validator";
 
 import User from "@/models/User";
-import { sendJSONStatus } from "@/utils/util";
-import { ApiAccountRegisterRequest, ApiAccountRegisterRespond } from "@typings/api";
+import { sendJSONStatus } from "@/util";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+async function handler(req: Request, res: Response) {
   const registerBody: ApiAccountRegisterRequest = {
     name: req.body.name,
-    nickname: req.body.nickname,
+    email: req.body.email,
     password: req.body.password,
     passwordRepeat: req.body.passwordRepeat,
   };
@@ -31,22 +31,21 @@ router.post("/", async (req, res) => {
       message: "username duplicate",
     });
 
-  // 开始注册
   try {
     const newDocument = new User({
-      NameForView: registerBody.nickname,
+      NameForView: registerBody.email,
       NameForLocate: registerBody.name,
       Password: registerBody.password,
     });
-    const document = await newDocument.save();
+    await newDocument.save();
     return sendJSONStatus<ApiAccountRegisterRespond>(res, { code: 0, message: "success" });
   } catch (error) {
     console.log(req.baseUrl, error);
     return sendJSONStatus<ApiAccountRegisterRespond>(res, { code: 2, message: "error" });
   }
-  return res.end("bug");
-});
+}
 
+router.post("/", handler);
 export default router;
 
 namespace localValidation {
@@ -81,7 +80,7 @@ namespace localValidation {
     const containSpace = /\s/;
 
     data.name = !isEmpty(data.name) ? data.name : "";
-    data.nickname = !isEmpty(data.nickname) ? data.nickname : "";
+    data.email = !isEmpty(data.email) ? data.email : "";
     data.password = !isEmpty(data.password) ? data.password : "";
     data.passwordRepeat = !isEmpty(data.passwordRepeat) ? data.passwordRepeat : "";
 
@@ -109,21 +108,21 @@ namespace localValidation {
       });
     }
 
-    if (validator.isEmpty(data.nickname)) {
+    if (validator.isEmpty(data.email)) {
       errors.push({ field: "nickname", message: "nickname is required" });
     }
     if (
-      !validator.isLength(data.nickname, {
+      !validator.isLength(data.email, {
         min: REGISTER__CONFIG.NICKNAME__MIN__LENGTH,
         max: REGISTER__CONFIG.NICKNAME__MAX__LENGTH,
       })
     ) {
       errors.push({
         field: "nickname",
-        message: `nickname length must between ${REGISTER__CONFIG.NICKNAME__MIN__LENGTH} to ${REGISTER__CONFIG.NICKNAME__MAX__LENGTH}`,
+        message: `email length must between ${REGISTER__CONFIG.NICKNAME__MIN__LENGTH} to ${REGISTER__CONFIG.NICKNAME__MAX__LENGTH}`,
       });
     }
-    if (containSpace.test(data.nickname)) {
+    if (containSpace.test(data.email)) {
       errors.push({ field: "nickname", message: "nickname can not contain space" });
     }
 

@@ -3,8 +3,7 @@ import jwt, { TokenExpiredError } from "jsonwebtoken";
 
 import User from "@/models/User";
 import { ACESS_TOKEN_SECRET } from "@/psw.json";
-import { sendJSONStatus } from "@/utils/util";
-import { ApiAccountLoginRespond } from "@typings/api";
+import { sendJSONStatus } from "@/util";
 
 import type { NextFunction, Request, Response } from "express";
 const router = Router();
@@ -23,7 +22,7 @@ function authenticateToken(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.headers["authorization"];
   const token = authHeader ? authHeader.split(" ")[1] : undefined;
   if (!token)
-    return sendJSONStatus<ApiAccountLoginRespond>(res, {
+    return sendJSONStatus<ApiAccountLogoutRespond>(res, {
       code: 1,
       message: "出错，没有登陆",
     });

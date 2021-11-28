@@ -1,3 +1,4 @@
+import "@typings/index";
 import "@/styles/global.scss";
 import "vfonts/Lato.css";
 import "vfonts/FiraCode.css";
