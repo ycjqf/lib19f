@@ -1,9 +1,9 @@
-import express from 'express';
-import { connect } from 'mongoose';
+import express from "express";
+import { connect } from "mongoose";
 
-import ApiRouterAccount from '@/api/account/router';
-import ApiRouterFetch from '@/api/fetch/router';
-import { mongoServerString } from '@/utils/util';
+import ApiRouterAccount from "@/api/account/router";
+import ApiRouterFetch from "@/api/fetch/router";
+import { mongoServerString } from "@/util";
 
 connect(mongoServerString)
   .then(() => {
@@ -11,7 +11,7 @@ connect(mongoServerString)
     startServer();
   })
   .catch((error) => {
-    return console.log(" 数据库启动出错出错了，检查后再起启动吧", error);
+    return console.log("数据库启动出错出错了，检查后再起启动吧", error);
   });
 
 function startServer() {
@@ -23,7 +23,7 @@ function startServer() {
   app.use("/api/account", ApiRouterAccount);
   app.use("/api/fetch", ApiRouterFetch);
 
-  app.use("/", (req, res) => {
+  app.use("/", (_req, res) => {
     return res.end("server for lib19f,advanded use please post to /api for more");
   });
 
