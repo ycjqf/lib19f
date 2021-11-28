@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
-  "private": true,
   "scripts": {
     "dev": "nodemon -e ts -w ./src -x npx ts-node -r tsconfig-paths/register src/server.ts",
     "build": "rm -rf dist && nest build -p tsconfig.json",
