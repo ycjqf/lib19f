@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "tailwind:watch": "npx tailwindcss -i ./node_modules/tailwindcss/tailwind.css -o ./dist/tailwind.treeshaked.css --watch"
   },
   "dependencies": {
     "axios": "^0.23.0",
@@ -18,6 +19,7 @@
     "onchange": "^7.1.0",
     "prettier": "2.4.1",
     "sass": "^1.42.1",
+    "tailwindcss": "^3.0.2",
     "typescript": "^4.4.3",
     "vfonts": "^0.1.0",
     "vite": "^2.6.4",
