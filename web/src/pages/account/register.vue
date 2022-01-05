@@ -6,6 +6,7 @@ import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules } fr
 import { Type } from "naive-ui/lib/button/src/interface";
 import { useRouter } from "vue-router";
 import { default as backgroundImageURL } from "@/assets/register-background.jpg";
+import { ApiAccountRegisterRespond } from "@typings/api";
 
 const ready = ref(false);
 const loginButtonText = ref("注册");
@@ -120,7 +121,7 @@ function handlePositiveClick() {
 }
 function handleRegister() {
   // @ts-ignore
-  loginFormRef.value.validate(async (errors) => {
+  loginFormRef.value.validate(async errors => {
     if (!errors) {
       const RegisterRawResult = await axios.post<ApiAccountRegisterRespond>(
         "/api/account/register",

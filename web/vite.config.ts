@@ -24,7 +24,7 @@ export default defineConfig({
       "/api": {
         target: "http://localhost:1337/api", //代理接口
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ""),
+        rewrite: path => path.replace(/^\/api/, ""),
       },
     },
   },

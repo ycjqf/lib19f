@@ -95,14 +95,14 @@ function handlePositiveClick() {
 }
 function handleLogin() {
   // @ts-ignore
-  loginFormRef.value.validate((errors) => {
+  loginFormRef.value.validate(errors => {
     if (errors) return console.log(errors);
     axios
       .post<ApiAccountLoginRespond>("/api/account/auth", {
         name: loginFormData.name,
         password: loginFormData.password,
       })
-      .then((result) => {
+      .then(result => {
         if (result.data.code === 0) {
           if (result.data.accessToken && result.data.refreshToken) {
             localStorage.setItem("access_token", result.data.accessToken);
