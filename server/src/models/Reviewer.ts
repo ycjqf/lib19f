@@ -1,21 +1,19 @@
 import { createConnection, model, Schema } from "mongoose";
 import autoIncrement = require("mongoose-auto-increment");
-import type { UserDocument } from "@typings/ducument";
+import type { ReviewerDocument } from "@typings/ducument";
 import { mongoServerString } from "@/util";
 
 const connection = createConnection(mongoServerString);
 autoIncrement.initialize(connection);
 
-const userSchema = new Schema<UserDocument>({
+const reviewerSchema = new Schema<ReviewerDocument>({
   id: { type: Number, required: true, unique: true },
   name: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   createdTime: { type: Date, default: () => new Date() },
   updatedTime: { type: Date, default: () => new Date() },
-  avatar: { type: String },
-  gender: { type: String, required: true },
-  introduction: { type: String },
+  avatar: { type: String, required: true },
 });
-userSchema.plugin(autoIncrement.plugin, { model: "User", field: "id", startAt: 1 });
-export default model<UserDocument>("User", userSchema);
+reviewerSchema.plugin(autoIncrement.plugin, { model: "Reviewer", field: "id", startAt: 1 });
+export default model<ReviewerDocument>("Reviewer", reviewerSchema);

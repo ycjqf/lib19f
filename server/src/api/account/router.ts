@@ -1,8 +1,8 @@
 import express from "express";
 import moment from "moment";
 
-import AccountAuth_Route from "@/api/account/auth";
-import AccountLogout_Route from "@/api/account/logout";
+// import AccountAuth_Route from "@/api/account/auth";
+// import AccountLogout_Route from "@/api/account/logout";
 import AccountRegister_Route from "@/api/account/register";
 
 moment.locale("zh-cn");
@@ -15,7 +15,7 @@ router.use(function timeLog(req, res, next) {
 });
 
 router.use("/register", AccountRegister_Route);
-router.use("/logout", AccountLogout_Route);
-router.use("/auth", AccountAuth_Route);
+// router.use("/logout", AccountLogout_Route);
+// router.use("/auth", AccountAuth_Route);
 
 export default router;

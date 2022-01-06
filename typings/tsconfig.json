@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "pretty": true,
+    "sourceMap": true,
+    "target": "es6",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "resolveJsonModule": true,
+    "paths": {
+      "@typings/*": ["./*"]
+    }
+  },
+  "include": ["*.ts", "*.d.ts"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "files": true
+  }
+}

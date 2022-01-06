@@ -1,24 +1,19 @@
 import { createConnection, model, Schema } from "mongoose";
-
-import { mongoServerString } from "@/util";
-
 import autoIncrement = require("mongoose-auto-increment");
+import type { AdminDocument } from "@typings/ducument";
+import { mongoServerString } from "@/util";
 
 const connection = createConnection(mongoServerString);
 autoIncrement.initialize(connection);
 
-const managerSchema = new Schema<ManagerDocument>({
+const adminSchema = new Schema<AdminDocument>({
   id: { type: Number, required: true, unique: true },
   name: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  gender: { type: Number, default: 0 },
-  introduction: { type: String, default: "" },
-  avatar: { type: String, default: "/raw-images/avatars/_default-manager.png" },
   createdTime: { type: Date, default: () => new Date() },
   updatedTime: { type: Date, default: () => new Date() },
-
-  compacity: { type: Number, required: true },
+  avatar: { type: String, required: true },
 });
-managerSchema.plugin(autoIncrement.plugin, { model: "Manager", field: "id", startAt: 1 });
-export default model<AccountDocument>("Manager", managerSchema);
+adminSchema.plugin(autoIncrement.plugin, { model: "Admin", field: "id", startAt: 1 });
+export default model<AdminDocument>("Admin", adminSchema);
