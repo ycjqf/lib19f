@@ -121,15 +121,15 @@
 
 对应的评论在 comments 表搜类型为 article，id 为文章 id。
 
-| 字段名      | 类型   | 特殊说明            |
-| ----------- | ------ | ------------------- |
-| id          | number |                     |
-| targetType  | Number | 0:comment 1:article |
-| targetId    | string |                     |
-| body        | string |                     |
-| userId      | Number |                     |
-| createdTime | Date   |                     |
-| updatedTime | Date   |                     |
+| 字段名      | 类型   | 特殊说明        |
+| ----------- | ------ | --------------- |
+| id          | number |                 |
+| targetType  | String | comment article |
+| targetId    | string |                 |
+| body        | string |                 |
+| userId      | Number |                 |
+| createdTime | Date   |                 |
+| updatedTime | Date   |                 |
 
 **评论和回复 Comment**
 

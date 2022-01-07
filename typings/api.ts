@@ -3,17 +3,12 @@ import { AccountCommon } from "./ducument";
 export const accountCapacities = ["user", "reviewer", "admin"] as const;
 type accountCapacity = typeof accountCapacities[number];
 
-export type ApiLoginRequest =
-  | {
-      email: AccountCommon["email"];
-      password: AccountCommon["password"];
-      capacity: accountCapacity;
-    }
-  | {
-      name: AccountCommon["name"];
-      password: AccountCommon["password"];
-      capacity: accountCapacity;
-    };
+export interface ApiLoginRequest {
+  email: AccountCommon["email"];
+  name: AccountCommon["name"];
+  password: AccountCommon["password"];
+  capacity: accountCapacity;
+}
 
 type loginCode =
   | "OK"
@@ -23,10 +18,10 @@ type loginCode =
   | "TODO";
 export type ApiLoginResponse =
   | {
-      code: "OK";
+      code: loginCode;
     }
   | {
-      code: loginCode;
+      code: "OK";
       accessToken: string;
       refreshToken: string;
     };

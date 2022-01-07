@@ -1,4 +1,4 @@
-import type { ApiRegisterRequest, ApiLoginResponse, ApiRegisterResponse } from "@typings/api";
+import type { ApiRegisterRequest, ApiRegisterResponse } from "@typings/api";
 import type { Request, Response } from "express";
 import { accountCapacities } from "@typings/api";
 import { Router } from "express";
@@ -17,18 +17,7 @@ import {
 
 const router = Router();
 
-User.find({}).then(users => console.log(users));
-
 async function handler(req: Request, res: Response) {
-  console.log(req.body);
-  if (accountCapacities.find(capacity => capacity === req.body.capacity) === undefined)
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "CREDENTIAL_PATTERN_UNMATCH" });
-
-  // TODO 现在还不允许通过接口注册普通用户外的身份
-  if (req.body.capacity !== "user") {
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "TODO" });
-  }
-
   const registerBody: ApiRegisterRequest = {
     name: req.body.name ? `${req.body.name}` : "",
     email: req.body.email ? `${req.body.email}` : "",
@@ -38,6 +27,7 @@ async function handler(req: Request, res: Response) {
   };
 
   if (
+    accountCapacities.find(capacity => capacity === req.body.capacity) === undefined ||
     registerBody.name.length < NAME_MIN_LENGTH ||
     registerBody.name.length > NAME_MAX_LENGTH ||
     !validator.matches(registerBody.name, NAME_PATTERN) ||
@@ -48,6 +38,11 @@ async function handler(req: Request, res: Response) {
     registerBody.password !== registerBody.passwordRepeat
   )
     return sendJSONStatus<ApiRegisterResponse>(res, { code: "CREDENTIAL_PATTERN_UNMATCH" });
+
+  // TODO 现在还不允许通过接口注册普通用户外的身份
+  if (req.body.capacity !== "user") {
+    return sendJSONStatus<ApiRegisterResponse>(res, { code: "TODO" });
+  }
 
   if (await User.exists({ name: registerBody.name }))
     return sendJSONStatus<ApiRegisterResponse>(res, { code: "NAME_TAKEN" });
