@@ -4,7 +4,6 @@ import { connect } from "mongoose";
 import API from "@/api/_router";
 import { mongoServerString } from "@/util";
 import moment from "moment";
-import jwt from "express-jwt";
 moment.locale("zh-cn");
 
 connect(mongoServerString)

@@ -2,7 +2,7 @@ import { Router } from "express";
 import jwt from "jsonwebtoken";
 
 import User from "@/models/User";
-import { ACESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "@/psw.json";
+import { ACESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, EXPIRE_TIME } from "@/psw.json";
 import { sendJSONStatus } from "@/util";
 import { ApiLoginRequest, ApiLoginResponse, accountCapacities } from "@typings/api";
 import validator from "validator";
@@ -61,8 +61,8 @@ router.post("/", async (req, res) => {
     const user = await User.findOne(queryObject);
     if (!user) return sendJSONStatus<ApiLoginResponse>(res, { code: "WRONG_CREDENTIAL" });
 
-    const forJwt = { name: loginBody.name };
-    const accessToken = jwt.sign(forJwt, ACESS_TOKEN_SECRET, { expiresIn: "15s" });
+    const forJwt = { id: user.id };
+    const accessToken = jwt.sign(forJwt, ACESS_TOKEN_SECRET, { expiresIn: EXPIRE_TIME });
     const refreshToken = jwt.sign(forJwt, REFRESH_TOKEN_SECRET);
 
     return sendJSONStatus<ApiLoginResponse>(res, {
