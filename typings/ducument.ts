@@ -27,9 +27,12 @@ export interface ArticleDocument {
   poster: string;
 }
 
+export const commentTargetTypes = ["comment", "article"] as const;
+export type commentTargetType = typeof commentTargetTypes[number];
+
 export interface CommentDocument {
   id: number;
-  targetType: "comment" | "article";
+  targetType: commentTargetType;
   targetId: number;
   body: string;
   userId: number;
