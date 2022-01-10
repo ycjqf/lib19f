@@ -18,6 +18,7 @@ export interface AdminDocument extends AccountCommon {}
 
 export interface ArticleDocument {
   id: number;
+  title: string;
   description: string;
   userId: number;
   body: string;

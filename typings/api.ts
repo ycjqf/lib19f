@@ -1,7 +1,7 @@
 import { AccountCommon } from "./ducument";
 
 export const accountCapacities = ["user", "reviewer", "admin"] as const;
-type accountCapacity = typeof accountCapacities[number];
+export type accountCapacity = typeof accountCapacities[number];
 
 export interface ApiLoginRequest {
   email: AccountCommon["email"];

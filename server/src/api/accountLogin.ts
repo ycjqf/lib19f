@@ -4,7 +4,12 @@ import jwt from "jsonwebtoken";
 import User from "@/models/User";
 import { ACESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET, EXPIRE_TIME } from "@/psw.json";
 import { sendJSONStatus } from "@/util";
-import { ApiLoginRequest, ApiLoginResponse, accountCapacities } from "@typings/api";
+import {
+  ApiLoginRequest,
+  ApiLoginResponse,
+  accountCapacities,
+  accountCapacity,
+} from "@typings/api";
 import validator from "validator";
 import {
   NAME_MIN_LENGTH,
@@ -60,8 +65,8 @@ router.post("/", async (req, res) => {
   try {
     const user = await User.findOne(queryObject);
     if (!user) return sendJSONStatus<ApiLoginResponse>(res, { code: "WRONG_CREDENTIAL" });
-
-    const forJwt = { id: user.id };
+    const capacity: accountCapacity = "user";
+    const forJwt = { id: user.id, capacity };
     const accessToken = jwt.sign(forJwt, ACESS_TOKEN_SECRET, { expiresIn: EXPIRE_TIME });
     const refreshToken = jwt.sign(forJwt, REFRESH_TOKEN_SECRET);
 

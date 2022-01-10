@@ -8,8 +8,8 @@ router.post("/", async (req, res) => {
   const authorization = req.headers.authorization.replace("Bearer ", "");
   const payload = jwt.verify(authorization, REFRESH_TOKEN_SECRET);
   if (typeof payload === "string" || !payload.id) return res.send("INVALID");
-  const { id } = payload;
-  const accessToken = jwt.sign({ id }, ACESS_TOKEN_SECRET, { expiresIn: EXPIRE_TIME });
+  const { id, capacity } = payload;
+  const accessToken = jwt.sign({ id, capacity }, ACESS_TOKEN_SECRET, { expiresIn: EXPIRE_TIME });
   return res.send({ accessToken });
 });
 

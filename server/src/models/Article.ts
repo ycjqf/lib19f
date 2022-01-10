@@ -8,12 +8,13 @@ autoIncrement.initialize(connection);
 
 const articleSchema = new Schema<ArticleDocument>({
   id: { type: Number, required: true, unique: true },
-  description: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String },
   userId: { type: Number, required: true },
   body: { type: String, required: true },
   createdTime: { type: Date, default: () => new Date() },
   updatedTime: { type: Date, default: () => new Date() },
-  poster: { type: String, required: true },
+  poster: { type: String },
 });
 articleSchema.plugin(autoIncrement.plugin, { model: "Article", field: "id", startAt: 1 });
 export default model<ArticleDocument>("Article", articleSchema);
