@@ -37,17 +37,29 @@ async function handler(req: Request, res: Response) {
     !validator.isEmail(registerBody.email) ||
     registerBody.password !== registerBody.passwordRepeat
   )
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "CREDENTIAL_PATTERN_UNMATCH" });
+    return sendJSONStatus<ApiRegisterResponse>(
+      res,
+      { code: "PATTERN_UNMATCH", message: "模式不匹配" },
+      422
+    );
 
   // TODO 现在还不允许通过接口注册普通用户外的身份
   if (req.body.capacity !== "user") {
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "TODO" });
+    return sendJSONStatus<ApiRegisterResponse>(res, { code: "TODO", message: "待实现" }, 501);
   }
 
   if (await User.exists({ name: registerBody.name }))
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "NAME_TAKEN" });
+    return sendJSONStatus<ApiRegisterResponse>(
+      res,
+      { code: "NAME_TAKEN", message: "用户名被占用" },
+      422
+    );
   if (await User.exists({ email: registerBody.email }))
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "EMAIL_TAKEN" });
+    return sendJSONStatus<ApiRegisterResponse>(
+      res,
+      { code: "EMAIL_TAKEN", message: "邮箱被占用" },
+      422
+    );
 
   try {
     const newUser = new User({
@@ -59,10 +71,14 @@ async function handler(req: Request, res: Response) {
       introduction: "",
     });
     await newUser.save();
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "OK" });
+    return sendJSONStatus<ApiRegisterResponse>(res, { code: "OK", message: "成功" }, 201);
   } catch (error) {
     console.log("🐛 注册出错", error);
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "INTERNAL_ERROR" });
+    return sendJSONStatus<ApiRegisterResponse>(
+      res,
+      { code: "INTERNAL_ERROR", message: "内部错误" },
+      500
+    );
   }
 }
 
