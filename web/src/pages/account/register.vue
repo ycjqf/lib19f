@@ -6,7 +6,7 @@ import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules } fr
 import { Type } from "naive-ui/lib/button/src/interface";
 import { useRouter } from "vue-router";
 import { default as backgroundImageURL } from "@/assets/register-background.jpg";
-import { ApiAccountRegisterRespond } from "@typings/api";
+import { ApiRegisterRequest, ApiRegisterResponse } from "@typings/api";
 
 const ready = ref(false);
 const loginButtonText = ref("注册");
@@ -123,16 +123,13 @@ function handleRegister() {
   // @ts-ignore
   loginFormRef.value.validate(async errors => {
     if (!errors) {
-      const RegisterRawResult = await axios.post<ApiAccountRegisterRespond>(
-        "/api/account/register",
-        {
-          name: registerFormData.name,
-          nickname: registerFormData.nickname,
-          password: registerFormData.password,
-          passwordRepeat: registerFormData.passwordRepeat,
-        }
-      );
-      if (RegisterRawResult.data.code === 0) {
+      const RegisterRawResult = await axios.post<ApiRegisterResponse>("/api/account/register", {
+        name: registerFormData.name,
+        nickname: registerFormData.nickname,
+        password: registerFormData.password,
+        passwordRepeat: registerFormData.passwordRepeat,
+      });
+      if (RegisterRawResult.data.code === "OK") {
         ready.value = true;
         loginButtonLevel.value = "success";
         loginButtonText.value = "成功";

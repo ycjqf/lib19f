@@ -5,7 +5,7 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
-    "tailwind:watch": "npx tailwindcss -i ./node_modules/tailwindcss/tailwind.css -o ./dist/tailwind.treeshaked.css --watch"
+    "tail:w": "npx tailwindcss -i ./node_modules/tailwindcss/tailwind.css -o ./dist/tailwind.treeshaked.css --watch"
   },
   "dependencies": {
     "axios": "^0.23.0",

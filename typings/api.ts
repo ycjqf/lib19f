@@ -34,6 +34,7 @@ export interface ApiRegisterResponse {
 }
 
 // ---- 更新令牌 /Api/Account/Reauth
+/// 请求体的token在header的Authorization中
 export interface ApiAccountReauthResponse {
   code: "OK" | "INTERNAL_ERROR" | JwtError;
   message: string;

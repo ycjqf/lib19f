@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import type { ApiAccountLoginRequest, ApiAccountLoginRespond } from "@typings/api";
-import { libraryName, librarySlogan } from "@/config";
-import axios from "axios";
 import { ref, reactive } from "vue";
 import {
   NForm,
@@ -16,75 +13,49 @@ import {
   AlertProps,
   NCollapseTransition,
 } from "naive-ui";
-import {} from "naive-ui/lib/alert/index";
-import { useRouter } from "vue-router";
+import axios from "axios";
+import type { ApiLoginRequest, ApiLoginResponse } from "@typings/api";
+import { libraryName, librarySlogan } from "@/config";
+import {
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_PATTERN,
+  NAME_MAX_LENGTH,
+  NAME_MIN_LENGTH,
+  NAME_PATTERN,
+} from "@typings/constants";
 
 const loginFormRef = ref(null);
-const onlyLetterNumberUnderscore = /^\w+$/;
-const containSpace = /\s/;
-const router = useRouter();
-
 const alertType = ref<AlertProps["type"]>(undefined);
 const alertTitle = ref("");
 const alertMessage = ref("");
-const loginFormData = reactive<ApiAccountLoginRequest>({
+const loginFormData = reactive<ApiLoginRequest>({
   name: "",
   password: "",
+  email: "",
+  capacity: "user",
 });
 const loginFormRules: FormRules = {
   name: [
-    {
-      required: true,
-      message: "请输入登录名",
-    },
+    { required: true, message: "请输入登录名" },
     {
       trigger: "blur",
-      validator: (rule, value) => {
-        return !containSpace.test(value);
-      },
-      message: "登录名不能包含空格",
-    },
-    {
-      trigger: "blur",
-      validator: (rule, value) => {
-        return onlyLetterNumberUnderscore.test(value);
-      },
-      message: "登录名仅能含数字、字母及下划线",
-    },
-    {
-      trigger: "blur",
-      validator: (rule, value) => {
-        return value.length >= 4 && value.length <= 12;
-      },
-      message: "登录名长度位于4到12",
+      validator: (_rule, value) =>
+        NAME_PATTERN.test(value) &&
+        value.length >= NAME_MIN_LENGTH &&
+        value.length <= NAME_MAX_LENGTH,
+      message: `登录名仅能含数字、字母及下划线，长度位于${NAME_MIN_LENGTH}到${NAME_MAX_LENGTH}之间`,
     },
   ],
-
   password: [
-    {
-      required: true,
-      message: "请输入密码",
-    },
+    { required: true, message: "请输入密码" },
     {
       trigger: "blur",
-      validator: (rule, value) => {
-        return !containSpace.test(value);
-      },
-      message: "密码不能包含空格",
-    },
-    {
-      trigger: "blur",
-      validator: (rule, value) => {
-        return onlyLetterNumberUnderscore.test(value);
-      },
-      message: "密码仅能含数字、字母及下划线",
-    },
-    {
-      trigger: "blur",
-      validator: (rule, value) => {
-        return value.length >= 8 && value.length <= 16;
-      },
-      message: "密码长度位于4到12",
+      validator: (_rule, value) =>
+        PASSWORD_PATTERN.test(value) &&
+        value.length >= PASSWORD_MIN_LENGTH &&
+        value.length <= PASSWORD_MAX_LENGTH,
+      message: `密码仅能含数字、字母及下划线，密码长度位于${PASSWORD_MIN_LENGTH}到${PASSWORD_MAX_LENGTH}`,
     },
   ],
 };
@@ -98,12 +69,12 @@ function handleLogin() {
   loginFormRef.value.validate(errors => {
     if (errors) return console.log(errors);
     axios
-      .post<ApiAccountLoginRespond>("/api/account/auth", {
+      .post<ApiLoginResponse>("/api/account/login", {
         name: loginFormData.name,
         password: loginFormData.password,
       })
       .then(result => {
-        if (result.data.code === 0) {
+        if (result.data.code === "OK") {
           if (result.data.accessToken && result.data.refreshToken) {
             localStorage.setItem("access_token", result.data.accessToken);
             localStorage.setItem("refresh_token", result.data.refreshToken);
@@ -128,36 +99,41 @@ function handleLogin() {
             alertMessage.value = "";
           }, 8000);
         }
+      })
+      .catch(error => {
+        alertType.value = "error";
+        alertTitle.value = "登陆失败";
+        alertMessage.value = error.message;
       });
   });
 }
 </script>
 
 <template>
-  <div class="Login">
+  <div class="absolute z-10 w-screen h-screen flex items-center justify-center">
     <n-form
       ref="loginFormRef"
       :model="loginFormData"
       :rules="loginFormRules"
       :show-require-mark="false"
-      class="Login__Form"
+      class="flex flex-col justify-between bg-[#f0f0f0] px-10 py-14 w-full h-screen md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto transition-all duration-150 ease-out"
       label-align="left"
       label-placement="left"
       label-width="80px"
     >
-      <div class="inner">
-        <n-collapse-transition :collapsed="!!alertType">
-          <n-alert :title="alertTitle" :type="alertType" class="alert-message">
+      <div>
+        <n-collapse-transition :show="!!alertType">
+          <n-alert :title="alertTitle" :type="alertType" class="alert-message mb-5">
             {{ alertMessage }}
           </n-alert>
         </n-collapse-transition>
-        <n-h1 :strong="true" class="title" v-text="libraryName" />
-        <n-p class="message" v-text="librarySlogan" />
-        <n-form-item class="formItem" first label="登陆名" path="name">
+        <n-h1 :strong="true" class="cursor-pointer" v-text="libraryName" />
+        <n-p class="cursor-pointer mb-8" v-text="librarySlogan" />
+        <n-form-item class="mb-2 cursor-pointer" first label="登陆名" path="name">
           <n-input v-model:value="loginFormData.name" />
         </n-form-item>
 
-        <n-form-item class="formItem" first label="密码" path="password">
+        <n-form-item class="mb-2 cursor-pointer" first label="密码" path="password">
           <n-input
             v-model:value="loginFormData.password"
             :maxlength="16"
@@ -168,102 +144,18 @@ function handleLogin() {
         </n-form-item>
       </div>
 
-      <div class="bottom">
-        <div class="buttons">
+      <div>
+        <div class="mt-6 flex justify-end">
           <n-popconfirm @positive-click="handlePositiveClick">
             <template #trigger>
-              <n-button class="button" round>清除</n-button>
+              <n-button class="mr-2" round>清除</n-button>
             </template>
             确定重置数据
           </n-popconfirm>
-          <n-button class="button" round type="info" @click="handleLogin">登陆</n-button>
+          <n-button round type="info" @click="handleLogin">登陆</n-button>
         </div>
       </div>
     </n-form>
   </div>
-  <div class="LoginBackground"></div>
+  <div class="w-screen h-screen bg-slate-600"></div>
 </template>
-
-<style lang="scss">
-.Login {
-  position: absolute;
-  z-index: 2;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &__Form {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    @media screen and (min-width: 769px) {
-      // 上右下左
-      padding: 80px 50px 60px 50px;
-      width: 430px;
-      border-radius: 4px;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-      background-color: #f3f3f3;
-    }
-    @media screen and (max-width: 768px) {
-      width: 100%;
-      height: 100vh;
-      padding: 80px 52px;
-      background-color: #f0f0f0;
-    }
-
-    .title,
-    .message {
-      cursor: pointer;
-    }
-    .message {
-      margin-bottom: 32px;
-    }
-    .alert-message {
-      margin-bottom: 20px;
-      .n-alert-body {
-        padding-top: 10px;
-        padding-bottom: 8px;
-      }
-    }
-
-    .formItem {
-      margin-bottom: 8px;
-      cursor: pointer;
-    }
-    .buttons {
-      margin-top: 24px;
-      display: flex;
-      justify-content: flex-end;
-      .button {
-        margin-left: 18px;
-      }
-    }
-  }
-}
-
-.LoginBackground {
-  width: 100vw;
-  height: 100vh;
-
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-
-  filter: brightness(60%) saturate(70%);
-  transition: filter 300ms ease-in;
-
-  @keyframes gradient {
-    0% {
-      background-position: 0 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0 50%;
-    }
-  }
-}
-</style>
