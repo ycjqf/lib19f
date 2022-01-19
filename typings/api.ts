@@ -1,5 +1,4 @@
 import { AccountCommon } from "./ducument";
-import { ErrorCode } from "express-jwt";
 
 export const accountCapacities = ["user", "reviewer", "admin"] as const;
 export type accountCapacity = typeof accountCapacities[number];
@@ -20,7 +19,7 @@ export interface ApiLoginResponse {
   refreshToken?: string;
 }
 
-// ---- 注册 Api/Account/Logout
+/// 注册 Api/Account/Logout
 export interface ApiRegisterRequest {
   name: AccountCommon["name"];
   email: AccountCommon["email"];
@@ -33,7 +32,7 @@ export interface ApiRegisterResponse {
   message: string;
 }
 
-// ---- 更新令牌 /Api/Account/Reauth
+/// 更新令牌 /Api/Account/Reauth
 /// 请求体的token在header的Authorization中
 export interface ApiAccountReauthResponse {
   code: "OK" | "INTERNAL_ERROR" | JwtError;
@@ -48,8 +47,8 @@ export interface ApiAddArticleRequest {
   description: string;
   body: string;
 }
-export interface ApiAddArticleRespond {
-  code: "OK" | "INTERNAL_ERROR" | JwtError;
+export interface ApiAddArticleResponse {
+  code: "OK" | "EMPTY_TITLE" | "EMPTY_BODY" | "TITLE_TOO_LONG" | "BODY_TOO_LONG" | "INTERNAL_ERROR" | JwtError;
   message: string;
 }
 // ---- 评论 /Api/Add/Comment
@@ -58,8 +57,8 @@ export interface ApiAddCommentRequest {
   body: string;
   targetType: "article" | "comment";
 }
-export interface ApiAddCommentRespond {
-  code: "OK" | "INTERNAL_ERROR" | JwtError;
+export interface ApiAddCommentResponse {
+  code: "OK" | "INTERNAL_ERROR" | "EMPTY_BODY" | "TODO" | JwtError;
   message: string;
 }
 

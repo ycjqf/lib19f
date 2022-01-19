@@ -3,33 +3,43 @@ import jwt from "jsonwebtoken";
 import Comment from "@/models/Comment";
 import { commentTargetTypes } from "@typings/ducument";
 import Article from "@/models/Article";
+import { ApiAddCommentRequest, ApiAddCommentResponse } from "@typings/api";
+import { sendJSONStatus } from "@/util";
 
 const router = Router();
 
 router.post("/", async (req, res) => {
-  // must have targetType with types
-  // must have targetId and exist
-  // must have body within limit lenth
-  const { targetId, targetType, body } = req.body;
-  if (!body || body === "") return res.send("body is required");
-  if (!targetType || commentTargetTypes.indexOf(targetType) === -1) return res.send("targetType is invalid");
-  if (targetType === "comment") return res.send("can't reply currently");
+  const { authorization } = req.headers;
+  const decoded = jwt.decode(authorization.replace("Bearer ", ""));
+  if (typeof decoded === "string") return sendJSONStatus<ApiAddCommentResponse>(res, { code: "INVALID_TOKEN", message: "令牌负载无效" }, 200);
 
-  if (targetType === "article") {
-    const isExist = await Article.findOne({ id: targetId });
-    if (!isExist) return res.send("no this article exist");
-    const { authorization } = req.headers;
-    const decoded = jwt.decode(authorization.replace("Bearer ", ""));
-    if (typeof decoded === "string") return res.send("no string payload allowed");
-    const comment = new Comment({
-      body: body,
-      userId: decoded.id,
-      targetType: targetType,
-      targetId: targetId,
-    });
+  if (!req.body.body || typeof req.body.body !== "string" || req.body.body.trim() === "")
+    return sendJSONStatus<ApiAddCommentResponse>(res, { code: "EMPTY_BODY", message: "内容不能为空" }, 200);
+  if (!req.body.targetType || typeof req.body.targetType !== "string" || !commentTargetTypes.includes(req.body.targetType))
+    return sendJSONStatus<ApiAddCommentResponse>(res, { code: "EMPTY_BODY", message: "评论类型不能为空" }, 200);
+  if (!req.body.targetId || typeof req.body.targetId !== "number")
+    return sendJSONStatus<ApiAddCommentResponse>(res, { code: "EMPTY_BODY", message: "评论对象有误" }, 200);
+
+  if (req.body.targetType === "article" && !(await Article.exists({ id: req.body.targetId })))
+    return sendJSONStatus<ApiAddCommentResponse>(res, { code: "TODO", message: "没有这篇文章" }, 200);
+  if (req.body.targetType === "comment" && !(await Comment.exists({ id: req.body.targetId })))
+    return sendJSONStatus<ApiAddCommentResponse>(res, { code: "TODO", message: "没有这条评论" }, 200);
+
+  const commentRequest: ApiAddCommentRequest = {
+    targetId: req.body.targetId,
+    targetType: req.body.targetType,
+    body: req.body.body,
+  };
+  const comment = new Comment({
+    userId: decoded.id,
+    ...commentRequest,
+  });
+  try {
     await comment.save();
-    return res.send("comment saved");
-  } else return res.send("unknown targetType");
+    return sendJSONStatus<ApiAddCommentResponse>(res, { code: "OK", message: "成功" }, 200);
+  } catch (error) {
+    return sendJSONStatus<ApiAddCommentResponse>(res, { code: "INTERNAL_ERROR", message: "存储失败" }, 200);
+  }
 });
 
 export default router;
