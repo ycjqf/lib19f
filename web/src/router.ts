@@ -37,6 +37,12 @@ const staticRoutes: RouteRecordRaw[] = [
     meta: { defaultTitle: `${libraryName}相关` },
     component: () => import("@/pages/static/about.vue"),
   },
+  {
+    name: "edit",
+    path: "/edit",
+    meta: { defaultTitle: `编辑｜${libraryName}` },
+    component: () => import("@/pages/static/edit.vue"),
+  },
 ];
 // 有父级动态匹配
 const parentedDynamicRoutes: RouteRecordRaw[] = [
