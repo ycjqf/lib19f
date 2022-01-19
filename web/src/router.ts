@@ -12,11 +12,7 @@ const staticRoutes: RouteRecordRaw[] = [
       const accessToken = localStorage.getItem("access_token");
       const refreshToken = localStorage.getItem("refresh_token");
       const user = accessToken
-        ? JSON.parse(
-            decodeURIComponent(
-              escape(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))
-            )
-          )
+        ? JSON.parse(decodeURIComponent(escape(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))))
         : undefined;
       console.log(user);
       if (user) return import("@/pages/static/index.vue");
@@ -73,8 +69,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _from) => {
-  if (to.meta.defaultTitle && typeof to.meta.defaultTitle === "string")
-    document.title = to.meta.defaultTitle;
+  if (to.meta.defaultTitle && typeof to.meta.defaultTitle === "string") document.title = to.meta.defaultTitle;
 });
 
 export default router;

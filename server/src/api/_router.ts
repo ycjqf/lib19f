@@ -11,14 +11,8 @@ import { AuthenticateError } from "@typings/api";
 
 const router = express.Router();
 
-router.use(
-  /^\/api\/(add|update|upload|delete)\/.*/,
-  expressJwt({ secret: ACESS_TOKEN_SECRET, algorithms: ["HS256"] })
-);
-router.use(
-  "/api/account/reauth",
-  expressJwt({ secret: REFRESH_TOKEN_SECRET, algorithms: ["HS256"] })
-);
+router.use(/^\/api\/(add|update|upload|delete)\/.*/, expressJwt({ secret: ACESS_TOKEN_SECRET, algorithms: ["HS256"] }));
+router.use("/api/account/reauth", expressJwt({ secret: REFRESH_TOKEN_SECRET, algorithms: ["HS256"] }));
 router.use((err, req: Request, res: Response, next: NextFunction) => {
   if (err.name === "UnauthorizedError") {
     let code: AuthenticateError["code"] = "INVALID_TOKEN";

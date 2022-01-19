@@ -19,19 +19,11 @@ const searchString = ref("");
       </div>
       <div class="HeaderBar__ContentRight">
         <div class="HeaderBarContent__Search">
-          <n-auto-complete
-            v-model:value="searchString"
-            :placeholder="`搜索${libraryName}`"
-            style="border-radius: 6px"
-          ></n-auto-complete>
+          <n-auto-complete v-model:value="searchString" :placeholder="`搜索${libraryName}`" style="border-radius: 6px"></n-auto-complete>
         </div>
         <div class="HeaderBarContent__Log">
-          <router-link class="HeaderBar-g__Link HeaderBarContent__Log__Login" to="/login">
-            登陆
-          </router-link>
-          <router-link class="HeaderBar-g__Link HeaderBarContent__Log__Register" to="/register">
-            注册
-          </router-link>
+          <router-link class="HeaderBar-g__Link HeaderBarContent__Log__Login" to="/login"> 登陆 </router-link>
+          <router-link class="HeaderBar-g__Link HeaderBarContent__Log__Register" to="/register"> 注册 </router-link>
         </div>
       </div>
     </div>

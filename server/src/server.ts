@@ -22,9 +22,7 @@ function startServer() {
   app.use(express.json());
   app.disable("x-powered-by");
   app.use((req, res, next) => {
-    console.log(
-      `${req.method}[${moment().format("YYYY-MM-DD HH:mm:ss")}] ${req.url} <== ${req.ip}`
-    );
+    console.log(`${req.method}[${moment().format("YYYY-MM-DD HH:mm:ss")}] ${req.url} <== ${req.ip}`);
     next();
   });
 

@@ -3,13 +3,7 @@ const accessToken = localStorage.getItem("access_token");
 const refreshToken = localStorage.getItem("refresh_token");
 import { useRouter } from "vue-router";
 const router = useRouter();
-const user = accessToken
-  ? JSON.parse(
-      decodeURIComponent(
-        escape(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))
-      )
-    )
-  : undefined;
+const user = accessToken ? JSON.parse(decodeURIComponent(escape(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))))) : undefined;
 
 async function logoff() {
   localStorage.clear();

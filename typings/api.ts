@@ -68,9 +68,4 @@ export interface AuthenticateError {
   code: JwtError;
   message: string;
 }
-type JwtError =
-  | "REVOKED_TOKEN"
-  | "INVALID_TOKEN"
-  | "CREDENTIALS_BAD_SCHEME"
-  | "CREDENTIALS_BAD_FORMAT"
-  | "CREDENTIALS_REQUIRED";
+type JwtError = "REVOKED_TOKEN" | "INVALID_TOKEN" | "CREDENTIALS_BAD_SCHEME" | "CREDENTIALS_BAD_FORMAT" | "CREDENTIALS_REQUIRED";

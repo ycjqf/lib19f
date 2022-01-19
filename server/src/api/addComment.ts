@@ -12,8 +12,7 @@ router.post("/", async (req, res) => {
   // must have body within limit lenth
   const { targetId, targetType, body } = req.body;
   if (!body || body === "") return res.send("body is required");
-  if (!targetType || commentTargetTypes.indexOf(targetType) === -1)
-    return res.send("targetType is invalid");
+  if (!targetType || commentTargetTypes.indexOf(targetType) === -1) return res.send("targetType is invalid");
   if (targetType === "comment") return res.send("can't reply currently");
 
   if (targetType === "article") {
