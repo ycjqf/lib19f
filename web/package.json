@@ -5,16 +5,18 @@
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview",
-    "tail:w": "npx tailwindcss -i ./node_modules/tailwindcss/tailwind.css -o ./dist/tailwind.treeshaked.css --watch"
+    "tail:w": "npx tailwindcss -i ./input.css -o ./dist/tailwind.treeshaked.css --watch"
   },
   "dependencies": {
-    "@milkdown/core": "^5.3.2",
-    "@milkdown/plugin-history": "^5.3.2",
-    "@milkdown/preset-commonmark": "^5.3.2",
-    "@milkdown/theme-nord": "^5.3.2",
-    "@milkdown/vue": "^5.3.2",
+    "@milkdown/core": "^5.3.3",
+    "@milkdown/plugin-history": "^5.3.3",
+    "@milkdown/plugin-listener": "^5.3.3",
+    "@milkdown/preset-commonmark": "^5.3.3",
+    "@milkdown/theme-nord": "^5.3.3",
+    "@milkdown/vue": "^5.3.3",
+    "@vicons/fluent": "^0.11.0",
     "axios": "^0.23.0",
-    "naive-ui": "^2.19.9",
+    "naive-ui": "^2.24.1",
     "vue": "^3.2.16",
     "vue-router": "^4.0.11"
   },

@@ -45,7 +45,7 @@ router.use((err, req: Request, res: Response, next: NextFunction) => {
         code: code,
         message: message,
       },
-      401
+      200
     );
   }
   next();

@@ -4,3 +4,7 @@ export const NAME_PATTERN = /^[a-zA-Z0-9_]+$/;
 export const PASSWORD_MIN_LENGTH = 6;
 export const PASSWORD_MAX_LENGTH = 20;
 export const PASSWORD_PATTERN = /^[a-zA-Z0-9_]+$/;
+export const MIN_TITLE_LENGTH = 5;
+export const MAX_TITLE_LENGTH = 50;
+export const MAX_DESCRIPTION_LENGTH = 140;
+export const MAX_ARTICLE_CHARS = 10000;

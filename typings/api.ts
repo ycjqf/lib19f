@@ -48,7 +48,7 @@ export interface ApiAddArticleRequest {
   body: string;
 }
 export interface ApiAddArticleResponse {
-  code: "OK" | "EMPTY_TITLE" | "EMPTY_BODY" | "TITLE_TOO_LONG" | "BODY_TOO_LONG" | "INTERNAL_ERROR" | JwtError;
+  code: "OK" | "UNMATCH_TITLE_LENGTH" | "DESCRIPTION_TOO_LONG" | "UNMATCH_BODY_LENGTH" | "INTERNAL_ERROR" | JwtError;
   message: string;
 }
 // ---- 评论 /Api/Add/Comment

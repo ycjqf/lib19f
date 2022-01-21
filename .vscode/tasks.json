@@ -1,0 +1,38 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "前端开发",
+      "script": "dev",
+      "type": "npm",
+      "path": "web/",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "后端开发",
+      "script": "dev",
+      "type": "npm",
+      "path": "server/",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
+      "label": "样式监听",
+      "script": "tail:w",
+      "type": "npm",
+      "path": "web/",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "runOptions": { "runOn": "folderOpen" }
+    }
+  ]
+}
