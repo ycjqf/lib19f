@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
   };
 
   if (accountCapacities.find(capacity => capacity === loginBody.capacity) === undefined)
-    return sendJSONStatus<ApiLoginResponse>(res, { code: "PATTERN_UNMATCH", message: "没有这个身份" }, 200);
+    return sendJSONStatus<ApiLoginResponse>(res, { code: "PATTERN_UNMATCH", message: "没有这个身份" });
   console.log(loginBody.capacity, "user", loginBody.capacity !== "user");
   if (loginBody.capacity !== "user") return sendJSONStatus<ApiLoginResponse>(res, { code: "TODO", message: "现在还不允许通过接口注册普通用户外的身份" }, 501);
 
@@ -29,7 +29,7 @@ router.post("/", async (req, res) => {
     loginBody.password.length > PASSWORD_MAX_LENGTH ||
     !validator.matches(loginBody.password, PASSWORD_PATTERN)
   ) {
-    return sendJSONStatus<ApiLoginResponse>(res, { code: "PATTERN_UNMATCH", message: "密码模式或长度不匹配" }, 200);
+    return sendJSONStatus<ApiLoginResponse>(res, { code: "PATTERN_UNMATCH", message: "密码模式或长度不匹配" });
   }
 
   // 优先选择 name 作为凭证
@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
   if (usingCredential === "email") queryObject = { email: loginBody.email, password: loginBody.password };
   try {
     const user = await User.findOne(queryObject);
-    if (!user) return sendJSONStatus<ApiLoginResponse>(res, { code: "WRONG_CREDENTIAL", message: "用户名或密码错误" }, 200);
+    if (!user) return sendJSONStatus<ApiLoginResponse>(res, { code: "WRONG_CREDENTIAL", message: "用户名或密码错误" });
     const capacity: accountCapacity = "user";
     const forJwt = { id: user.id, capacity };
     const accessToken = jwt.sign(forJwt, ACESS_TOKEN_SECRET, { expiresIn: EXPIRE_TIME });

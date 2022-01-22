@@ -1,4 +1,4 @@
-import { AccountCommon } from "./ducument";
+import { AccountCommon, ArticleDocument } from "./ducument";
 
 export const accountCapacities = ["user", "reviewer", "admin"] as const;
 export type accountCapacity = typeof accountCapacities[number];
@@ -60,6 +60,39 @@ export interface ApiAddCommentRequest {
 export interface ApiAddCommentResponse {
   code: "OK" | "INTERNAL_ERROR" | "EMPTY_BODY" | "TODO" | JwtError;
   message: string;
+}
+
+// ----- 文章分页 /api/get/articles
+export interface ApiGetArticlesRequest {
+  page: number;
+  pageSize: number;
+}
+export interface ApiGetArticlesResponse {
+  code: "OK" | "WRONG_QUERY" | "INTERNAL_ERROR";
+  message: string;
+  articles: Array<{
+    id: ArticleDocument["id"];
+    title: ArticleDocument["title"];
+    description: ArticleDocument["description"];
+    userId: ArticleDocument["userId"];
+    poster: ArticleDocument["poster"];
+    createdTime: ArticleDocument["createdTime"];
+    updatedTime: ArticleDocument["updatedTime"];
+  }>;
+  total: number;
+}
+
+export interface ApiGetProfileRequest {
+  id: AccountCommon["id"];
+}
+export interface ApiGetProfileResponse {
+  code: "OK" | "WRONG_ID" | "NO_SUCH_USER" | "INTERNAL_ERROR";
+  message: string;
+  profile?: {
+    id: AccountCommon["id"];
+    name: AccountCommon["name"];
+    avatar: AccountCommon["avatar"];
+  };
 }
 
 // -------- 其他验证错误和类型 --------

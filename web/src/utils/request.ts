@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
+import { AccountCommon, UserDocument } from "@typings/ducument";
 
 export function postWithCredential<Req, Res>(url: string, data: Req): Promise<AxiosResponse<Res, any>> {
   // post body with token
@@ -23,3 +24,5 @@ export function credentialEmpty(): boolean {
   const refreshToken = localStorage.getItem("refresh_token");
   return !accessToken || accessToken === "" || !refreshToken || refreshToken === "";
 }
+
+export function getUserProfile(userID: AccountCommon["id"]): UserDocument {}

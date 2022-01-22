@@ -4,7 +4,7 @@ import { DATABASE__DOMAIN, DATABASE__PASSWORD, DATABASE__USERNAME, DATABASE__NAM
 
 export const mongoServerString = `mongodb+srv://${DATABASE__USERNAME}:${DATABASE__PASSWORD}@${DATABASE__DOMAIN}/${DATABASE__NAME}?retryWrites=true&w=majority`;
 // export const mongoServerString = `mongodb://localhost?retryWrites=true&w=majority`;
-export const sendJSONStatus = <T = void, U extends T = T>(res: Response, data: U, code: number) => {
+export const sendJSONStatus = <T = void, U extends T = T>(res: Response, data: U, code: number = 200) => {
   res.status(code);
   res.json(data).end();
 };

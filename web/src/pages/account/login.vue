@@ -80,19 +80,7 @@ function openTipTemporarily(type: AlertProps["type"], title: string, description
       :model="loginFormData"
       :rules="loginFormRules"
       :show-require-mark="false"
-      class="
-        flex flex-col
-        justify-between
-        bg-[#f0f0f0]
-        px-10
-        py-14
-        w-full
-        h-screen
-        md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto
-        transition-all
-        duration-150
-        ease-out
-      "
+      class="flex flex-col justify-between bg-[#f0f0f0] px-10 py-14 w-full h-screen md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto transition-all duration-150 ease-out"
       label-align="left"
       label-placement="left"
       label-width="80px"

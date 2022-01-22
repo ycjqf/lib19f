@@ -30,15 +30,15 @@ async function handler(req: Request, res: Response) {
     !validator.isEmail(registerBody.email) ||
     registerBody.password !== registerBody.passwordRepeat
   )
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "PATTERN_UNMATCH", message: "模式不匹配" }, 200);
+    return sendJSONStatus<ApiRegisterResponse>(res, { code: "PATTERN_UNMATCH", message: "模式不匹配" });
 
   // TODO 现在还不允许通过接口注册普通用户外的身份
   if (req.body.capacity !== "user") {
     return sendJSONStatus<ApiRegisterResponse>(res, { code: "TODO", message: "待实现" }, 501);
   }
 
-  if (await User.exists({ name: registerBody.name })) return sendJSONStatus<ApiRegisterResponse>(res, { code: "NAME_TAKEN", message: "用户名被占用" }, 200);
-  if (await User.exists({ email: registerBody.email })) return sendJSONStatus<ApiRegisterResponse>(res, { code: "EMAIL_TAKEN", message: "邮箱被占用" }, 200);
+  if (await User.exists({ name: registerBody.name })) return sendJSONStatus<ApiRegisterResponse>(res, { code: "NAME_TAKEN", message: "用户名被占用" });
+  if (await User.exists({ email: registerBody.email })) return sendJSONStatus<ApiRegisterResponse>(res, { code: "EMAIL_TAKEN", message: "邮箱被占用" });
 
   try {
     const newUser = new User({
