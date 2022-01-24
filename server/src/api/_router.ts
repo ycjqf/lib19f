@@ -7,6 +7,7 @@ import addArticle from "@/api/addArticle";
 import addComment from "@/api/addComment";
 import getArticles from "@/api/getArticles";
 import getProfile from "@/api/getProfile";
+import getArticle from "@/api/getArticle";
 import { ACESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "@/psw.json";
 import { sendJSONStatus } from "@/util";
 import { AuthenticateError } from "@typings/api";
@@ -60,6 +61,7 @@ router.use("/api/account/reauth", accountReauth);
 router.use("/api/add/article", addArticle);
 router.use("/api/add/comment", addComment);
 router.use("/api/get/articles", getArticles);
+router.use("/api/get/article", getArticle);
 router.use("/api/get/profile", getProfile);
 
 router.all("/", (req, res) => {

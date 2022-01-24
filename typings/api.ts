@@ -95,6 +95,15 @@ export interface ApiGetProfileResponse {
   };
 }
 
+export interface ApiGetArticleRequest {
+  id: AccountCommon["id"];
+}
+export interface ApiGetArticleResponse {
+  code: "OK" | "WRONG_ID" | "NO_SUCH_ARTICLE" | "INTERNAL_ERROR";
+  message: string;
+  article?: ArticleDocument;
+}
+
 // -------- 其他验证错误和类型 --------
 export interface AuthenticateError {
   code: JwtError;
