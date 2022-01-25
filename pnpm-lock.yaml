@@ -69,6 +69,7 @@ importers:
       '@vicons/fluent': ^0.11.0
       '@vitejs/plugin-vue': ^1.9.3
       axios: ^0.23.0
+      moment: ^2.29.1
       naive-ui: ^2.24.1
       onchange: ^7.1.0
       prettier: 2.4.1
@@ -89,6 +90,7 @@ importers:
       '@milkdown/vue': 5.3.3_vue@3.2.23
       '@vicons/fluent': 0.11.0
       axios: 0.23.0
+      moment: 2.29.1
       naive-ui: 2.24.1_vue@3.2.23
       vue: 3.2.23
       vue-router: 4.0.12_vue@3.2.23
@@ -3576,7 +3578,6 @@ packages:
 
   /moment/2.29.1:
     resolution: {integrity: sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==}
-    dev: true
 
   /mongodb-connection-string-url/2.2.0:
     resolution: {integrity: sha512-U0cDxLUrQrl7DZA828CA+o69EuWPWEJTwdMPozyd7cy/dbtncUZczMw7wRHcwMD7oKOn0NM2tF9jdf5FFVW9CA==}

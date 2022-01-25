@@ -11,13 +11,26 @@ const staticRoutes: RouteRecordRaw[] = [
     component: () => {
       const accessToken = localStorage.getItem("access_token");
       const refreshToken = localStorage.getItem("refresh_token");
-      const user = accessToken
-        ? JSON.parse(decodeURIComponent(escape(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))))
-        : undefined;
+      const user =
+        accessToken && refreshToken
+          ? JSON.parse(decodeURIComponent(escape(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))))
+          : undefined;
       console.log(user);
       if (user) return import("@/pages/static/index.vue");
       return import("@/pages/static/homeUnlogged.vue");
     },
+  },
+  {
+    name: "articles",
+    path: "/articles",
+    meta: { defaultTitle: `${libraryName}：${librarySlogan}` },
+    component: () => import("@/pages/static/homeUnlogged.vue"),
+  },
+  {
+    name: "article",
+    path: "/article/:id",
+    meta: { defaultTitle: `${libraryName}：${librarySlogan}` },
+    component: () => import("@/pages/article.vue"),
   },
   {
     name: "login",

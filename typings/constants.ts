@@ -8,3 +8,4 @@ export const MIN_TITLE_LENGTH = 5;
 export const MAX_TITLE_LENGTH = 50;
 export const MAX_DESCRIPTION_LENGTH = 140;
 export const MAX_ARTICLE_CHARS = 10000;
+export const DEFAULT_ARTICLE_PAGE_SIZE = 10;

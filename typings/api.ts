@@ -70,15 +70,7 @@ export interface ApiGetArticlesRequest {
 export interface ApiGetArticlesResponse {
   code: "OK" | "WRONG_QUERY" | "INTERNAL_ERROR";
   message: string;
-  articles: Array<{
-    id: ArticleDocument["id"];
-    title: ArticleDocument["title"];
-    description: ArticleDocument["description"];
-    userId: ArticleDocument["userId"];
-    poster: ArticleDocument["poster"];
-    createdTime: ArticleDocument["createdTime"];
-    updatedTime: ArticleDocument["updatedTime"];
-  }>;
+  articles: Array<ArticlePreview>;
   total: number;
 }
 
@@ -110,3 +102,13 @@ export interface AuthenticateError {
   message: string;
 }
 type JwtError = "REVOKED_TOKEN" | "INVALID_TOKEN" | "CREDENTIALS_BAD_SCHEME" | "CREDENTIALS_BAD_FORMAT" | "CREDENTIALS_REQUIRED";
+
+export interface ArticlePreview {
+  id: ArticleDocument["id"];
+  title: ArticleDocument["title"];
+  description: ArticleDocument["description"];
+  userId: ArticleDocument["userId"];
+  poster: ArticleDocument["poster"];
+  createdTime: ArticleDocument["createdTime"];
+  updatedTime: ArticleDocument["updatedTime"];
+}

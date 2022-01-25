@@ -18,12 +18,14 @@ router.post("/", async (req, res) => {
   if (typeof parsed.page !== "number") parsed.page = 1;
   if (typeof parsed.pageSize !== "number") parsed.pageSize = 10;
 
+  console.log(parsed, req.body);
+
   const total = await Article.countDocuments({});
 
   const articles = await Article.find()
     .select("id title description userId poster createdTime updatedTime -_id")
     .limit(parsed.pageSize)
-    .skip(parsed.page - 1)
+    .skip((parsed.page - 1) * parsed.pageSize)
     .sort("-createdTime");
 
   return sendJSONStatus<ApiGetArticlesResponse>(res, { code: "OK", message: "测试", articles: articles, total });
