@@ -1,11 +1,15 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules, NAlert, AlertProps, NCollapseTransition } from "naive-ui";
+import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules, NAlert, AlertProps, NCollapseTransition, useMessage } from "naive-ui";
 import axios, { AxiosResponse } from "axios";
 import type { ApiLoginRequest, ApiLoginResponse } from "@typings/api";
 import { libraryName, librarySlogan } from "@/config";
+import { checkTokenAndGetProfile } from "@/store";
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_PATTERN, NAME_MAX_LENGTH, NAME_MIN_LENGTH, NAME_PATTERN } from "@typings/constants";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const messager = useMessage();
 const loginFormRef = ref(null);
 const alertType = ref<AlertProps["type"]>(undefined);
 const alertTitle = ref("");
@@ -47,6 +51,7 @@ async function handleLogin() {
       return openTipTemporarily("error", "登录失败", result.data.message, 8000);
     localStorage.setItem("access_token", result.data.accessToken);
     localStorage.setItem("refresh_token", result.data.refreshToken);
+    checkTokenAndGetProfile(router, messager);
     window.location.href = "/";
   };
   loginPromise.then(onResolve).catch(error => {
@@ -80,7 +85,19 @@ function openTipTemporarily(type: AlertProps["type"], title: string, description
       :model="loginFormData"
       :rules="loginFormRules"
       :show-require-mark="false"
-      class="flex flex-col justify-between bg-[#f0f0f0] px-10 py-14 w-full h-screen md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto transition-all duration-150 ease-out"
+      class="
+        flex flex-col
+        justify-between
+        bg-[#f0f0f0]
+        px-10
+        py-14
+        w-full
+        h-screen
+        md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto
+        transition-all
+        duration-150
+        ease-out
+      "
       label-align="left"
       label-placement="left"
       label-width="80px"

@@ -1,5 +1,5 @@
 <template>
-  <div class="Page-404">
-    <span class="Title">不小心触及到了知识的蛮荒之地。</span>
+  <div class="bg-blue-900 h-screen w-screen overflow-hidden flex items-center justify-center">
+    <span class="text-4xl font-bold text-slate-200">海底世界</span>
   </div>
 </template>

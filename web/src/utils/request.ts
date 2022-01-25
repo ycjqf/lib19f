@@ -24,5 +24,3 @@ export function credentialEmpty(): boolean {
   const refreshToken = localStorage.getItem("refresh_token");
   return !accessToken || accessToken === "" || !refreshToken || refreshToken === "";
 }
-
-export function getUserProfile(userID: AccountCommon["id"]): UserDocument {}
