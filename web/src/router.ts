@@ -1,59 +1,58 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
-import { libraryName, librarySlogan } from "@/store";
+import { LIBRARY_NAME, LIBRARY_SLOGAN } from "@/store";
 
 // 静态匹配
 const staticRoutes: RouteRecordRaw[] = [
   {
     name: "home",
     path: "/",
-    meta: { defaultTitle: `${libraryName}：${librarySlogan}` },
+    meta: { defaultTitle: `${LIBRARY_NAME}：${LIBRARY_SLOGAN}` },
     component: () => {
-      // const accessToken = localStorage.getItem("access_token");
-      // const refreshToken = localStorage.getItem("refresh_token");
-      // const user =
-      //   accessToken && refreshToken
-      //     ? JSON.parse(decodeURIComponent(escape(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")))))
-      //     : undefined;
-      // console.log(user);
-      // if (user) return import("@/pages/static/index.vue");
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+      const user =
+        accessToken && refreshToken
+          ? JSON.parse(decodeURIComponent(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))))
+          : undefined;
+      if (user) return import("@/pages/static/index.vue");
       return import("@/pages/static/homeUnlogged.vue");
     },
   },
   {
     name: "articles",
     path: "/articles",
-    meta: { defaultTitle: `${libraryName}：${librarySlogan}` },
+    meta: { defaultTitle: `${LIBRARY_NAME}：${LIBRARY_SLOGAN}` },
     component: () => import("@/pages/static/homeUnlogged.vue"),
   },
   {
     name: "article",
     path: "/article/:id",
-    meta: { defaultTitle: `${libraryName}：${librarySlogan}` },
+    meta: { defaultTitle: `${LIBRARY_NAME}：${LIBRARY_SLOGAN}` },
     component: () => import("@/pages/article.vue"),
   },
   {
     name: "login",
     path: "/login",
-    meta: { defaultTitle: `登陆到${libraryName} · ${libraryName}` },
+    meta: { defaultTitle: `登陆到${LIBRARY_NAME} · ${LIBRARY_NAME}` },
     component: () => import("@/pages/account/login.vue"),
   },
   {
     name: "register",
     path: "/register",
-    meta: { defaultTitle: `注册账户 · ${libraryName}` },
+    meta: { defaultTitle: `注册账户 · ${LIBRARY_NAME}` },
     component: () => import("@/pages/account/register.vue"),
   },
   {
     name: "about",
     path: "/about",
-    meta: { defaultTitle: `${libraryName}相关` },
+    meta: { defaultTitle: `${LIBRARY_NAME}相关` },
     component: () => import("@/pages/static/about.vue"),
   },
   {
     name: "edit",
     path: "/edit",
-    meta: { defaultTitle: `编辑｜${libraryName}` },
+    meta: { defaultTitle: `编辑｜${LIBRARY_NAME}` },
     component: () => import("@/pages/static/edit.vue"),
   },
 ];
@@ -75,7 +74,7 @@ const unparentedDynamicRoutes: RouteRecordRaw[] = [
   {
     name: "404",
     path: "/:pathMatch(.*)*",
-    meta: { defaultTitle: `404 页面找不到 · ${libraryName}` },
+    meta: { defaultTitle: `404 页面找不到 · ${LIBRARY_NAME}` },
     component: () => import("@/pages/404.vue"),
   },
 ];
@@ -88,7 +87,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, _from) => {
-  if (to.meta.defaultTitle && typeof to.meta.defaultTitle === "string") document.title = to.meta.defaultTitle;
+  if (to.meta.defaultTitle === "string") document.title = to.meta.defaultTitle;
 });
 
 export default router;

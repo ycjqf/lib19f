@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { libraryName, librarySlogan } from "@/store";
+import { LIBRARY_NAME, LIBRARY_SLOGAN } from "@/store";
 import axios, { AxiosResponse } from "axios";
 import { ref, reactive } from "vue";
 import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules } from "naive-ui";
@@ -132,8 +132,8 @@ function hintAndRestore(message: string, duration: number) {
       label-width="80px"
     >
       <div>
-        <n-h1 :strong="true" v-text="libraryName" />
-        <n-p class="mb-8" v-text="librarySlogan" />
+        <n-h1 :strong="true" v-text="LIBRARY_NAME" />
+        <n-p class="mb-8" v-text="LIBRARY_SLOGAN" />
 
         <n-form-item class="mb-2" first label="登陆名" path="name">
           <n-input v-model:value="registerFormData.name" placeholder="登陆名称" />

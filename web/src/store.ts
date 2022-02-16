@@ -4,8 +4,8 @@ import axios from "axios";
 import { Router } from "vue-router";
 import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 
-export const libraryName = "云库";
-export const librarySlogan = "云上共享，自在如我。";
+export const LIBRARY_NAME = "云库";
+export const LIBRARY_SLOGAN = "云上共享，自在如我。";
 export const USER_PROFILE = ref<ApiGetProfileResponse["profile"]>(undefined);
 
 export async function checkTokenAndGetProfile(router: Router, messager: MessageApiInjection) {

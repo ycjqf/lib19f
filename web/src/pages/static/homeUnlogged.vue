@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import HeaderBar from "@/components/HeaderBar.vue";
-import { libraryName, librarySlogan } from "@/store";
+import { LIBRARY_NAME, LIBRARY_SLOGAN } from "@/store";
 import { useRoute, useRouter } from "vue-router";
 import { ApiGetArticlesResponse, ArticlePreview } from "@typings/api";
 import { ref, watch } from "vue";
@@ -71,9 +71,9 @@ init();
   <HeaderBar />
   <div class="w-full bg-slate-900 px-48 py-24 hidden">
     <h1 class="text-7xl font-bolder mb-10 whitespace-nowrap text-white">
-      {{ libraryName }}
+      {{ LIBRARY_NAME }}
     </h1>
-    <p class="text-gray-300 text-lg">{{ librarySlogan }}</p>
+    <p class="text-gray-300 text-lg">{{ LIBRARY_SLOGAN }}</p>
   </div>
 
   <div class="container mx-auto">
