@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
-import { libraryName, librarySlogan } from "@/config";
+import { libraryName, librarySlogan } from "@/store";
 
 // 静态匹配
 const staticRoutes: RouteRecordRaw[] = [

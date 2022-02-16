@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { libraryName, librarySlogan } from "@/config";
+import { libraryName, librarySlogan } from "@/store";
 </script>
 
 <template>

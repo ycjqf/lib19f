@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { libraryName } from "@/config";
+import { libraryName } from "@/store";
 import { ref } from "vue";
 import { NAutoComplete, useMessage } from "naive-ui";
 import { logout, USER_PROFILE } from "@/store";

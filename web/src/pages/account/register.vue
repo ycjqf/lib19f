@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { libraryName, librarySlogan } from "@/config";
+import { libraryName, librarySlogan } from "@/store";
 import axios, { AxiosResponse } from "axios";
 import { ref, reactive } from "vue";
 import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules } from "naive-ui";
@@ -114,7 +114,19 @@ function hintAndRestore(message: string, duration: number) {
       :model="registerFormData"
       :rules="registerFormRules"
       :show-require-mark="false"
-      class="flex flex-col justify-between bg-[#f0f0f0] px-10 py-14 w-full h-screen md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto transition-all duration-150 ease-out"
+      class="
+        flex flex-col
+        justify-between
+        bg-[#f0f0f0]
+        px-10
+        py-14
+        w-full
+        h-screen
+        md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto
+        transition-all
+        duration-150
+        ease-out
+      "
       label-align="left"
       label-placement="left"
       label-width="80px"

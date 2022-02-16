@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import HeaderBar from "@/components/HeaderBar.vue";
-import { libraryName, librarySlogan } from "@/config";
+import { libraryName, librarySlogan } from "@/store";
 import { useRoute, useRouter } from "vue-router";
 import { ApiGetArticlesResponse, ArticlePreview } from "@typings/api";
 import { ref, watch } from "vue";

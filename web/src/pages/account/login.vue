@@ -3,7 +3,7 @@ import { ref, reactive } from "vue";
 import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules, NAlert, AlertProps, NCollapseTransition, useMessage } from "naive-ui";
 import axios, { AxiosResponse } from "axios";
 import type { ApiLoginRequest, ApiLoginResponse } from "@typings/api";
-import { libraryName, librarySlogan } from "@/config";
+import { libraryName, librarySlogan } from "@/store";
 import { checkTokenAndGetProfile } from "@/store";
 import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_PATTERN, NAME_MAX_LENGTH, NAME_MIN_LENGTH, NAME_PATTERN } from "@typings/constants";
 import { useRouter } from "vue-router";
