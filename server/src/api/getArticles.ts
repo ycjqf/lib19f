@@ -2,33 +2,45 @@ import { Router } from "express";
 import Article from "@/models/Article";
 import { ApiGetArticlesRequest, ApiGetArticlesResponse } from "@typings/api";
 import { sendJSONStatus } from "@/util";
+import { DEFAULT_ARTICLE_PAGE_SIZE, POSITIVE_INTEGER_REGEX } from "@typings/constants";
 
 const router = Router();
 
 router.post("/", async (req, res) => {
-  const parsed: ApiGetArticlesRequest = {
+  const queried: ApiGetArticlesRequest = {
     page: req.body.page,
     pageSize: req.body.pageSize,
   };
-  if (typeof parsed.page === "number" && (parsed.page <= 0 || parsed.page !== parseInt(`${parsed.page}`, 10)))
-    return sendJSONStatus<ApiGetArticlesResponse>(res, { code: "WRONG_QUERY", message: "分页若存在需为正整数", articles: [], total: 0 });
-  if (typeof parsed.pageSize === "number" && (parsed.pageSize <= 0 || parsed.pageSize !== parseInt(`${parsed.pageSize}`, 10)))
-    return sendJSONStatus<ApiGetArticlesResponse>(res, { code: "WRONG_QUERY", message: "页面大小若存在需为正整数", articles: [], total: 0 });
-
-  if (typeof parsed.page !== "number") parsed.page = 1;
-  if (typeof parsed.pageSize !== "number") parsed.pageSize = 10;
-
-  console.log(parsed, req.body);
+  const havePageButInvalid = queried.page && !POSITIVE_INTEGER_REGEX.test(queried.page);
+  const havePageSizeButInvalid = queried.pageSize && !POSITIVE_INTEGER_REGEX.test(queried.pageSize);
+  if (havePageButInvalid || havePageSizeButInvalid) {
+    return sendJSONStatus<ApiGetArticlesResponse>(res, {
+      code: "WRONG_QUERY",
+      message: "分页若存在需为正整数",
+      articles: [],
+      total: 0,
+      current: 1,
+      pageSize: DEFAULT_ARTICLE_PAGE_SIZE,
+    });
+  }
+  const newPage = queried.page === null ? 1 : parseInt(queried.page);
+  const newPageSize = queried.pageSize === null ? DEFAULT_ARTICLE_PAGE_SIZE : parseInt(queried.pageSize);
 
   const total = await Article.countDocuments({});
-
   const articles = await Article.find()
     .select("id title description userId poster createdTime updatedTime -_id")
-    .limit(parsed.pageSize)
-    .skip((parsed.page - 1) * parsed.pageSize)
+    .limit(newPageSize)
+    .skip((newPage - 1) * newPageSize)
     .sort("-createdTime");
 
-  return sendJSONStatus<ApiGetArticlesResponse>(res, { code: "OK", message: "测试", articles: articles, total });
+  return sendJSONStatus<ApiGetArticlesResponse>(res, {
+    code: "OK",
+    message: "success",
+    articles: articles,
+    total,
+    current: newPage,
+    pageSize: newPageSize,
+  });
 });
 
 export default router;

@@ -5,7 +5,7 @@
       "label": "前端开发",
       "script": "dev",
       "type": "npm",
-      "path": "web/",
+      "path": "remix/",
       "presentation": {
         "reveal": "always",
         "panel": "new"
@@ -25,9 +25,9 @@
     },
     {
       "label": "样式监听",
-      "script": "tail:w",
+      "script": "tw:w",
       "type": "npm",
-      "path": "web/",
+      "path": "remix/",
       "presentation": {
         "reveal": "always",
         "panel": "new"

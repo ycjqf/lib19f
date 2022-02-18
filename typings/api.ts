@@ -64,14 +64,16 @@ export interface ApiAddCommentResponse {
 
 // ----- 文章分页 /api/get/articles
 export interface ApiGetArticlesRequest {
-  page: number;
-  pageSize: number;
+  page: string | null;
+  pageSize: string | null;
 }
 export interface ApiGetArticlesResponse {
   code: "OK" | "WRONG_QUERY" | "INTERNAL_ERROR";
   message: string;
   articles: Array<ArticlePreview>;
   total: number;
+  current: number;
+  pageSize: number;
 }
 
 export interface ApiGetProfileRequest {

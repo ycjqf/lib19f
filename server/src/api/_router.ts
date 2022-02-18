@@ -1,5 +1,6 @@
 import express, { Response, Request, NextFunction } from "express";
 import expressJwt, { ErrorCode } from "express-jwt";
+import cookieParser from "cookie-parser";
 import accountLogin from "@/api/accountLogin";
 import accountRegister from "@/api/accountRegister";
 import accountReauth from "@/api/accountReauth";
@@ -17,9 +18,11 @@ moment.locale("zh-cn");
 const router = express.Router();
 
 router.use(express.json());
+router.use(cookieParser());
 router.use(/^\/api\/(add|update|upload|delete)\/.*/, expressJwt({ secret: ACESS_TOKEN_SECRET, algorithms: ["HS256"] }));
 router.use("/api/account/reauth", expressJwt({ secret: REFRESH_TOKEN_SECRET, algorithms: ["HS256"] }));
 router.use((req, res, next) => {
+  console.log(req.cookies);
   console.log(`${req.method}[${moment().format("YYYY-MM-DD HH:mm:ss")}] ${req.url} <== ${req.ip}`);
   next();
 });

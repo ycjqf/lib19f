@@ -4,3 +4,8 @@ dist
 server/src/psw.json
 .idea
 test.rest
+remix/.cache
+remix/build
+remix/public/build
+remix/.env
+remix/.vscode

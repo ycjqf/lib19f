@@ -19,13 +19,11 @@ async function handler(req: Request, res: Response) {
     capacity: req.body.capacity,
   };
 
+  console.log(registerBody);
+
   if (
     accountCapacities.find(capacity => capacity === req.body.capacity) === undefined ||
-    registerBody.name.length < NAME_MIN_LENGTH ||
-    registerBody.name.length > NAME_MAX_LENGTH ||
     !validator.matches(registerBody.name, NAME_PATTERN) ||
-    registerBody.password.length < PASSWORD_MIN_LENGTH ||
-    registerBody.password.length > PASSWORD_MAX_LENGTH ||
     !validator.matches(registerBody.password, PASSWORD_PATTERN) ||
     !validator.isEmail(registerBody.email) ||
     registerBody.password !== registerBody.passwordRepeat
