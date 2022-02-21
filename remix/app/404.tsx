@@ -1,5 +1,4 @@
 import { Links, LiveReload, Meta, Link } from "remix";
-import { LIBRARY_NAME, LIBRARY_SLOGAN } from "~typings/constants";
 import { default as notFoundIllustration } from "~/assets/not-found.svg";
 
 export default function NotFound() {
@@ -26,7 +25,7 @@ export default function NotFound() {
                 },
               ].map(i => (
                 <Link to={i.link}>
-                  <span className="border border-black px-6 py-2 bg-slate-100 hover:bg-white transition-all">{i.name}</span>
+                  <span className="border border-black px-6 py-2 bg-slate-100 hover:bg-white transition-colors">{i.name}</span>
                 </Link>
               ))}
             </div>

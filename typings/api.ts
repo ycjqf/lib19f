@@ -1,4 +1,4 @@
-import { AccountCommon, ArticleDocument } from "./ducument";
+import { AccountCommon, ArticleDocument, UserDocument } from "./ducument";
 
 export const accountCapacities = ["user", "reviewer", "admin"] as const;
 export type accountCapacity = typeof accountCapacities[number];
@@ -77,7 +77,8 @@ export interface ApiGetArticlesResponse {
 }
 
 export interface ApiGetProfileRequest {
-  id: AccountCommon["id"];
+  id?: UserDocument["id"];
+  name?: UserDocument["name"];
 }
 export interface ApiGetProfileResponse {
   code: "OK" | "WRONG_ID" | "NO_SUCH_USER" | "INTERNAL_ERROR";
@@ -90,7 +91,7 @@ export interface ApiGetProfileResponse {
 }
 
 export interface ApiGetArticleRequest {
-  id: AccountCommon["id"];
+  id: string;
 }
 export interface ApiGetArticleResponse {
   code: "OK" | "WRONG_ID" | "NO_SUCH_ARTICLE" | "INTERNAL_ERROR";
@@ -113,4 +114,23 @@ export interface ArticlePreview {
   poster: ArticleDocument["poster"];
   createdTime: ArticleDocument["createdTime"];
   updatedTime: ArticleDocument["updatedTime"];
+}
+
+export const basicCodes = ["OK", "INTERNAL_ERROR", "WRONG_PARAMS"] as const;
+export type BasicCode = typeof basicCodes[number];
+
+export interface GetArticlesReq {
+  q: string | undefined;
+  page: number | undefined;
+  pageSize: number | undefined;
+  userId: UserDocument["id"] | undefined;
+  sort: "CREATED_UP" | "UPDATED_UP" | undefined;
+}
+export interface GetArticlesRes {
+  code: BasicCode;
+  message: string;
+  current: number;
+  total: number;
+  pageSize: number;
+  articles: Array<ArticlePreview>;
 }

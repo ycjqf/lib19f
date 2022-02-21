@@ -21,7 +21,6 @@ router.post("/", async (req, res) => {
 
   if (accountCapacities.find(capacity => capacity === loginBody.capacity) === undefined)
     return sendJSONStatus<ApiLoginResponse>(res, { code: "PATTERN_UNMATCH", message: "没有这个身份" });
-  console.log(loginBody.capacity, "user", loginBody.capacity !== "user");
   if (loginBody.capacity !== "user") return sendJSONStatus<ApiLoginResponse>(res, { code: "TODO", message: "现在还不允许通过接口注册普通用户外的身份" }, 501);
 
   if (
@@ -48,6 +47,13 @@ router.post("/", async (req, res) => {
     const forJwt = { id: user.id, capacity };
     const accessToken = jwt.sign(forJwt, ACESS_TOKEN_SECRET, { expiresIn: EXPIRE_TIME });
     const refreshToken = jwt.sign(forJwt, REFRESH_TOKEN_SECRET);
+    // @ts-ignore
+    req.session.data = {
+      id: user.id,
+      capacity: "user",
+    };
+
+    console.log(`登陆成功 ${user.name}`);
 
     return sendJSONStatus<ApiLoginResponse>(
       res,

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Article from "@/models/Article";
-import { ApiGetArticlesRequest, ApiGetArticlesResponse } from "@typings/api";
+import { ApiGetArticlesRequest, ApiGetArticlesResponse, GetArticlesReq, GetArticlesRes } from "@typings/api";
 import { sendJSONStatus } from "@/util";
 import { DEFAULT_ARTICLE_PAGE_SIZE, POSITIVE_INTEGER_REGEX } from "@typings/constants";
 

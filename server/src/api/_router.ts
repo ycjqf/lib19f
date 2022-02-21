@@ -1,6 +1,5 @@
 import express, { Response, Request, NextFunction } from "express";
 import expressJwt, { ErrorCode } from "express-jwt";
-import cookieParser from "cookie-parser";
 import accountLogin from "@/api/accountLogin";
 import accountRegister from "@/api/accountRegister";
 import accountReauth from "@/api/accountReauth";
@@ -9,21 +8,21 @@ import addComment from "@/api/addComment";
 import getArticles from "@/api/getArticles";
 import getProfile from "@/api/getProfile";
 import getArticle from "@/api/getArticle";
+import authenticate from "@/api/authenticate";
 import { ACESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "@/psw.json";
 import { sendJSONStatus } from "@/util";
 import { AuthenticateError } from "@typings/api";
 import moment from "moment";
-moment.locale("zh-cn");
 
+moment.locale("zh-cn");
 const router = express.Router();
 
 router.use(express.json());
-router.use(cookieParser());
+
 router.use(/^\/api\/(add|update|upload|delete)\/.*/, expressJwt({ secret: ACESS_TOKEN_SECRET, algorithms: ["HS256"] }));
 router.use("/api/account/reauth", expressJwt({ secret: REFRESH_TOKEN_SECRET, algorithms: ["HS256"] }));
 router.use((req, res, next) => {
-  console.log(req.cookies);
-  console.log(`${req.method}[${moment().format("YYYY-MM-DD HH:mm:ss")}] ${req.url} <== ${req.ip}`);
+  console.log(`${req.method}[${moment().format("YYYY-MM-DD HH:mm:ss")}]`);
   next();
 });
 router.use((error, req, res, next) => {
@@ -66,6 +65,7 @@ router.use("/api/add/comment", addComment);
 router.use("/api/get/articles", getArticles);
 router.use("/api/get/article", getArticle);
 router.use("/api/get/profile", getProfile);
+router.use("/api/authenticate", authenticate);
 
 router.all("/", (req, res) => {
   return res.end("lib19f的后端服务，查看readme.md以了解更多");

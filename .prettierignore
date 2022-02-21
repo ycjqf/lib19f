@@ -5,4 +5,9 @@ build
 yarn.lock
 pnpm-lock.yaml
 package-lock.json
-
+dist
+.idea
+./remix/.cache
+./remix/build
+./remix/public/build
+./remix/.env

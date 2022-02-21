@@ -69,7 +69,7 @@ export default function Login() {
             w-full
             h-screen
             md:rounded md:shadow md:min-h-[500px]
-            md:w-[448px] md:h-auto
+            md:w-[528px] md:h-auto
             md:px-12 ${result && result.code !== "OK" ? "md:py-8" : "md:py-16"}
             transition-all
             duration-150
@@ -121,7 +121,7 @@ export default function Login() {
                 }}
               />
             </div>
-            <div className="flex mb-4">
+            <div className="flex mb-8">
               <a href="https://mail.163.com/register/" target="_blank">
                 <Typography color="primary" variant="button">
                   创建一个网易邮箱

@@ -1,38 +1,19 @@
 import { useContext, useEffect } from "react";
 import { logout, ProfileContext } from "~/contexts";
 import { Button } from "@mui/material";
-import { Link, useFetcher } from "remix";
-import { ApiGetProfileRequest } from "~typings/api";
+import { Link } from "remix";
 
 export default function HeaderBar() {
   const profile = useContext(ProfileContext);
-  const fetcher = useFetcher();
-  useEffect(() => {
-    fetcher.submit(
-      {
-        id: `1`,
-      },
-      {
-        method: "post",
-        action: "http://localhost:1337/api/account/profile",
-        encType: "application/x-www-form-urlencoded",
-      }
-    );
-  }, []);
-
-  useEffect(() => {
-    if (fetcher.type === "init") {
-      fetcher.load("http://localhost:1337/api/account/profile");
-      console.log(fetcher.state, fetcher.type, fetcher.submission, fetcher.data);
-    }
-  }, [fetcher]);
-
   return (
-    <div className=" w-full py-4 px-2 flex items-center justify-between">
-      <div className="flex items-center">
-        <p>{`${profile.id} ${profile.capacity}`}</p>
-        <Link to={"/"}>主页</Link>
-        <Link to={"/articles"}>文章</Link>
+    <div className=" w-full py-4 px-4 flex items-center justify-between">
+      <div className="flex items-center gap-x-4">
+        <Link className="hover:underline" to={"/"}>
+          主页
+        </Link>
+        <Link className="hover:underline" to={"/articles"}>
+          文章
+        </Link>
       </div>
       <div className="flex items-center">
         {profile.id ? (

@@ -5,8 +5,12 @@
   "license": "GPL-3.0",
   "main": "index.js",
   "scripts": {
-    "prettier": "prettier --write .",
-    "prettier:watch": "onchange '**/*' -- prettier --write --ignore-unknown {{changed}}"
+    "dev": "concurrently \"npm:dev:*\" -c red,yellow,blue,green -n d:",
+    "dev:prettier": "onchange '**/*' -- prettier --write --ignore-unknown {{changed}}",
+    "dev:server": "cd server && npm run dev",
+    "dev:tw": "cd remix && npm run tw:w",
+    "dev:remix": "cd remix && npm run dev",
+    "prettier": "prettier --write ."
   },
   "author": "ycjqf",
   "workspaces": [
@@ -14,6 +18,7 @@
     "web"
   ],
   "devDependencies": {
+    "concurrently": "^7.0.0",
     "onchange": "^7.1.0",
     "prettier": "^2.5.0"
   }

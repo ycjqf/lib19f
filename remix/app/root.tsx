@@ -1,4 +1,4 @@
-import { useFetcher, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "remix";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from "remix";
 import type { MetaFunction, LinksFunction } from "remix";
 import { LIBRARY_NAME, LIBRARY_SLOGAN } from "~typings/constants";
 import styles from "~dist/output.css";
@@ -31,37 +31,6 @@ export function CatchBoundary() {
 
 export default function App() {
   const [profile, setProfile] = useState<ProfileContextType>({ id: undefined, capacity: "user" });
-
-  useEffect(() => {
-    const accessToken = localStorage.getItem("access_token");
-    const refreshToken = localStorage.getItem("refresh_token");
-    if (!accessToken || !refreshToken) return logout();
-    try {
-      const decoded = jwt_decode(accessToken) as any;
-      setProfile({
-        id: decoded.id as number,
-        capacity: "user",
-      });
-    } catch (error) {
-      logout();
-    }
-  }, []);
-
-  // if (!parsedPayload.id) return;
-
-  // fetcher.submit();
-
-  // const result = await axios.post<ApiGetProfileResponse>("/api/get/profile", {
-  //   id: parsedPayload.id,
-  // });
-  // if (result.data.code !== "OK") {
-  //   localStorage.removeItem("access_token");
-  //   localStorage.removeItem("refresh_token");
-  //   router.push({ name: "login" });
-  //   messager.error("登陆ID无效，请重新登陆");
-  //   return;
-  // }
-  // USER_PROFILE.value = result.data.profile;
 
   return (
     <html lang="en">

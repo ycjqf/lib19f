@@ -1,6 +1,6 @@
 import { Button, TextField, Typography, Alert, Collapse } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Form, ActionFunction, MetaFunction, Link, useActionData, useSearchParams } from "remix";
+import { Form, ActionFunction, MetaFunction, Link, useActionData, useSearchParams, redirect } from "remix";
 import { ApiLoginRequest, ApiLoginResponse } from "~typings/api";
 import { NAME_MIN_LENGTH, NAME_MAX_LENGTH, NAME_PATTERN, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_PATTERN } from "~typings/constants";
 import { LIBRARY_NAME } from "~typings/constants";
@@ -22,13 +22,18 @@ export const action: ActionFunction = async ({ request }) => {
     password: body.get("password"),
     capacity: "user",
   } as ApiLoginRequest;
-  const result = (await (
-    await fetch("http://localhost:1337/api/account/login", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    })
-  ).json()) as ApiLoginResponse;
+  const response = await fetch("http://localhost:1337/api/account/login", {
+    method: "post",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(form),
+  });
+  const result = await (response.json() as Promise<ApiLoginResponse>);
+  if (result.code === "OK")
+    return redirect("/", {
+      headers: {
+        "set-cookie": `${response.headers.get("set-cookie")}`,
+      },
+    });
   return result;
 };
 
