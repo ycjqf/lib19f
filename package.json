@@ -8,8 +8,8 @@
     "dev": "concurrently \"npm:dev:*\" -c red,yellow,blue,green -n d:",
     "dev:prettier": "onchange '**/*' -- prettier --write --ignore-unknown {{changed}}",
     "dev:server": "cd server && npm run dev",
-    "dev:tw": "cd remix && npm run tw:w",
-    "dev:remix": "cd remix && npm run dev",
+    "dev:tw": "cd next && npm run tw:w",
+    "dev:next": "cd next && npm run dev",
     "prettier": "prettier --write ."
   },
   "author": "ycjqf",

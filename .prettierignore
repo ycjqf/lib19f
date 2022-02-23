@@ -11,3 +11,5 @@ dist
 ./remix/build
 ./remix/public/build
 ./remix/.env
+next/.next/
+next/styles/output.css

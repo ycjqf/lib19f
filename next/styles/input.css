@@ -1,0 +1,26 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+    "微软雅黑", Arial, sans-serif !important;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* @tailwind base; */
+@tailwind components;
+@tailwind utilities;
+
+.g-404-img-center {
+  background-position: center;
+}
+
+@layer components {
+  .tw-header-link {
+    @apply text-white text-base hover:text-gray-400 transition-colors ease-out duration-75;
+  }
+}

@@ -6,7 +6,14 @@ import validator from "validator";
 
 import User from "@/models/User";
 import { sendJSONStatus } from "@/util";
-import { NAME_MIN_LENGTH, NAME_MAX_LENGTH, NAME_PATTERN, PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_PATTERN } from "@typings/constants";
+import {
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  NAME_PATTERN,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_PATTERN,
+} from "@typings/constants";
 
 const router = Router();
 
@@ -28,15 +35,26 @@ async function handler(req: Request, res: Response) {
     !validator.isEmail(registerBody.email) ||
     registerBody.password !== registerBody.passwordRepeat
   )
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "PATTERN_UNMATCH", message: "模式不匹配" });
+    return sendJSONStatus<ApiRegisterResponse>(res, {
+      code: "PATTERN_UNMATCH",
+      message: "模式不匹配",
+    });
 
   // TODO 现在还不允许通过接口注册普通用户外的身份
   if (req.body.capacity !== "user") {
     return sendJSONStatus<ApiRegisterResponse>(res, { code: "TODO", message: "待实现" }, 501);
   }
 
-  if (await User.exists({ name: registerBody.name })) return sendJSONStatus<ApiRegisterResponse>(res, { code: "NAME_TAKEN", message: "用户名被占用" });
-  if (await User.exists({ email: registerBody.email })) return sendJSONStatus<ApiRegisterResponse>(res, { code: "EMAIL_TAKEN", message: "邮箱被占用" });
+  if (await User.exists({ name: registerBody.name }))
+    return sendJSONStatus<ApiRegisterResponse>(res, {
+      code: "NAME_TAKEN",
+      message: "用户名被占用",
+    });
+  if (await User.exists({ email: registerBody.email }))
+    return sendJSONStatus<ApiRegisterResponse>(res, {
+      code: "EMAIL_TAKEN",
+      message: "邮箱被占用",
+    });
 
   try {
     const newUser = new User({
@@ -51,7 +69,11 @@ async function handler(req: Request, res: Response) {
     return sendJSONStatus<ApiRegisterResponse>(res, { code: "OK", message: "成功" }, 201);
   } catch (error) {
     console.log("🐛 注册出错", error);
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "INTERNAL_ERROR", message: "内部错误" }, 500);
+    return sendJSONStatus<ApiRegisterResponse>(
+      res,
+      { code: "INTERNAL_ERROR", message: "内部错误" },
+      500
+    );
   }
 }
 

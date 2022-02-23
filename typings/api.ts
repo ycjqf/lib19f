@@ -48,7 +48,7 @@ export interface ApiAddArticleRequest {
   body: string;
 }
 export interface ApiAddArticleResponse {
-  code: "OK" | "UNMATCH_TITLE_LENGTH" | "DESCRIPTION_TOO_LONG" | "UNMATCH_BODY_LENGTH" | "INTERNAL_ERROR" | JwtError;
+  code: "OK" | "BAD_DATA" | "INTERNAL_ERROR" | "UNAUTHORIZED";
   message: string;
 }
 // ---- 评论 /Api/Add/Comment
@@ -104,7 +104,12 @@ export interface AuthenticateError {
   code: JwtError;
   message: string;
 }
-type JwtError = "REVOKED_TOKEN" | "INVALID_TOKEN" | "CREDENTIALS_BAD_SCHEME" | "CREDENTIALS_BAD_FORMAT" | "CREDENTIALS_REQUIRED";
+type JwtError =
+  | "REVOKED_TOKEN"
+  | "INVALID_TOKEN"
+  | "CREDENTIALS_BAD_SCHEME"
+  | "CREDENTIALS_BAD_FORMAT"
+  | "CREDENTIALS_REQUIRED";
 
 export interface ArticlePreview {
   id: ArticleDocument["id"];
@@ -134,3 +139,14 @@ export interface GetArticlesRes {
   pageSize: number;
   articles: Array<ArticlePreview>;
 }
+
+export interface SessionData {
+  id: AccountCommon["id"];
+  capacity: accountCapacity;
+}
+
+export type AuthenticateRes = {
+  isLogged: boolean;
+  data?: SessionData;
+  profile?: ApiGetProfileResponse["profile"];
+};

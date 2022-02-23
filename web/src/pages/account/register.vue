@@ -7,7 +7,14 @@ import { Type } from "naive-ui/lib/button/src/interface";
 import { useRouter } from "vue-router";
 import { default as backgroundImageURL } from "@/assets/register-background.jpg";
 import { ApiRegisterRequest, ApiRegisterResponse } from "@typings/api";
-import { NAME_PATTERN, NAME_MIN_LENGTH, NAME_MAX_LENGTH, PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_PATTERN } from "@typings/constants";
+import {
+  NAME_PATTERN,
+  NAME_MIN_LENGTH,
+  NAME_MAX_LENGTH,
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_PATTERN,
+} from "@typings/constants";
 
 const ready = ref(false);
 const loginButtonText = ref("注册");
@@ -28,7 +35,10 @@ const registerFormRules: FormRules = {
     { required: true, message: "请输入登录名" },
     {
       trigger: "blur",
-      validator: (_rule, value) => NAME_PATTERN.test(value) && value.length >= NAME_MIN_LENGTH && value.length <= NAME_MAX_LENGTH,
+      validator: (_rule, value) =>
+        NAME_PATTERN.test(value) &&
+        value.length >= NAME_MIN_LENGTH &&
+        value.length <= NAME_MAX_LENGTH,
       message: `${NAME_MIN_LENGTH}到${NAME_MAX_LENGTH}数字字母及下划线`,
     },
   ],
@@ -48,7 +58,10 @@ const registerFormRules: FormRules = {
     { required: true, message: "请输入密码" },
     {
       trigger: "blur",
-      validator: (_rule, value) => PASSWORD_PATTERN.test(value) && value.length >= PASSWORD_MIN_LENGTH && value.length <= PASSWORD_MAX_LENGTH,
+      validator: (_rule, value) =>
+        PASSWORD_PATTERN.test(value) &&
+        value.length >= PASSWORD_MIN_LENGTH &&
+        value.length <= PASSWORD_MAX_LENGTH,
       message: `${PASSWORD_MIN_LENGTH}到${PASSWORD_MAX_LENGTH}位数字字母及下划线`,
     },
   ],
@@ -71,7 +84,10 @@ async function handleRegister() {
   const validateErrors = (await loginFormRef.value.validate()) as Array<ValidateError>;
   if (validateErrors && validateErrors.length > 0) return hintAndRestore("请检查表单项", 5000);
 
-  const loginPromise = axios.post<ApiRegisterResponse>("/api/account/register", registerFormData);
+  const loginPromise = axios.post<ApiRegisterResponse>(
+    "/api/account/register",
+    registerFormData
+  );
   const onResolve = (result: AxiosResponse<ApiRegisterResponse, any>) => {
     if (result.data.code !== "OK") return hintAndRestore("登陆失败", 8000);
     ready.value = true;
@@ -114,19 +130,7 @@ function hintAndRestore(message: string, duration: number) {
       :model="registerFormData"
       :rules="registerFormRules"
       :show-require-mark="false"
-      class="
-        flex flex-col
-        justify-between
-        bg-[#f0f0f0]
-        px-10
-        py-14
-        w-full
-        h-screen
-        md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto
-        transition-all
-        duration-150
-        ease-out
-      "
+      class="flex flex-col justify-between bg-[#f0f0f0] px-10 py-14 w-full h-screen md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto transition-all duration-150 ease-out"
       label-align="left"
       label-placement="left"
       label-width="80px"
@@ -139,13 +143,26 @@ function hintAndRestore(message: string, duration: number) {
           <n-input v-model:value="registerFormData.name" placeholder="登陆名称" />
         </n-form-item>
         <n-form-item class="mb-2" first label="显示名" path="email">
-          <n-input v-model:value="registerFormData.email" placeholder="邮箱，用于通知重要信息" />
+          <n-input
+            v-model:value="registerFormData.email"
+            placeholder="邮箱，用于通知重要信息"
+          />
         </n-form-item>
         <n-form-item class="mb-2" first label="密码" path="password">
-          <n-input v-model:value="registerFormData.password" placeholder="请输入密码" show-password-on="click" type="password" />
+          <n-input
+            v-model:value="registerFormData.password"
+            placeholder="请输入密码"
+            show-password-on="click"
+            type="password"
+          />
         </n-form-item>
         <n-form-item class="mb-2" first label="确认密码" path="passwordRepeat">
-          <n-input v-model:value="registerFormData.passwordRepeat" placeholder="确认密码" show-password-on="click" type="password" />
+          <n-input
+            v-model:value="registerFormData.passwordRepeat"
+            placeholder="确认密码"
+            show-password-on="click"
+            type="password"
+          />
         </n-form-item>
       </div>
 

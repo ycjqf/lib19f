@@ -2,7 +2,7 @@
 @tailwind utilities;
 
 @layer components {
-    .tw-header-link {
-      @apply text-white text-base hover:text-gray-400 transition-colors ease-out duration-75;
-    }
+  .tw-header-link {
+    @apply text-white text-base hover:text-gray-400 transition-colors ease-out duration-75;
+  }
 }

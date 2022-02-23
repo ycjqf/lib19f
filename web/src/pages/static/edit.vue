@@ -9,7 +9,12 @@ import { ApiAddArticleRequest, ApiAddArticleResponse } from "@typings/api";
 import { NIcon, NButton, NPopconfirm, useMessage, c } from "naive-ui";
 import { TextEditStyle24Regular } from "@vicons/fluent";
 import { credentialEmpty } from "@/utils/request";
-import { MIN_TITLE_LENGTH, MAX_TITLE_LENGTH, MAX_DESCRIPTION_LENGTH, MAX_ARTICLE_CHARS } from "@typings/constants";
+import {
+  MIN_TITLE_LENGTH,
+  MAX_TITLE_LENGTH,
+  MAX_DESCRIPTION_LENGTH,
+  MAX_ARTICLE_CHARS,
+} from "@typings/constants";
 import { AxiosResponse } from "axios";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
 import { postWithCredential } from "@/utils/request";
@@ -38,13 +43,21 @@ const editor = useEditor(root =>
 function onSubmit() {
   message.destroyAll();
   if (credentialEmpty()) return message.error("请先登录");
-  if (input.value.title.trim().length < MIN_TITLE_LENGTH || input.value.title.trim().length > MAX_TITLE_LENGTH)
+  if (
+    input.value.title.trim().length < MIN_TITLE_LENGTH ||
+    input.value.title.trim().length > MAX_TITLE_LENGTH
+  )
     return message.error(`标题长度${MIN_TITLE_LENGTH}到${MAX_TITLE_LENGTH}`);
-  if (input.value.description.trim().length > MAX_DESCRIPTION_LENGTH) return message.error(`描述长度不能超过${MAX_DESCRIPTION_LENGTH}`);
+  if (input.value.description.trim().length > MAX_DESCRIPTION_LENGTH)
+    return message.error(`描述长度不能超过${MAX_DESCRIPTION_LENGTH}`);
   if (input.value.body.trim().length === 0) return message.error("内容不能为空");
-  if (input.value.body.trim().length > MAX_ARTICLE_CHARS) return message.error(`内容不能超过${MAX_ARTICLE_CHARS}字符"`);
+  if (input.value.body.trim().length > MAX_ARTICLE_CHARS)
+    return message.error(`内容不能超过${MAX_ARTICLE_CHARS}字符"`);
 
-  const postPromise = postWithCredential<ApiAddArticleRequest, ApiAddArticleResponse>("/api/add/article", input.value);
+  const postPromise = postWithCredential<ApiAddArticleRequest, ApiAddArticleResponse>(
+    "/api/add/article",
+    input.value
+  );
   const onResolve = (res: AxiosResponse<ApiAddArticleResponse>) => {
     if (res.data.code === "OK") {
       message.success("发布成功");
@@ -77,7 +90,9 @@ function resetForm() {
           minlength="4"
           v-model="input.title"
         />
-        <text-edit-style24-regular class="input-line-icon transition-colors ease-out duration-300 w-8 h-8 mr-4"></text-edit-style24-regular>
+        <text-edit-style24-regular
+          class="input-line-icon transition-colors ease-out duration-300 w-8 h-8 mr-4"
+        ></text-edit-style24-regular>
       </div>
       <div class="input-line flex flex-nowrap items-center mb-8 flex-row-reverse">
         <input
@@ -87,7 +102,9 @@ function resetForm() {
           maxlength="140"
           v-model="input.description"
         />
-        <text-edit-style24-regular class="input-line-icon transition-colors ease-out duration-300 w-8 h-8 mr-4"></text-edit-style24-regular>
+        <text-edit-style24-regular
+          class="input-line-icon transition-colors ease-out duration-300 w-8 h-8 mr-4"
+        ></text-edit-style24-regular>
       </div>
       <div class="flex-1 pb-4 overflow-scroll">
         <vue-editor :editor="editor"></vue-editor>

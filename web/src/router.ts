@@ -13,7 +13,11 @@ const staticRoutes: RouteRecordRaw[] = [
       const refreshToken = localStorage.getItem("refresh_token");
       const user =
         accessToken && refreshToken
-          ? JSON.parse(decodeURIComponent(window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))))
+          ? JSON.parse(
+              decodeURIComponent(
+                window.atob(accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))
+              )
+            )
           : undefined;
       if (user) return import("@/pages/static/index.vue");
       return import("@/pages/static/homeUnlogged.vue");

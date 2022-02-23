@@ -11,10 +11,17 @@ router.post("/", async (req, res) => {
   };
 
   if (typeof parsed.id !== "string" || !/^[1-9]\d*$/.test(parsed.id))
-    return sendJSONStatus<ApiGetArticleResponse>(res, { code: "WRONG_ID", message: "id需为正整数" });
+    return sendJSONStatus<ApiGetArticleResponse>(res, {
+      code: "WRONG_ID",
+      message: "id需为正整数",
+    });
 
   const article = await Article.findOne({ id: parseInt(parsed.id) });
-  if (!article) return sendJSONStatus<ApiGetArticleResponse>(res, { code: "NO_SUCH_ARTICLE", message: "没有这个文章" });
+  if (!article)
+    return sendJSONStatus<ApiGetArticleResponse>(res, {
+      code: "NO_SUCH_ARTICLE",
+      message: "没有这个文章",
+    });
 
   const { id, title, description, userId, body, createdTime, updatedTime, poster } = article;
   return sendJSONStatus<ApiGetArticleResponse>(res, {

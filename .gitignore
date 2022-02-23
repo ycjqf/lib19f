@@ -3,9 +3,8 @@ node_modules
 dist
 server/src/psw.json
 .idea
-test.rest
 remix/.cache
 remix/build
-remix/public/build
+remix/public
 remix/.env
-remix/.vscode
+next/.next/**.*

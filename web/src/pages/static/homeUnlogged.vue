@@ -45,8 +45,10 @@ async function init() {
   //   return;
   // }
 
-  if (typeof route.query.page === "string" && /^[1-9]\d*$/.test(route.query.page)) currentPage.value = parseInt(route.query.page);
-  if (typeof route.query.pageSize === "string" && /^[1-9]\d*$/.test(route.query.pageSize)) pageSize.value = parseInt(route.query.pageSize);
+  if (typeof route.query.page === "string" && /^[1-9]\d*$/.test(route.query.page))
+    currentPage.value = parseInt(route.query.page);
+  if (typeof route.query.pageSize === "string" && /^[1-9]\d*$/.test(route.query.pageSize))
+    pageSize.value = parseInt(route.query.pageSize);
 
   const result = await axios.post<ApiGetArticlesResponse>("/api/get/articles", {
     page: currentPage.value,
@@ -78,7 +80,11 @@ init();
 
   <div class="container mx-auto">
     <div class="flex flex-col gap-y-10 my-10">
-      <ArticlePeek v-for="article in articles" :key="article.id" :preview="article"></ArticlePeek>
+      <ArticlePeek
+        v-for="article in articles"
+        :key="article.id"
+        :preview="article"
+      ></ArticlePeek>
     </div>
     <n-pagination
       class="text-center mb-16 w-fit mx-auto"

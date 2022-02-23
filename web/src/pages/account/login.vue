@@ -1,11 +1,31 @@
 <script lang="ts" setup>
 import { ref, reactive } from "vue";
-import { NForm, NFormItem, NInput, NH1, NP, NButton, NPopconfirm, FormRules, NAlert, AlertProps, NCollapseTransition, useMessage } from "naive-ui";
+import {
+  NForm,
+  NFormItem,
+  NInput,
+  NH1,
+  NP,
+  NButton,
+  NPopconfirm,
+  FormRules,
+  NAlert,
+  AlertProps,
+  NCollapseTransition,
+  useMessage,
+} from "naive-ui";
 import axios, { AxiosResponse } from "axios";
 import type { ApiLoginRequest, ApiLoginResponse } from "@typings/api";
 import { libraryName, librarySlogan } from "@/store";
 import { checkTokenAndGetProfile } from "@/store";
-import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH, PASSWORD_PATTERN, NAME_MAX_LENGTH, NAME_MIN_LENGTH, NAME_PATTERN } from "@typings/constants";
+import {
+  PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
+  PASSWORD_PATTERN,
+  NAME_MAX_LENGTH,
+  NAME_MIN_LENGTH,
+  NAME_PATTERN,
+} from "@typings/constants";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -25,7 +45,10 @@ const loginFormRules: FormRules = {
     { required: true, message: "请输入登录名" },
     {
       trigger: "blur",
-      validator: (_rule, value) => NAME_PATTERN.test(value) && value.length >= NAME_MIN_LENGTH && value.length <= NAME_MAX_LENGTH,
+      validator: (_rule, value) =>
+        NAME_PATTERN.test(value) &&
+        value.length >= NAME_MIN_LENGTH &&
+        value.length <= NAME_MAX_LENGTH,
       message: `${NAME_MIN_LENGTH}到${NAME_MAX_LENGTH}数字字母及下划线`,
     },
   ],
@@ -33,7 +56,10 @@ const loginFormRules: FormRules = {
     { required: true, message: "请输入密码" },
     {
       trigger: "blur",
-      validator: (_rule, value) => PASSWORD_PATTERN.test(value) && value.length >= PASSWORD_MIN_LENGTH && value.length <= PASSWORD_MAX_LENGTH,
+      validator: (_rule, value) =>
+        PASSWORD_PATTERN.test(value) &&
+        value.length >= PASSWORD_MIN_LENGTH &&
+        value.length <= PASSWORD_MAX_LENGTH,
       message: `${PASSWORD_MIN_LENGTH}到${PASSWORD_MAX_LENGTH}位数字字母及下划线`,
     },
   ],
@@ -65,7 +91,12 @@ function resetForm() {
   loginFormData.email = "";
 }
 
-function openTipTemporarily(type: AlertProps["type"], title: string, description: string, duration: number) {
+function openTipTemporarily(
+  type: AlertProps["type"],
+  title: string,
+  description: string,
+  duration: number
+) {
   alertType.value = type;
   alertTitle.value = title;
   alertMessage.value = description;
@@ -85,19 +116,7 @@ function openTipTemporarily(type: AlertProps["type"], title: string, description
       :model="loginFormData"
       :rules="loginFormRules"
       :show-require-mark="false"
-      class="
-        flex flex-col
-        justify-between
-        bg-[#f0f0f0]
-        px-10
-        py-14
-        w-full
-        h-screen
-        md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto
-        transition-all
-        duration-150
-        ease-out
-      "
+      class="flex flex-col justify-between bg-[#f0f0f0] px-10 py-14 w-full h-screen md:rounded md:shadow md:w-96 md:px-8 md:py-4 md:h-auto transition-all duration-150 ease-out"
       label-align="left"
       label-placement="left"
       label-width="80px"
@@ -118,7 +137,13 @@ function openTipTemporarily(type: AlertProps["type"], title: string, description
           <n-input v-model:value="loginFormData.name" />
         </n-form-item>
         <n-form-item class="mb-2 cursor-pointer" first label="密码" path="password">
-          <n-input v-model:value="loginFormData.password" :maxlength="16" :minlength="8" show-password-on="click" type="password" />
+          <n-input
+            v-model:value="loginFormData.password"
+            :maxlength="16"
+            :minlength="8"
+            show-password-on="click"
+            type="password"
+          />
         </n-form-item>
       </div>
 

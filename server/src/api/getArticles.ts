@@ -1,6 +1,11 @@
 import { Router } from "express";
 import Article from "@/models/Article";
-import { ApiGetArticlesRequest, ApiGetArticlesResponse, GetArticlesReq, GetArticlesRes } from "@typings/api";
+import {
+  ApiGetArticlesRequest,
+  ApiGetArticlesResponse,
+  GetArticlesReq,
+  GetArticlesRes,
+} from "@typings/api";
 import { sendJSONStatus } from "@/util";
 import { DEFAULT_ARTICLE_PAGE_SIZE, POSITIVE_INTEGER_REGEX } from "@typings/constants";
 
@@ -12,7 +17,8 @@ router.post("/", async (req, res) => {
     pageSize: req.body.pageSize,
   };
   const havePageButInvalid = queried.page && !POSITIVE_INTEGER_REGEX.test(queried.page);
-  const havePageSizeButInvalid = queried.pageSize && !POSITIVE_INTEGER_REGEX.test(queried.pageSize);
+  const havePageSizeButInvalid =
+    queried.pageSize && !POSITIVE_INTEGER_REGEX.test(queried.pageSize);
   if (havePageButInvalid || havePageSizeButInvalid) {
     return sendJSONStatus<ApiGetArticlesResponse>(res, {
       code: "WRONG_QUERY",
@@ -23,8 +29,12 @@ router.post("/", async (req, res) => {
       pageSize: DEFAULT_ARTICLE_PAGE_SIZE,
     });
   }
-  const newPage = queried.page === null ? 1 : parseInt(queried.page);
-  const newPageSize = queried.pageSize === null ? DEFAULT_ARTICLE_PAGE_SIZE : parseInt(queried.pageSize);
+  const newPage =
+    queried.page === null || typeof queried.page === "undefined" ? 1 : parseInt(queried.page);
+  const newPageSize =
+    queried.pageSize === null || typeof queried.pageSize === "undefined"
+      ? DEFAULT_ARTICLE_PAGE_SIZE
+      : parseInt(queried.pageSize);
 
   const total = await Article.countDocuments({});
   const articles = await Article.find()

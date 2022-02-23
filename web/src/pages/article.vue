@@ -5,7 +5,8 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const articleId = ref<number | undefined>(undefined);
 
-if (typeof route.params.id === "string" && /^[1-9]\d*$/.test(route.params.id)) articleId.value = parseInt(route.params.id);
+if (typeof route.params.id === "string" && /^[1-9]\d*$/.test(route.params.id))
+  articleId.value = parseInt(route.params.id);
 </script>
 
 <template>

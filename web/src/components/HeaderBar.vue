@@ -22,14 +22,31 @@ const searchString = ref("");
       </div>
       <div class="flex items-center">
         <div>
-          <n-auto-complete v-model:value="searchString" :placeholder="`搜索${LIBRARY_NAME}`" style="border-radius: 6px"></n-auto-complete>
+          <n-auto-complete
+            v-model:value="searchString"
+            :placeholder="`搜索${LIBRARY_NAME}`"
+            style="border-radius: 6px"
+          ></n-auto-complete>
         </div>
         <div class="flex items-center gap-x-4">
-          <router-link v-if="!USER_PROFILE" class="tw-header-link" to="/login"> 登陆 </router-link>
-          <router-link v-else class="tw-header-link" @contextmenu.prevent="logout(messager)" :to="`/user/${USER_PROFILE.id}`">
+          <router-link v-if="!USER_PROFILE" class="tw-header-link" to="/login">
+            登陆
+          </router-link>
+          <router-link
+            v-else
+            class="tw-header-link"
+            @contextmenu.prevent="logout(messager)"
+            :to="`/user/${USER_PROFILE.id}`"
+          >
             {{ USER_PROFILE.name }}
           </router-link>
-          <router-link v-if="!USER_PROFILE" class="tw-header-link border-[1px] border-white px-2 py-1 rounded-md" to="/register"> 注册 </router-link>
+          <router-link
+            v-if="!USER_PROFILE"
+            class="tw-header-link border-[1px] border-white px-2 py-1 rounded-md"
+            to="/register"
+          >
+            注册
+          </router-link>
         </div>
       </div>
     </div>
