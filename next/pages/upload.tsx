@@ -18,7 +18,6 @@ import { getProfileSSR } from "@/utils/req";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const profileResult = await getProfileSSR(context.req, context.res);
-  console.log(profileResult);
   if (!profileResult.isLogged)
     return {
       redirect: {

@@ -12,7 +12,7 @@ import Divider from "@mui/material/Divider";
 import Box from "@mui/material/Box";
 import { styled, ThemeProvider, createTheme } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import { KeyboardArrowDown, People, PermMedia, Dns, Public } from "@mui/icons-material";
+import { KeyboardArrowDown, People, PermMedia, Dns, Public, Add } from "@mui/icons-material";
 import { useState } from "react";
 import { LIBRARY_NAME, LIBRARY_SLOGAN } from "@typings/constants";
 import Link from "next/link";
@@ -44,7 +44,7 @@ export default function Articles({ data, profile }: Props) {
       <Head>
         <title>页面</title>
       </Head>
-      <div className="flex w-screen h-screen overflow-hidden">
+      <div className="flex w-screen h-screen overflow-hidden relative">
         <CustomizedList profile={profile} />
         <div className="flex flex-col overflow-hidden flex-1">
           <div className="flex-1 overflow-y-scroll">
@@ -52,11 +52,19 @@ export default function Articles({ data, profile }: Props) {
               {code === "OK" && articles.length === 0 && <p>空</p>}
               {code === "OK" && (
                 <div
-                  className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3
-                 xl:grid-cols-4 gap-x-2 gap-y-2 px-4 py-12"
+                  className="px-2 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2
+                 xl:grid-cols-4 gap-x-2 gap-y-2 py-6"
                 >
                   {articles.map(art => (
-                    <ArticlePeek key={art.id} preview={art} />
+                    <ArticlePeek
+                      key={art.id}
+                      preview={art}
+                      currentUserId={
+                        profile.data && profile.data.capacity === "user"
+                          ? profile.data.id
+                          : undefined
+                      }
+                    />
                   ))}
                 </div>
               )}
@@ -74,6 +82,23 @@ export default function Articles({ data, profile }: Props) {
               }}
             />
           </div>
+        </div>
+        <div className="absolute bottom-10 right-10">
+          <Link href={"/upload"} passHref>
+            <Button
+              variant="contained"
+              sx={{
+                width: 20,
+                minWidth: "unset",
+                height: 20,
+                borderRadius: 20,
+                p: "24px",
+                fontSize: "30px",
+              }}
+            >
+              <Add></Add>
+            </Button>
+          </Link>
         </div>
       </div>
     </>
@@ -127,22 +152,27 @@ function CustomizedList(props: { profile: Props["profile"] }) {
           <FireNav component="nav" className="flex flex-col">
             <Box>
               {/* nav title */}
-              <ListItemButton component="a" href="/">
-                <ListItemIcon sx={{ fontSize: 20 }}>📖</ListItemIcon>
-                <ListItemText
-                  sx={{ my: 1 }}
-                  primary={`${LIBRARY_NAME} 所有页面`}
-                  secondary={LIBRARY_SLOGAN}
-                  primaryTypographyProps={{
-                    fontSize: 16,
-                    fontWeight: "medium",
-                    letterSpacing: 0,
-                  }}
-                  secondaryTypographyProps={{
-                    fontSize: 10,
-                  }}
-                />
-              </ListItemButton>
+              <Link href={"/"} passHref>
+                <a className="text-white">
+                  <ListItemButton>
+                    <ListItemIcon sx={{ fontSize: 20 }}>📖</ListItemIcon>
+                    <ListItemText
+                      sx={{ my: 1 }}
+                      primary={`${LIBRARY_NAME} 所有页面`}
+                      secondary={LIBRARY_SLOGAN}
+                      primaryTypographyProps={{
+                        fontSize: 16,
+                        fontWeight: "medium",
+                        letterSpacing: 0,
+                      }}
+                      secondaryTypographyProps={{
+                        fontSize: 10,
+                      }}
+                    />
+                  </ListItemButton>
+                </a>
+              </Link>
+
               <Divider />
             </Box>
             <Box

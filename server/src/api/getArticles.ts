@@ -3,11 +3,13 @@ import Article from "@/models/Article";
 import {
   ApiGetArticlesRequest,
   ApiGetArticlesResponse,
+  ArticlePreview,
   GetArticlesReq,
   GetArticlesRes,
 } from "@typings/api";
 import { sendJSONStatus } from "@/util";
 import { DEFAULT_ARTICLE_PAGE_SIZE, POSITIVE_INTEGER_REGEX } from "@typings/constants";
+import User from "@/models/User";
 
 const router = Router();
 
@@ -38,15 +40,36 @@ router.post("/", async (req, res) => {
 
   const total = await Article.countDocuments({});
   const articles = await Article.find()
-    .select("id title description userId poster createdTime updatedTime -_id")
+    .select("id title description poster userId createdTime updatedTime -_id")
     .limit(newPageSize)
     .skip((newPage - 1) * newPageSize)
     .sort("-createdTime");
 
+  const promises = articles.map(async (art): Promise<ArticlePreview> => {
+    const { id, title, description, poster, userId, createdTime, updatedTime } = art;
+    const user = await User.findOne({ id: userId });
+    const { name, avatar } = user;
+    return {
+      id,
+      title,
+      description,
+      poster,
+      createdTime,
+      updatedTime,
+      profile: {
+        id: userId,
+        name,
+        avatar,
+      },
+    };
+  });
+
+  const populatedArticles: ArticlePreview[] = await Promise.all(promises);
+
   return sendJSONStatus<ApiGetArticlesResponse>(res, {
     code: "OK",
     message: "success",
-    articles: articles,
+    articles: populatedArticles,
     total,
     current: newPage,
     pageSize: newPageSize,

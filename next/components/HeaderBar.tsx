@@ -18,7 +18,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 export default function HeaderBar(props: { authenticateRes: AuthenticateRes }) {
   return (
     <div className="flex items-center justify-between mx-4 py-2">
-      <div className="flex items-center gap-x-2">
+      <div className="flex items-center gap-x-4">
         {[
           {
             name: "主页",
@@ -53,9 +53,11 @@ export default function HeaderBar(props: { authenticateRes: AuthenticateRes }) {
             </StyledBadge>
           </>
         ) : (
-          <Button variant="contained" disableElevation>
-            登陆
-          </Button>
+          <Link href={"/login"} passHref>
+            <Button variant="contained" disableElevation>
+              登陆
+            </Button>
+          </Link>
         )}
       </div>
     </div>

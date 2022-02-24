@@ -97,6 +97,11 @@ export interface ApiGetArticleResponse {
   code: "OK" | "WRONG_ID" | "NO_SUCH_ARTICLE" | "INTERNAL_ERROR";
   message: string;
   article?: ArticleDocument;
+  profile?: {
+    id: AccountCommon["id"];
+    name: AccountCommon["name"];
+    avatar: AccountCommon["avatar"];
+  };
 }
 
 // -------- 其他验证错误和类型 --------
@@ -115,8 +120,12 @@ export interface ArticlePreview {
   id: ArticleDocument["id"];
   title: ArticleDocument["title"];
   description: ArticleDocument["description"];
-  userId: ArticleDocument["userId"];
   poster: ArticleDocument["poster"];
+  profile: {
+    id: AccountCommon["id"];
+    name: AccountCommon["name"];
+    avatar: AccountCommon["avatar"];
+  };
   createdTime: ArticleDocument["createdTime"];
   updatedTime: ArticleDocument["updatedTime"];
 }

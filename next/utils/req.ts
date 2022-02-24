@@ -42,6 +42,5 @@ export async function getProfileSSR(
   const setCookie = response.headers.get("set-cookie");
   if (typeof setCookie === "string") res.setHeader("set-cookie", setCookie);
   const result = (await response.json()) as AuthenticateRes;
-  console.log(result);
   return result;
 }

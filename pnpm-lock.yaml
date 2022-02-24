@@ -28,9 +28,11 @@ importers:
       '@mui/material': ^5.4.2
       '@types/node': 17.0.18
       '@types/react': 17.0.39
+      date-fns: ^2.28.0
       eslint: 8.9.0
       eslint-config-next: 12.1.0
       next: 12.1.0
+      nextjs-progressbar: ^0.0.13
       react: 17.0.2
       react-dom: 17.0.2
       react-markdown: 6.0.3
@@ -49,7 +51,9 @@ importers:
       '@milkdown/theme-nord': 5.3.3
       '@mui/icons-material': 5.4.2_40fc9198f3297cec148e6ca7b8f715e2
       '@mui/material': 5.4.2_6226f8758b5b21b5515ad844c1caeb22
+      date-fns: 2.28.0
       next: 12.1.0_react-dom@17.0.2+react@17.0.2
+      nextjs-progressbar: 0.0.13_next@12.1.0+react@17.0.2
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-markdown: 6.0.3_a0c521d4794c7ad97f5f4c1c4a7d5818
@@ -5791,6 +5795,18 @@ packages:
       - babel-plugin-macros
     dev: false
 
+  /nextjs-progressbar/0.0.13_next@12.1.0+react@17.0.2:
+    resolution: {integrity: sha512-vuE9/j1yaFyHhMVwdlPZbGbcwnvoZZMH8fXUG+HCa+w5uojRNOMO43EL+o9YZ53QwQHsjWdfUapz+J8D/u3jFw==}
+    peerDependencies:
+      next: '>= 6.0.0 <=12.x.x'
+      react: '>= 16.0.0 <= 17.x.x'
+    dependencies:
+      next: 12.1.0_react-dom@17.0.2+react@17.0.2
+      nprogress: 0.2.0
+      prop-types: 15.8.1
+      react: 17.0.2
+    dev: false
+
   /node-emoji/1.11.0:
     resolution: {integrity: sha512-wo2DpQkQp7Sjm2A0cq+sN7EHKO6Sl0ctXeBdFZrL9T9+UywORbufTcTZxom8YqpLQt/FqNMUkOpkZrJVYSKD3A==}
     dependencies:
@@ -5841,6 +5857,10 @@ packages:
     dependencies:
       path-key: 3.1.1
     dev: true
+
+  /nprogress/0.2.0:
+    resolution: {integrity: sha1-y480xTIT2JVyP8urkH6UIq28r7E=}
+    dev: false
 
   /object-assign/4.1.1:
     resolution: {integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=}

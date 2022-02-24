@@ -11,7 +11,6 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
 };
 
 const Home = ({ profileResult }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.log(profileResult);
   return (
     <>
       <Head>
@@ -20,8 +19,9 @@ const Home = ({ profileResult }: InferGetServerSidePropsType<typeof getServerSid
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HeaderBar authenticateRes={profileResult}></HeaderBar>
+
       <div className="bg-red w-full h-96 bg-red-300 flex items-center justify-center">
-        <div className="mx-6 my-3 border border-white">立刻进入</div>
+        <div className="mx-6 my-3 border border-white border-solid">立刻进入</div>
       </div>
       <div className="bg-red w-full h-96 bg-red-400"></div>
       <Container maxWidth="xl" className="py-2">

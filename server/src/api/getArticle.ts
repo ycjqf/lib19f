@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ApiGetArticleRequest, ApiGetArticleResponse } from "@typings/api";
 import { sendJSONStatus } from "@/util";
 import Article from "@/models/Article";
+import User from "@/models/User";
 
 const router = Router();
 
@@ -24,6 +25,8 @@ router.post("/", async (req, res) => {
     });
 
   const { id, title, description, userId, body, createdTime, updatedTime, poster } = article;
+  const user = await User.findOne({ id: userId });
+  const { name, avatar } = user;
   return sendJSONStatus<ApiGetArticleResponse>(res, {
     code: "OK",
     message: "success",
@@ -36,6 +39,11 @@ router.post("/", async (req, res) => {
       createdTime,
       updatedTime,
       poster,
+    },
+    profile: {
+      id: userId,
+      name,
+      avatar,
     },
   });
 });

@@ -19,7 +19,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 
 const Article = ({ data }: Props) => {
-  console.log(data.article?.body);
   return (
     <div>
       <DynamicComponentWithNoSSR defaultText={`${data.article?.body}`} editable={false} />
