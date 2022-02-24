@@ -14,7 +14,7 @@ export default function ArticlePeek(props: ArticlePeekProps) {
         <Link href={`/article/${props.preview.id}`} passHref>
           <a className="text-2xl cursor-pointer text-[#333333] inline-block truncate">
             {props.currentUserId && props.currentUserId === props.preview.profile?.id
-              ? "编辑 "
+              ? "编辑"
               : ""}
             {props.preview.title}
             <span className="text-gray-400 text-sm">#{props.preview.id}</span>

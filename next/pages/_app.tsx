@@ -2,11 +2,11 @@ import "@/styles/output.css";
 import type { AppProps } from "next/app";
 import NextNProgress from "nextjs-progressbar";
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <NextNProgress
-        color="#1f6feb"
+        color="#007d9c"
         startPosition={0.3}
         stopDelayMs={200}
         height={2.5}
@@ -17,5 +17,3 @@ function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
-
-export default MyApp;

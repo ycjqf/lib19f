@@ -28,7 +28,6 @@ export async function getProfileSSR(
   req: GetServerSidePropsContext["req"],
   res: GetServerSidePropsContext["res"]
 ): Promise<AuthenticateRes> {
-  // const authResult = await cookiePost(req, res, "", {});
   const cookie = req.headers.cookie;
   const headers: HeadersInit =
     typeof cookie === "string"

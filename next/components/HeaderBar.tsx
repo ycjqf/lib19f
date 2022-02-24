@@ -17,7 +17,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function HeaderBar(props: { authenticateRes: AuthenticateRes }) {
   return (
-    <div className="flex items-center justify-between mx-4 py-2">
+    <div className="flex items-center justify-between px-4 py-2 z-20 relative bg-white">
       <div className="flex items-center gap-x-4">
         {[
           {

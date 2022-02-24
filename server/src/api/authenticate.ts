@@ -1,31 +1,24 @@
 import { Router } from "express";
 import { sendJSONStatus } from "@/util";
-import { AuthenticateRes } from "@typings/api";
+import { AuthenticateRes, SessionData } from "@typings/api";
 import User from "@/models/User";
 
-const router = Router();
-
-router.all("/", async (req, res) => {
-  // @ts-ignore
-  if (req.session.data) {
-    // @ts-ignore
-    const { id, capacity } = req.session.data;
-    let profile: AuthenticateRes["profile"] = undefined;
-    // @ts-ignore
-    const user = await User.findOne({ id: req.session.data.id });
-    if (user) {
-      const { id, name, avatar } = user;
-      profile = { id, name, avatar };
-    }
-    // @ts-ignore
+export default Router().all("/", async (req, res) => {
+  const session = req.session as typeof req.session & { data: SessionData | undefined };
+  if (!session.data) {
+    req.session = null;
+    return sendJSONStatus<AuthenticateRes>(res, { isLogged: false });
+  }
+  const { id, capacity } = session.data;
+  let profile: AuthenticateRes["profile"] = undefined;
+  const user = await User.findOne({ id: session.data.id });
+  if (!user)
     return sendJSONStatus<AuthenticateRes>(res, {
       isLogged: true,
       data: { id: id, capacity: capacity },
       profile: profile,
     });
-  }
-  req.session = null;
-  return sendJSONStatus<AuthenticateRes>(res, { isLogged: false });
-});
 
-export default router;
+  const { name, avatar } = user;
+  profile = { id, name, avatar };
+});

@@ -5,9 +5,7 @@ import { ReactEditor, useEditor } from "@milkdown/react";
 import { gfm } from "@milkdown/preset-gfm";
 import { commonmark } from "@milkdown/preset-commonmark";
 import { blockquote, SupportedKeys } from "@milkdown/preset-gfm";
-// @ts-ignore
 import { history } from "@milkdown/plugin-history";
-// @ts-ignore
 import { emoji } from "@milkdown/plugin-emoji";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
 
@@ -27,10 +25,10 @@ export default function C(props: {
         ctx.set(rootCtx, root);
         ctx.set(editorViewOptionsCtx, { editable: () => props.editable });
         ctx.set(defaultValueCtx, props.defaultText);
-        if (typeof props.onMarkdownUpdated !== "undefined") {
-          ctx.get(listenerCtx).markdownUpdated((ctx, markdown, prevMarkdown) => {
-            // @ts-ignore
-            props.onMarkdownUpdated(markdown);
+        const { onMarkdownUpdated } = props;
+        if (typeof onMarkdownUpdated !== "undefined") {
+          ctx.get(listenerCtx).markdownUpdated((ctx, markdown) => {
+            onMarkdownUpdated(markdown);
           });
         }
       })

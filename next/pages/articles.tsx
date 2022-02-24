@@ -1,6 +1,11 @@
 import { Avatar, Pagination, Button } from "@mui/material";
-import { ApiGetArticlesRequest, ApiGetArticlesResponse, AuthenticateRes } from "@typings/api";
-import { useRouter } from "next/router";
+import {
+  ApiAccountLogoutRes,
+  ApiGetArticlesRequest,
+  ApiGetArticlesResponse,
+  AuthenticateRes,
+} from "@typings/api";
+import Router, { useRouter } from "next/router";
 import ArticlePeek from "@/components/ArticlePeek";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
@@ -18,6 +23,12 @@ import { LIBRARY_NAME, LIBRARY_SLOGAN } from "@typings/constants";
 import Link from "next/link";
 import Mlink from "@mui/material/Link";
 import { getProfileSSR } from "@/utils/req";
+
+async function logout() {
+  const response = await fetch("/api/logout", { method: "get" });
+  const result = (await response.json()) as ApiAccountLogoutRes;
+  if (result.code === "OK") return Router.reload();
+}
 
 type Props = { data: ApiGetArticlesResponse; profile: AuthenticateRes };
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -256,7 +267,9 @@ function CustomizedList(props: { profile: Props["profile"] }) {
               </Box>
 
               {props.profile.isLogged ? (
-                <Button disableElevation>登出</Button>
+                <Button disableElevation onClick={logout}>
+                  登出
+                </Button>
               ) : (
                 <Link href={"/login"} passHref>
                   <Button disableElevation>登陆</Button>

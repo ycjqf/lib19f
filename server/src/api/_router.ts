@@ -1,23 +1,24 @@
 import express from "express";
 import accountLogin from "@/api/accountLogin";
 import accountRegister from "@/api/accountRegister";
+import accountLogout from "@/api/accountLogout";
 import addArticle from "@/api/addArticle";
 import addComment from "@/api/addComment";
 import getArticles from "@/api/getArticles";
 import getProfile from "@/api/getProfile";
 import getArticle from "@/api/getArticle";
 import authenticate from "@/api/authenticate";
-import cors from "cors";
 
 const router = express.Router();
 router.use("/api/account/register", accountRegister);
 router.use("/api/account/login", accountLogin);
+router.use("/api/account/logout", accountLogout);
 router.use("/api/add/article", addArticle);
 router.use("/api/add/comment", addComment);
 router.use("/api/get/articles", getArticles);
 router.use("/api/get/article", getArticle);
-router.use("/api/get/profile", cors(), getProfile);
-router.use("/api/authenticate", cors(), authenticate);
+router.use("/api/get/profile", getProfile);
+router.use("/api/authenticate", authenticate);
 router.all("/", (req, res) => res.end("lib19f的后端服务，查看readme.md以了解更多"));
 router.all("*", (req, res) => res.status(404).end(`无效接口 invalid api`));
 export default router;

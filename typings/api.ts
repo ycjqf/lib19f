@@ -13,10 +13,18 @@ export interface ApiLoginRequest {
   capacity: accountCapacity;
 }
 export interface ApiLoginResponse {
-  code: "OK" | "PATTERN_UNMATCH" | "WRONG_CREDENTIAL" | "INTERNAL_ERROR" | "TODO";
+  code: "OK" | "BAD_FORM" | "WRONG_CREDENTIAL" | "INTERNAL_ERROR";
   message: string;
   accessToken?: string;
   refreshToken?: string;
+}
+
+export interface ApiAccountLogoutReq {
+  test: "test";
+}
+export interface ApiAccountLogoutRes {
+  code: "OK" | "INTERNAL_ERROR" | "NOT_LOGGED_IN";
+  message: string;
 }
 
 /// 注册 Api/Account/Logout
@@ -28,7 +36,7 @@ export interface ApiRegisterRequest {
   capacity: accountCapacity;
 }
 export interface ApiRegisterResponse {
-  code: "OK" | "EMAIL_TAKEN" | "NAME_TAKEN" | "PATTERN_UNMATCH" | "INTERNAL_ERROR" | "TODO";
+  code: "OK" | "EMAIL_TAKEN" | "NAME_TAKEN" | "PATTERN_UNMATCH" | "INTERNAL_ERROR";
   message: string;
 }
 

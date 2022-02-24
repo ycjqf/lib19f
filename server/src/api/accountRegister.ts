@@ -3,78 +3,57 @@ import type { Request, Response } from "express";
 import { accountCapacities } from "@typings/api";
 import { Router } from "express";
 import validator from "validator";
-
 import User from "@/models/User";
 import { sendJSONStatus } from "@/util";
-import {
-  NAME_MIN_LENGTH,
-  NAME_MAX_LENGTH,
-  NAME_PATTERN,
-  PASSWORD_MIN_LENGTH,
-  PASSWORD_MAX_LENGTH,
-  PASSWORD_PATTERN,
-} from "@typings/constants";
+import { NAME_PATTERN, PASSWORD_PATTERN } from "@typings/constants";
 
-const router = Router();
-
-async function handler(req: Request, res: Response) {
-  const registerBody: ApiRegisterRequest = {
-    name: req.body.name ? `${req.body.name}` : "",
-    email: req.body.email ? `${req.body.email}` : "",
-    password: req.body.password ? `${req.body.password}` : "",
-    passwordRepeat: req.body.passwordRepeat ? `${req.body.passwordRepeat}` : "",
-    capacity: req.body.capacity,
+export default Router().post("/", async (req: Request, res: Response) => {
+  const currentResponse: ApiRegisterResponse = { code: "PATTERN_UNMATCH", message: "" };
+  const setMsgNReturn = (msg: string) => {
+    currentResponse.message = msg;
+    return sendJSONStatus<ApiRegisterResponse>(res, currentResponse);
+  };
+  const body: ApiRegisterRequest = {
+    name: typeof req.body.name === "string" ? `${req.body.name}` : "",
+    email: typeof req.body.email === "string" ? `${req.body.email}` : "",
+    password: typeof req.body.password === "string" ? `${req.body.password}` : "",
+    passwordRepeat:
+      typeof req.body.passwordRepeat === "string" ? `${req.body.passwordRepeat}` : "",
+    capacity: typeof req.body.capacity === "string" ? req.body.capacity : "user",
   };
 
-  console.log(registerBody);
+  currentResponse.code = "PATTERN_UNMATCH";
+  if (accountCapacities.find(capacity => capacity === req.body.capacity) === undefined)
+    return setMsgNReturn("capacity is not valid");
+  if (!validator.matches(body.name, NAME_PATTERN)) return setMsgNReturn("name is not valid");
+  if (!validator.matches(body.password, PASSWORD_PATTERN))
+    return setMsgNReturn("password is not valid");
+  if (body.password !== body.passwordRepeat)
+    return setMsgNReturn("password repeat is not valid");
+  if (body.capacity !== "user")
+    return setMsgNReturn("login as non-user is not implemented currently");
+  if (!validator.isEmail(body.email)) return setMsgNReturn("email is not valid");
 
-  if (
-    accountCapacities.find(capacity => capacity === req.body.capacity) === undefined ||
-    !validator.matches(registerBody.name, NAME_PATTERN) ||
-    !validator.matches(registerBody.password, PASSWORD_PATTERN) ||
-    !validator.isEmail(registerBody.email) ||
-    registerBody.password !== registerBody.passwordRepeat
-  )
-    return sendJSONStatus<ApiRegisterResponse>(res, {
-      code: "PATTERN_UNMATCH",
-      message: "模式不匹配",
-    });
+  currentResponse.code = "NAME_TAKEN";
+  if (await User.exists({ name: body.name })) return setMsgNReturn("name is already taken");
 
-  // TODO 现在还不允许通过接口注册普通用户外的身份
-  if (req.body.capacity !== "user") {
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "TODO", message: "待实现" }, 501);
-  }
-
-  if (await User.exists({ name: registerBody.name }))
-    return sendJSONStatus<ApiRegisterResponse>(res, {
-      code: "NAME_TAKEN",
-      message: "用户名被占用",
-    });
-  if (await User.exists({ email: registerBody.email }))
-    return sendJSONStatus<ApiRegisterResponse>(res, {
-      code: "EMAIL_TAKEN",
-      message: "邮箱被占用",
-    });
+  currentResponse.code = "EMAIL_TAKEN";
+  if (await User.exists({ email: body.email })) return setMsgNReturn("email is already used");
 
   try {
+    currentResponse.code = "OK";
     const newUser = new User({
-      name: registerBody.name,
-      email: registerBody.email,
-      password: registerBody.password,
+      name: body.name,
+      email: body.email,
+      password: body.password,
       avatar: "",
       gender: "unset",
       introduction: "",
     });
     await newUser.save();
-    return sendJSONStatus<ApiRegisterResponse>(res, { code: "OK", message: "成功" }, 201);
-  } catch (error) {
-    console.log("🐛 注册出错", error);
-    return sendJSONStatus<ApiRegisterResponse>(
-      res,
-      { code: "INTERNAL_ERROR", message: "内部错误" },
-      500
-    );
+    return setMsgNReturn(`register success`);
+  } catch (e) {
+    currentResponse.code = "INTERNAL_ERROR";
+    return setMsgNReturn(`register failed ${e.message}`);
   }
-}
-
-export default router.post("/", handler);
+});
