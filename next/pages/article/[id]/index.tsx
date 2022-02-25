@@ -1,6 +1,5 @@
 import {
   ApiGetArticleResponse,
-  ApiGetArticleRequest,
   AuthenticateRes,
   ApiDeleteArticleRequest,
   ApiDeleteArticleResponse,
@@ -16,7 +15,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
-import Router from "next/router";
 const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
 
 type Props = { articleProp: ApiGetArticleResponse; profileProp: AuthenticateRes };
@@ -56,32 +54,32 @@ const Article = ({ articleProp, profileProp }: NextPageContext & Props) => {
                   {article.title}
                   <span className="text-gray-400 text-sm font-normal">#{article.id}</span>
                 </h4>
-                {/* {profileProp.data?.id === article.userId && ( */}
-                <div className="inline-flex gap-x-2">
-                  <Link href={`/article/${article.id}/edit`} passHref>
-                    <IconButton color="primary" size="small" aria-label="edit article">
-                      <EditIcon />
+                {profileProp.data?.id === article.userId && (
+                  <div className="inline-flex gap-x-2">
+                    <Link href={`/article/${article.id}/edit`} passHref>
+                      <IconButton color="primary" size="small" aria-label="edit article">
+                        <EditIcon />
+                      </IconButton>
+                    </Link>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={async e => {
+                        const response = await fetch("/api/delete-article", {
+                          method: "post",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            id: `${article.id}`,
+                          } as ApiDeleteArticleRequest),
+                        });
+                        const result = (await response.json()) as ApiDeleteArticleResponse;
+                        if (result.code === "OK") return router.push("/articles");
+                        alert(result.message);
+                      }}
+                    >
+                      <DeleteIcon />
                     </IconButton>
-                  </Link>
-                  <IconButton
-                    aria-label="delete"
-                    onClick={async e => {
-                      const response = await fetch("/api/delete-article", {
-                        method: "post",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          id: `${article.id}`,
-                        } as ApiDeleteArticleRequest),
-                      });
-                      const result = (await response.json()) as ApiDeleteArticleResponse;
-                      if (result.code === "OK") return router.push("/articles");
-                      alert(result.message);
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </div>
-                {/* )} */}
+                  </div>
+                )}
               </div>
               {/* description */}
               <p

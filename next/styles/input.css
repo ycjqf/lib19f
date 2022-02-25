@@ -14,10 +14,7 @@ a {
 /* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
-
-.g-404-img-center {
-  background-position: center;
-}
+@tailwind base;
 
 @layer components {
   .tw-header-link {
