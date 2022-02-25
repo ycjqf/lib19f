@@ -101,6 +101,13 @@ export interface ApiGetProfileResponse {
 export interface ApiGetArticleRequest {
   id: string;
 }
+export interface ApiDeleteArticleRequest {
+  id: string;
+}
+export interface ApiDeleteArticleResponse {
+  code: "OK" | "WRONG_ID" | "NO_SUCH_ARTICLE" | "NOT_AUTHORIZED" | "INTERNAL_ERROR";
+  message: string;
+}
 export interface ApiGetArticleResponse {
   code: "OK" | "WRONG_ID" | "NO_SUCH_ARTICLE" | "INTERNAL_ERROR";
   message: string;
@@ -164,6 +171,7 @@ export interface SessionData {
 
 export type AuthenticateRes = {
   isLogged: boolean;
+  message: string;
   data?: SessionData;
   profile?: ApiGetProfileResponse["profile"];
 };

@@ -1,5 +1,11 @@
 import { FC } from "react";
-import { Editor, rootCtx, editorViewOptionsCtx, defaultValueCtx } from "@milkdown/core";
+import {
+  Editor,
+  rootCtx,
+  editorViewOptionsCtx,
+  defaultValueCtx,
+  themeFactory,
+} from "@milkdown/core";
 import { nord } from "@milkdown/theme-nord";
 import { ReactEditor, useEditor } from "@milkdown/react";
 import { gfm } from "@milkdown/preset-gfm";
