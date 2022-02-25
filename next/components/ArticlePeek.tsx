@@ -52,7 +52,9 @@ export default function ArticlePeek(props: ArticlePeekProps) {
               ? `创建于 ${format(new Date(props.preview.createdTime), "yyyy-MM-dd HH:mm", {
                   locale: zhCN,
                 })}`
-              : `更新于 ${props.preview.updatedTime}`}
+              : `更新于 ${format(new Date(props.preview.updatedTime), "yyyy-MM-dd HH:mm", {
+                  locale: zhCN,
+                })}`}
           </span>
         </p>
       </div>

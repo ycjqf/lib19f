@@ -9,6 +9,7 @@ import getProfile from "@/api/getProfile";
 import getArticle from "@/api/getArticle";
 import deleteArticle from "./deleteArticle";
 import authenticate from "@/api/authenticate";
+import updateArticle from "@/api/updateArticle";
 
 const router = express.Router();
 router.use("/api/account/register", accountRegister);
@@ -16,6 +17,7 @@ router.use("/api/account/login", accountLogin);
 router.use("/api/account/logout", accountLogout);
 router.use("/api/add/article", addArticle);
 router.use("/api/delete/article", deleteArticle);
+router.use("/api/update/article", updateArticle);
 router.use("/api/add/comment", addComment);
 router.use("/api/get/articles", getArticles);
 router.use("/api/get/article", getArticle);

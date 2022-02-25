@@ -59,6 +59,14 @@ export interface ApiAddArticleResponse {
   code: "OK" | "BAD_DATA" | "INTERNAL_ERROR" | "UNAUTHORIZED";
   message: string;
 }
+
+export interface ApiUpdateArticleRequest {
+  id: string;
+  title: string;
+  description: string;
+  body: string;
+}
+export type ApiUpdateArticleResponse = ApiAddArticleResponse;
 // ---- 评论 /Api/Add/Comment
 export interface ApiAddCommentRequest {
   targetId: number;

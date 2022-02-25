@@ -103,7 +103,9 @@ const Article = ({ articleProp, profileProp }: NextPageContext & Props) => {
                     ? `创建于 ${format(new Date(article.createdTime), "yyyy-MM-dd HH:mm", {
                         locale: zhCN,
                       })}`
-                    : `更新于 ${article.updatedTime}`}
+                    : `更新于 ${format(new Date(article.updatedTime), "yyyy-MM-dd HH:mm", {
+                        locale: zhCN,
+                      })}`}
                 </span>
               </p>
             </div>

@@ -19,9 +19,7 @@ router.post("/", async (req, res) => {
     code: ApiAddArticleResponse["code"] = "UNAUTHORIZED"
   ) => sendJSONStatus<ApiAddArticleResponse>(res, { code, message });
   const inLengthString = (str: any, min: number, max: number): boolean =>
-    typeof str === "string" &&
-    req.body.title.trim().length >= MIN_TITLE_LENGTH &&
-    req.body.title.trim().length <= MAX_TITLE_LENGTH;
+    typeof str === "string" && str.trim().length >= min && str.trim().length <= max;
 
   const session = req.session as typeof req.session & { data: SessionData | undefined };
   if (!session.data) return respond("未登陆");

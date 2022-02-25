@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
     .select("id title description poster userId createdTime updatedTime -_id")
     .limit(newPageSize)
     .skip((newPage - 1) * newPageSize)
-    .sort("-createdTime");
+    .sort("-updatedTime");
 
   const promises = articles.map(async (art): Promise<ArticlePreview> => {
     const { id, title, description, poster, userId, createdTime, updatedTime } = art;

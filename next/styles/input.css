@@ -14,7 +14,6 @@ a {
 /* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
-@tailwind base;
 
 @layer components {
   .tw-header-link {
