@@ -62,7 +62,7 @@ export default Router().post("/", async (request, response) => {
   }
 });
 class GetArticlesPayload {
-  checked: boolean = false;
+  checked = false;
   message: string;
   body: {
     page: number;

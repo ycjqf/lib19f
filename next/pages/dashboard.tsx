@@ -1,13 +1,12 @@
-import { LIBRARY_NAME } from "@/../typings/constants";
-import { NextPage } from "next";
 import Head from "next/head";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import { Button, Menu, MenuItem } from "@mui/material";
+import { LIBRARY_NAME } from "@typings/constants";
 
-const Dashboard: NextPage = () => {
+function Dashboard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -24,7 +23,7 @@ const Dashboard: NextPage = () => {
       </Head>
       <div className="px-6 my-8 max-w-7xl mx-auto">
         <div className="flex items-center mb-8 justify-between">
-          <h4 className="text-2xl">晚上好, {"ycjqf"}</h4>
+          <h4 className="text-2xl">晚上好, ycjqf</h4>
           <div>
             <Button
               id="basic-button"
@@ -68,6 +67,6 @@ const Dashboard: NextPage = () => {
       </div>
     </>
   );
-};
+}
 
 export default Dashboard;

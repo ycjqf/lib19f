@@ -1,17 +1,11 @@
 import { Pagination, Button, Container, Box } from "@mui/material";
-import {
-  ApiAccountLogoutRes,
-  ApiGetArticlesRequest,
-  ApiGetArticlesResponse,
-  AuthenticateRes,
-} from "@typings/api";
+import { ApiGetArticlesRequest, ApiGetArticlesResponse, AuthenticateRes } from "@typings/api";
 import { useRouter } from "next/router";
-import ArticlePeek from "@/components/ArticlePeek";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { Add, Error } from "@mui/icons-material";
 import Link from "next/link";
-import Mlink from "@mui/material/Link";
+import ArticlePeek from "@/components/ArticlePeek";
 import { getProfileSSR } from "@/utils/req";
 import HeaderBar from "@/components/HeaderBar";
 
@@ -27,8 +21,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
   });
   const profileResult = await getProfileSSR(context.req, context.res);
   const data = (await result.json()) as ApiGetArticlesResponse;
-  const props: Props = { data: data, profile: profileResult };
-  return { props: props };
+  const props: Props = { data, profile: profileResult };
+  return { props };
 };
 
 export default function Articles({ data, profile }: Props) {
@@ -40,17 +34,17 @@ export default function Articles({ data, profile }: Props) {
       <Head>
         <title>页面</title>
       </Head>
-      <HeaderBar authenticateRes={profile}></HeaderBar>
+      <HeaderBar authenticateRes={profile} />
       <div className="flex flex-col w-screen relative">
         <div className="bg-gray-300 h-64 w-full">
           <Container maxWidth="lg" className="relative" sx={{ height: "100%" }}>
             {/* add article icon */}
-            <Box sx={{}}></Box>
+            <Box sx={{}} />
             <div
               className="md:absolute z-10 md:bottom-0 md:right-10
             transform translate-y-1/2 fixed bottom-16 right-10"
             >
-              <Link href={"/upload"} passHref>
+              <Link href="/upload" passHref>
                 <Button
                   variant="contained"
                   sx={{
@@ -62,7 +56,7 @@ export default function Articles({ data, profile }: Props) {
                     fontSize: "30px",
                   }}
                 >
-                  <Add></Add>
+                  <Add />
                 </Button>
               </Link>
             </div>
@@ -73,7 +67,7 @@ export default function Articles({ data, profile }: Props) {
             {code !== "OK" && (
               <div className=" w-full h-80 flex items-center justify-center">
                 <p className="text-sm text-gray-500">
-                  <Error sx={{ width: "16px", height: "16px", mr: "4px" }}></Error>
+                  <Error sx={{ width: "16px", height: "16px", mr: "4px" }} />
                   {message}
                 </p>
               </div>
@@ -107,7 +101,7 @@ export default function Articles({ data, profile }: Props) {
                       page={current}
                       onChange={(event, page) => {
                         if (page === 1) return router.push({ query: {} });
-                        return router.push({ query: { page: page, pageSize: pageSize } });
+                        return router.push({ query: { page, pageSize } });
                       }}
                     />
                   </div>

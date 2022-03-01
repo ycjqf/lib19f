@@ -8,7 +8,10 @@ import {
   SessionData,
 } from "@typings/api";
 
-export default Router().post("/", async (req, res) => {
+const Ab = "";
+console.log(Ab);
+
+export default Router().post("/", async (req, res): Promise<void> => {
   const currentResponse: ApiLoginResponse = { code: "BAD_FORM", message: "" };
   const setMsgNReturn = (msg: string) => {
     currentResponse.message = msg;

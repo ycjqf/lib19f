@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
     message: ApiAddArticleResponse["message"],
     code: ApiAddArticleResponse["code"] = "UNAUTHORIZED"
   ) => sendJSONStatus<ApiAddArticleResponse>(res, { code, message });
-  const inLengthString = (str: any, min: number, max: number): boolean =>
+  const inLengthString = (str: unknown, min: number, max: number): boolean =>
     typeof str === "string" && str.trim().length >= min && str.trim().length <= max;
 
   const session = req.session as typeof req.session & { data: SessionData | undefined };

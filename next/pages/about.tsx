@@ -1,7 +1,7 @@
-import { NextPage } from "next";
-
-const About: NextPage = () => {
+function About() {
   return <p>About</p>;
-};
+}
 
 export default About;
+
+// balz woxmzdgjjt

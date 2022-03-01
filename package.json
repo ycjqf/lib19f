@@ -1,25 +1,24 @@
 {
   "name": "lib19f",
   "version": "1.0.0",
-  "description": "云共享资料库",
   "license": "GPL-3.0",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"npm:dev:*\" -c red,yellow,blue,green -n d:",
-    "dev:prettier": "onchange '**/*' -- prettier --write --ignore-unknown {{changed}}",
-    "dev:server": "cd server && npm run dev",
-    "dev:tw": "cd next && npm run tw:w",
-    "dev:next": "cd next && npm run dev",
+    "dev": "concurrently -n SVR,TWD,NXT \"npm run dev:SVR\" \"npm run dev:TWD\" \"npm run dev:NXT\" -c yellow,cyan,green",
+    "dev:SVR": "npm run dev --prefix server",
+    "dev:TWD": "npm run tw:w --prefix next",
+    "dev:NXT": "npm run dev --prefix next",
+    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "prettier": "prettier --write ."
   },
   "author": "ycjqf",
-  "workspaces": [
-    "server",
-    "web"
-  ],
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.13.0",
     "concurrently": "^7.0.0",
-    "onchange": "^7.1.0",
-    "prettier": "^2.5.0"
+    "eslint": "^8.10.0",
+    "eslint-config-prettier": "^8.4.0",
+    "prettier": "^2.5.0",
+    "typescript": "4.5.5"
   }
 }

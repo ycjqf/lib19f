@@ -1,25 +1,18 @@
-import { FC } from "react";
-import {
-  Editor,
-  rootCtx,
-  editorViewOptionsCtx,
-  defaultValueCtx,
-  themeFactory,
-} from "@milkdown/core";
+import { Editor, rootCtx, editorViewOptionsCtx, defaultValueCtx } from "@milkdown/core";
 import { nord } from "@milkdown/theme-nord";
 import { ReactEditor, useEditor } from "@milkdown/react";
-import { gfm } from "@milkdown/preset-gfm";
+import { gfm, blockquote, SupportedKeys } from "@milkdown/preset-gfm";
 import { commonmark } from "@milkdown/preset-commonmark";
-import { blockquote, SupportedKeys } from "@milkdown/preset-gfm";
 import { history } from "@milkdown/plugin-history";
 import { emoji } from "@milkdown/plugin-emoji";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
 
-export default function C(props: {
-  onMarkdownUpdated?: (newMarkdown: string) => void;
+type Props = {
+  onMarkdownUpdated: (newMarkdown: string) => void | undefined;
   defaultText: string;
   editable: boolean;
-}) {
+};
+export default function C({ onMarkdownUpdated, defaultText, editable }: Props) {
   const nodes = commonmark.configure(blockquote, {
     keymap: {
       [SupportedKeys.Blockquote]: "Mod-Shift-b",
@@ -29,11 +22,10 @@ export default function C(props: {
     Editor.make()
       .config(ctx => {
         ctx.set(rootCtx, root);
-        ctx.set(editorViewOptionsCtx, { editable: () => props.editable });
-        ctx.set(defaultValueCtx, props.defaultText);
-        const { onMarkdownUpdated } = props;
+        ctx.set(editorViewOptionsCtx, { editable: () => editable });
+        ctx.set(defaultValueCtx, defaultText);
         if (typeof onMarkdownUpdated !== "undefined") {
-          ctx.get(listenerCtx).markdownUpdated((ctx, markdown) => {
+          ctx.get(listenerCtx).markdownUpdated((updatedCtx, markdown) => {
             onMarkdownUpdated(markdown);
           });
         }

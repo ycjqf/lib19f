@@ -12,7 +12,7 @@ export const mongoServerString = `mongodb+srv://${DATABASE__USERNAME}:${DATABASE
 export const sendJSONStatus = <T = void, U extends T = T>(
   res: Response,
   data: U,
-  code: number = 200
+  code = 200
 ) => {
   res.status(code);
   res.json(data).end();
