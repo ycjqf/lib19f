@@ -1,7 +1,7 @@
 import { AccountCommon, ArticleDocument, UserDocument } from "./ducument";
 
 export const accountCapacities = ["user", "reviewer", "admin"] as const;
-export type accountCapacity = typeof accountCapacities[number];
+export type AccountCapacity = typeof accountCapacities[number];
 
 // -------- 账户 ACCOUNT --------
 
@@ -10,7 +10,7 @@ export interface ApiLoginRequest {
   email: AccountCommon["email"];
   name: AccountCommon["name"];
   password: AccountCommon["password"];
-  capacity: accountCapacity;
+  capacity: AccountCapacity;
 }
 export interface ApiLoginResponse {
   code: "OK" | "BAD_FORM" | "WRONG_CREDENTIAL" | "INTERNAL_ERROR";
@@ -33,7 +33,7 @@ export interface ApiRegisterRequest {
   email: AccountCommon["email"];
   password: AccountCommon["password"];
   passwordRepeat: AccountCommon["password"];
-  capacity: accountCapacity;
+  capacity: AccountCapacity;
 }
 export interface ApiRegisterResponse {
   code: "OK" | "EMAIL_TAKEN" | "NAME_TAKEN" | "PATTERN_UNMATCH" | "INTERNAL_ERROR";
@@ -174,7 +174,7 @@ export interface GetArticlesRes {
 
 export interface SessionData {
   id: AccountCommon["id"];
-  capacity: accountCapacity;
+  capacity: AccountCapacity;
 }
 
 export type AuthenticateRes = {

@@ -1,7 +1,5 @@
 import { Router } from "express";
-import Article from "@/models/Article";
 import { ApiUpdateArticleResponse, SessionData } from "@typings/api";
-import { sendJSONStatus } from "@/util";
 import {
   MAX_ARTICLE_CHARS,
   MAX_DESCRIPTION_LENGTH,
@@ -9,6 +7,8 @@ import {
   MIN_ARTICLE_CHARS,
   MIN_TITLE_LENGTH,
 } from "@typings/constants";
+import Article from "@/models/Article";
+import { sendJSONStatus } from "@/util";
 import User from "@/models/User";
 
 export default Router().post("/", async (req, res) => {

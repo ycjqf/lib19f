@@ -13,8 +13,8 @@ export interface UserDocument extends AccountCommon {
   introduction: string;
 }
 
-export interface ReviewerDocument extends AccountCommon {}
-export interface AdminDocument extends AccountCommon {}
+export type ReviewerDocument = AccountCommon;
+export type AdminDocument = AccountCommon
 
 export interface ArticleDocument {
   id: number;
