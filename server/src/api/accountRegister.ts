@@ -1,11 +1,11 @@
-import type { ApiRegisterRequest, ApiRegisterResponse } from "@typings/api";
+import type { ApiRegisterRequest, ApiRegisterResponse } from "tps/api";
 import type { Request, Response } from "express";
-import { accountCapacities } from "@typings/api";
+import { accountCapacities } from "tps/api";
 import { Router } from "express";
 import validator from "validator";
-import User from "@/models/User";
-import { sendJSONStatus } from "@/util";
-import { NAME_PATTERN, PASSWORD_PATTERN } from "@typings/constants";
+import User from "svr/models/User";
+import { sendJSONStatus } from "svr/util";
+import { NAME_PATTERN, PASSWORD_PATTERN } from "tps/constants";
 
 export default Router().post("/", async (req: Request, res: Response) => {
   const currentResponse: ApiRegisterResponse = { code: "PATTERN_UNMATCH", message: "" };

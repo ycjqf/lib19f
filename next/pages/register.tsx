@@ -1,6 +1,6 @@
 import { Button, TextField, Typography, Alert, Collapse } from "@mui/material";
 import { useState } from "react";
-import { ApiRegisterRequest, ApiRegisterResponse } from "@typings/api";
+import { ApiRegisterRequest, ApiRegisterResponse } from "tps/api";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
@@ -8,8 +8,8 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_PATTERN,
-} from "@typings/constants";
-import { LIBRARY_NAME } from "@typings/constants";
+} from "tps/constants";
+import { LIBRARY_NAME } from "tps/constants";
 import validator from "validator";
 import Link from "next/link";
 import Head from "next/head";

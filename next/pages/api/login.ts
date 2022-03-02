@@ -1,6 +1,6 @@
-import { ApiLoginRequest, ApiLoginResponse } from "@typings/api";
+import { ApiLoginRequest, ApiLoginResponse } from "tps/api";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { cookiePost } from "@/utils/req";
+import { cookiePost } from "nxt/utils/req";
 
 export default async function handler(
   req: NextApiRequest,

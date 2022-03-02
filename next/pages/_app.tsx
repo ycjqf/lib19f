@@ -1,4 +1,4 @@
-import "@/styles/output.css";
+import "nxt/styles/output.css";
 import type { AppProps } from "next/app";
 import NextNProgress from "nextjs-progressbar";
 

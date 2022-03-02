@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { ApiDeleteArticleRequest, ApiDeleteArticleResponse, SessionData } from "@typings/api";
-import { sendJSONStatus } from "@/util";
-import Article from "@/models/Article";
+import { ApiDeleteArticleRequest, ApiDeleteArticleResponse, SessionData } from "tps/api";
+import { sendJSONStatus } from "svr/util";
+import Article from "svr/models/Article";
 
 export default Router().post("/", async (req, res) => {
   const currentResponse: ApiDeleteArticleResponse = { code: "OK", message: "" };

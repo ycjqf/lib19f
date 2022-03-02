@@ -2,7 +2,7 @@ import { GetServerSidePropsContext, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { ApiAddArticleRequest, ApiAddArticleResponse } from "@typings/api";
+import { ApiAddArticleRequest, ApiAddArticleResponse } from "tps/api";
 import { Alert, AlertTitle, Button, Collapse, Container, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,9 +12,9 @@ import {
   MAX_TITLE_LENGTH,
   MIN_ARTICLE_CHARS,
   MIN_TITLE_LENGTH,
-} from "@typings/constants";
+} from "tps/constants";
 import Head from "next/head";
-import { getProfileSSR } from "@/utils/req";
+import { getProfileSSR } from "nxt/utils/req";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const profileResult = await getProfileSSR(context.req, context.res);
@@ -31,7 +31,7 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   };
 };
 
-const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+const Editor = dynamic(() => import("nxt/components/Editor"), { ssr: false });
 const Upload: NextPage = () => {
   const router = useRouter();
   const [isEmpty, setIsEmpty] = useState(true);
@@ -127,7 +127,7 @@ const Upload: NextPage = () => {
             disableElevation
             color="info"
             startIcon={<DeleteIcon />}
-            onClick={e => {
+            onClick={() => {
               router.reload();
             }}
           >

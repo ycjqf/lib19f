@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { ApiGetArticleRequest, ApiGetArticleResponse } from "@typings/api";
-import { sendJSONStatus } from "@/util";
-import Article from "@/models/Article";
-import User from "@/models/User";
+import { ApiGetArticleRequest, ApiGetArticleResponse } from "tps/api";
+import { sendJSONStatus } from "svr/util";
+import Article from "svr/models/Article";
+import User from "svr/models/User";
 
 const router = Router();
 

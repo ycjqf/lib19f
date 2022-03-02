@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import Link from "next/link";
 import Mlink from "@mui/material/Link";
-import { ApiAccountLogoutRes, AuthenticateRes } from "@typings/api";
+import { ApiAccountLogoutRes, AuthenticateRes } from "tps/api";
 import Router from "next/router";
 import { Logout } from "@mui/icons-material";
 

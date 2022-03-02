@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { ApiGetArticlesResponse, ArticlePreview } from "@typings/api";
-import { sendJSONStatus } from "@/util";
-import { DEFAULT_ARTICLE_PAGE_SIZE, POSITIVE_INTEGER_REGEX } from "@typings/constants";
-import Article from "@/models/Article";
-import User from "@/models/User";
+import { ApiGetArticlesResponse, ArticlePreview } from "tps/api";
+import { sendJSONStatus } from "svr/util";
+import { DEFAULT_ARTICLE_PAGE_SIZE, POSITIVE_INTEGER_REGEX } from "tps/constants";
+import Article from "svr/models/Article";
+import User from "svr/models/User";
 
 export default Router().post("/", async (request, response) => {
   const payload = new GetArticlesPayload(request.body.page, request.body.pageSize);
@@ -72,7 +72,7 @@ class GetArticlesPayload {
     pageSize: DEFAULT_ARTICLE_PAGE_SIZE,
   };
 
-  constructor(page: any, pageSize: any) {
+  constructor(page: unknown, pageSize: unknown) {
     if (typeof page === "string" || typeof page === "number") {
       const testPage = `${page}`;
       if (POSITIVE_INTEGER_REGEX.test(testPage)) {

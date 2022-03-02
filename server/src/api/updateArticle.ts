@@ -1,22 +1,22 @@
 import { Router } from "express";
-import { ApiUpdateArticleResponse, SessionData } from "@typings/api";
+import { ApiUpdateArticleResponse, SessionData } from "tps/api";
 import {
   MAX_ARTICLE_CHARS,
   MAX_DESCRIPTION_LENGTH,
   MAX_TITLE_LENGTH,
   MIN_ARTICLE_CHARS,
   MIN_TITLE_LENGTH,
-} from "@typings/constants";
-import Article from "@/models/Article";
-import { sendJSONStatus } from "@/util";
-import User from "@/models/User";
+} from "tps/constants";
+import Article from "svr/models/Article";
+import { sendJSONStatus } from "svr/util";
+import User from "svr/models/User";
 
 export default Router().post("/", async (req, res) => {
   const respond = (
     message: ApiUpdateArticleResponse["message"],
     code: ApiUpdateArticleResponse["code"] = "UNAUTHORIZED"
   ) => sendJSONStatus<ApiUpdateArticleResponse>(res, { code, message });
-  const inLengthString = (str: any, min: number, max: number): boolean =>
+  const inLengthString = (str: unknown, min: number, max: number): boolean =>
     typeof str === "string" && str.length >= min && str.length <= max;
 
   const session = req.session as typeof req.session & { data: SessionData | undefined };

@@ -1,22 +1,13 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "pretty": true,
-    "sourceMap": true,
-    "target": "es6",
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "resolveJsonModule": true,
-    "paths": {
-      "@/*": ["src/*"],
-      "@typings/*": ["../typings/*"]
-    }
+    "target": "esnext",
+    "outDir": "./dist"
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
   "ts-node": {
     "files": true
-  }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "../typings"],
+  "exclude": ["node_modules"],
+  "extends": "../tsconfig.json"
 }

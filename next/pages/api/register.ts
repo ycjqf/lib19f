@@ -1,4 +1,4 @@
-import { ApiRegisterRequest, ApiRegisterResponse } from "@typings/api";
+import { ApiRegisterRequest, ApiRegisterResponse } from "tps/api";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(

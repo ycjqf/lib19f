@@ -3,8 +3,8 @@ import {
   AuthenticateRes,
   ApiDeleteArticleRequest,
   ApiDeleteArticleResponse,
-} from "@typings/api";
-import { getProfileSSR } from "@/utils/req";
+} from "tps/api";
+import { getProfileSSR } from "nxt/utils/req";
 import { GetServerSideProps, NextPageContext } from "next";
 import dynamic from "next/dynamic";
 import Head from "next/head";
@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
-const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+const Editor = dynamic(() => import("nxt/components/Editor"), { ssr: false });
 
 type Props = { articleProp: ApiGetArticleResponse; profileProp: AuthenticateRes };
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -63,7 +63,7 @@ const Article = ({ articleProp, profileProp }: NextPageContext & Props) => {
                     </Link>
                     <IconButton
                       aria-label="delete"
-                      onClick={async e => {
+                      onClick={async () => {
                         const response = await fetch("/api/delete-article", {
                           method: "post",
                           headers: { "Content-Type": "application/json" },

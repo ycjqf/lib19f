@@ -1,8 +1,8 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
-import { LIBRARY_NAME, LIBRARY_SLOGAN } from "@typings/constants";
-import HeaderBar from "@/components/HeaderBar";
-import { getProfileSSR } from "@/utils/req";
+import { LIBRARY_NAME, LIBRARY_SLOGAN } from "tps/constants";
+import HeaderBar from "nxt/components/HeaderBar";
+import { getProfileSSR } from "nxt/utils/req";
 
 export const getServerSideProps = async (context: GetServerSidePropsContext) => {
   const profileResult = await getProfileSSR(context.req, context.res);

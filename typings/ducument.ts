@@ -14,7 +14,7 @@ export interface UserDocument extends AccountCommon {
 }
 
 export type ReviewerDocument = AccountCommon;
-export type AdminDocument = AccountCommon
+export type AdminDocument = AccountCommon;
 
 export interface ArticleDocument {
   id: number;

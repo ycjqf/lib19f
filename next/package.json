@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/node": "17.0.18",
     "@types/react": "17.0.39",
-    "eslint-config-next": "12.1.0",
+    "@types/react-swipeable-views": "^0.13.1",
     "tailwindcss": "^3.0.2"
   }
 }

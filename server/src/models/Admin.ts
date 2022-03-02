@@ -1,9 +1,9 @@
 import { createConnection, model, Schema } from "mongoose";
 import autoIncrement = require("mongoose-auto-increment");
-import type { AdminDocument } from "@typings/ducument";
-import { mongoServerString } from "@/util";
+import type { AdminDocument } from "tps/ducument";
+import { mongoServerString } from "svr/util";
 
-const connection: unknown = createConnection(mongoServerString);
+const connection = createConnection(mongoServerString);
 autoIncrement.initialize(connection);
 
 const adminSchema = new Schema<AdminDocument>({

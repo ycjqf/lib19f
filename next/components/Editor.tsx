@@ -8,7 +8,7 @@ import { emoji } from "@milkdown/plugin-emoji";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
 
 type Props = {
-  onMarkdownUpdated: (newMarkdown: string) => void | undefined;
+  onMarkdownUpdated?: (newMarkdown: string) => void;
   defaultText: string;
   editable: boolean;
 };

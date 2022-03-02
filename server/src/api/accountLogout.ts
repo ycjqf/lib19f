@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { sendJSONStatus } from "@/util";
-import { ApiAccountLogoutRes, SessionData } from "@typings/api";
+import { sendJSONStatus } from "svr/util";
+import { ApiAccountLogoutRes, SessionData } from "tps/api";
 
 export default Router().all("/", async (req, res) => {
   const session = req.session as typeof req.session & { data: SessionData | undefined };

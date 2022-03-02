@@ -1,14 +1,14 @@
 import express from "express";
-import accountLogin from "@/api/accountLogin";
-import accountRegister from "@/api/accountRegister";
-import accountLogout from "@/api/accountLogout";
-import addArticle from "@/api/addArticle";
-import getArticles from "@/api/getArticles";
-import getProfile from "@/api/getProfile";
-import getArticle from "@/api/getArticle";
-import deleteArticle from "./deleteArticle";
-import authenticate from "@/api/authenticate";
-import updateArticle from "@/api/updateArticle";
+import accountLogin from "svr/api/accountLogin";
+import accountRegister from "svr/api/accountRegister";
+import accountLogout from "svr/api/accountLogout";
+import addArticle from "svr/api/addArticle";
+import getArticles from "svr/api/getArticles";
+import getProfile from "svr/api/getProfile";
+import getArticle from "svr/api/getArticle";
+import deleteArticle from "svr/api/deleteArticle";
+import authenticate from "svr/api/authenticate";
+import updateArticle from "svr/api/updateArticle";
 
 const router = express.Router();
 router.use("/api/account/register", accountRegister);

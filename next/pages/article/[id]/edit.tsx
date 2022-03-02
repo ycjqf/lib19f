@@ -1,12 +1,11 @@
 import {
-  ApiAddArticleRequest,
   ApiAddArticleResponse,
   ApiGetArticleResponse,
   ApiUpdateArticleRequest,
   ApiUpdateArticleResponse,
   AuthenticateRes,
-} from "@typings/api";
-import { getProfileSSR } from "@/utils/req";
+} from "tps/api";
+import { getProfileSSR } from "nxt/utils/req";
 import { GetServerSideProps, NextPageContext } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -19,10 +18,10 @@ import {
   MAX_TITLE_LENGTH,
   MIN_ARTICLE_CHARS,
   MIN_TITLE_LENGTH,
-} from "@typings/constants";
+} from "tps/constants";
 import { Container, Collapse, Alert, AlertTitle, TextField, Button } from "@mui/material";
 import Head from "next/head";
-const Editor = dynamic(() => import("@/components/Editor"), { ssr: false });
+const Editor = dynamic(() => import("nxt/components/Editor"), { ssr: false });
 
 type Props = { articleProp: ApiGetArticleResponse; profileProp: AuthenticateRes };
 export const getServerSideProps: GetServerSideProps = async context => {
@@ -52,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   return { props: props };
 };
 
-const Reviews = ({ articleProp, profileProp }: NextPageContext & Props) => {
+const Reviews = ({ articleProp }: NextPageContext & Props) => {
   const router = useRouter();
   const [isEmpty, setIsEmpty] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -155,7 +154,7 @@ const Reviews = ({ articleProp, profileProp }: NextPageContext & Props) => {
             disableElevation
             color="info"
             startIcon={<DeleteIcon />}
-            onClick={e => {
+            onClick={() => {
               router.reload();
             }}
           >

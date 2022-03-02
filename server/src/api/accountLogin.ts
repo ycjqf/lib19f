@@ -1,15 +1,7 @@
 import { Router } from "express";
-import User from "@/models/User";
-import { sendJSONStatus } from "@/util";
-import {
-  ApiLoginRequest,
-  ApiLoginResponse,
-  accountCapacities,
-  SessionData,
-} from "@typings/api";
-
-const Ab = "";
-console.log(Ab);
+import User from "svr/models/User";
+import { sendJSONStatus } from "svr/util";
+import { ApiLoginRequest, ApiLoginResponse, accountCapacities, SessionData } from "tps/api";
 
 export default Router().post("/", async (req, res): Promise<void> => {
   const currentResponse: ApiLoginResponse = { code: "BAD_FORM", message: "" };
@@ -41,11 +33,14 @@ export default Router().post("/", async (req, res): Promise<void> => {
 
     currentResponse.code = "OK";
     const session = req.session as typeof req.session & { data: SessionData | undefined };
-    if (session.data) return req.session.regenerate(() => setMsgNReturn("already logged in"));
+    if (session.data) {
+      req.session.regenerate(() => setMsgNReturn("already logged in"));
+      return;
+    }
     session.data = { id: user.id, capacity: "user" };
     return setMsgNReturn("login success");
   } catch (e) {
     currentResponse.code = "INTERNAL_ERROR";
-    return setMsgNReturn(`login failed ${e.message}`);
+    return setMsgNReturn(`login failed ${e instanceof Error ? e.message : "unknwonw error"}`);
   }
 });

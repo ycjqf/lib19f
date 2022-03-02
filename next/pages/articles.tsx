@@ -1,13 +1,13 @@
 import { Pagination, Button, Container, Box } from "@mui/material";
-import { ApiGetArticlesRequest, ApiGetArticlesResponse, AuthenticateRes } from "@typings/api";
+import { ApiGetArticlesRequest, ApiGetArticlesResponse, AuthenticateRes } from "tps/api";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { Add, Error } from "@mui/icons-material";
 import Link from "next/link";
-import ArticlePeek from "@/components/ArticlePeek";
-import { getProfileSSR } from "@/utils/req";
-import HeaderBar from "@/components/HeaderBar";
+import ArticlePeek from "nxt/components/ArticlePeek";
+import { getProfileSSR } from "nxt/utils/req";
+import HeaderBar from "nxt/components/HeaderBar";
 
 type Props = { data: ApiGetArticlesResponse; profile: AuthenticateRes };
 export const getServerSideProps: GetServerSideProps = async context => {

@@ -1,4 +1,4 @@
-import { AuthenticateRes } from "@typings/api";
+import { AuthenticateRes } from "tps/api";
 import type { NextApiRequest, NextApiResponse, GetServerSidePropsContext } from "next";
 
 export async function cookiePost<Req, Res>(

@@ -4,11 +4,14 @@ import session from "express-session";
 import connectRedis from "connect-redis";
 import { createClient } from "redis";
 import moment from "moment";
-import { SessionData } from "@typings/api";
-import API from "@/api/_router";
-import { mongoServerString } from "@/util";
+import { SessionData } from "tps/api";
+import API from "svr/api/_router";
+import { mongoServerString } from "svr/util";
 
 const PORT = 1337;
+
+const strA: Array<string> = [];
+console.log(strA);
 
 void init();
 async function init(): Promise<void> {

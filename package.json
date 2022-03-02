@@ -8,7 +8,7 @@
     "dev:SVR": "npm run dev --prefix server",
     "dev:TWD": "npm run tw:w --prefix next",
     "dev:NXT": "npm run dev --prefix next",
-    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint": "DEBUG=eslint:cli-engine npx eslint . --ext .ts,.tsx --fix",
     "prettier": "prettier --write ."
   },
   "author": "ycjqf",
@@ -17,7 +17,9 @@
     "@typescript-eslint/parser": "^5.13.0",
     "concurrently": "^7.0.0",
     "eslint": "^8.10.0",
+    "eslint-config-next": "^12.1.0",
     "eslint-config-prettier": "^8.4.0",
+    "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.0",
     "typescript": "4.5.5"
   }

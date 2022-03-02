@@ -4,7 +4,7 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import { Button, Menu, MenuItem } from "@mui/material";
-import { LIBRARY_NAME } from "@typings/constants";
+import { LIBRARY_NAME } from "tps/constants";
 
 function Dashboard() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

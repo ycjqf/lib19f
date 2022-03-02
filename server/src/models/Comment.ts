@@ -1,7 +1,7 @@
 import { createConnection, model, Schema } from "mongoose";
 import autoIncrement = require("mongoose-auto-increment");
-import type { CommentDocument } from "@typings/ducument";
-import { mongoServerString } from "@/util";
+import type { CommentDocument } from "tps/ducument";
+import { mongoServerString } from "svr/util";
 
 const connection = createConnection(mongoServerString);
 autoIncrement.initialize(connection);

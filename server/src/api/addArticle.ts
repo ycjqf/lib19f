@@ -1,15 +1,15 @@
 import { Router } from "express";
-import Article from "@/models/Article";
-import { ApiAddArticleRequest, ApiAddArticleResponse, SessionData } from "@typings/api";
-import { sendJSONStatus } from "@/util";
+import Article from "svr/models/Article";
+import { ApiAddArticleRequest, ApiAddArticleResponse, SessionData } from "tps/api";
+import { sendJSONStatus } from "svr/util";
 import {
   MAX_ARTICLE_CHARS,
   MAX_DESCRIPTION_LENGTH,
   MAX_TITLE_LENGTH,
   MIN_ARTICLE_CHARS,
   MIN_TITLE_LENGTH,
-} from "@typings/constants";
-import User from "@/models/User";
+} from "tps/constants";
+import User from "svr/models/User";
 
 const router = Router();
 

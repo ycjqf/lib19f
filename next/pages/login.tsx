@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, TextField, Typography, Alert, Collapse } from "@mui/material";
 import { useEffect, useState } from "react";
-import { ApiLoginRequest, ApiLoginResponse } from "@typings/api";
+import { ApiLoginRequest, ApiLoginResponse } from "tps/api";
 import {
   NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
@@ -9,11 +9,10 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
   PASSWORD_PATTERN,
-} from "@typings/constants";
-import { LIBRARY_NAME } from "@typings/constants";
+} from "tps/constants";
+import { LIBRARY_NAME } from "tps/constants";
 import { useRouter } from "next/router";
 import Link from "next/link";
-// @ts-ignore
 import SwipeableViews from "react-swipeable-views";
 import { NextPage } from "next";
 

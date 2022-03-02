@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { sendJSONStatus } from "@/util";
-import { AuthenticateRes, SessionData } from "@typings/api";
-import User from "@/models/User";
+import { sendJSONStatus } from "svr/util";
+import { AuthenticateRes, SessionData } from "tps/api";
+import User from "svr/models/User";
 
 export default Router().all("/", async (req, res) => {
   try {

@@ -3,8 +3,4 @@ node_modules
 dist
 server/src/psw.json
 .idea
-remix/.cache
-remix/build
-remix/public
-remix/.env
-next/.next/**.*
+next/.next/

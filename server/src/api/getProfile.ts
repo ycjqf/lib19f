@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { ApiGetProfileRequest, ApiGetProfileResponse } from "@typings/api";
-import { sendJSONStatus } from "@/util";
-import User from "@/models/User";
-import { POSITIVE_INTEGER_REGEX } from "@typings/constants";
+import { ApiGetProfileRequest, ApiGetProfileResponse } from "tps/api";
+import { sendJSONStatus } from "svr/util";
+import User from "svr/models/User";
+import { POSITIVE_INTEGER_REGEX } from "tps/constants";
 
 const router = Router();
 
