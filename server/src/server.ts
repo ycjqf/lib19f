@@ -1,17 +1,14 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { connect } from "mongoose";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import { createClient } from "redis";
 import moment from "moment";
-import { SessionData } from "tps/api";
+import { ApiLoginResponse, SessionData } from "tps/api";
 import API from "svr/api/_router";
-import { mongoServerString } from "svr/util";
+import { mongoServerString, sendJSONStatus } from "svr/util";
 
 const PORT = 1337;
-
-const strA: Array<string> = [];
-console.log(strA);
 
 void init();
 async function init(): Promise<void> {
@@ -52,6 +49,21 @@ async function init(): Promise<void> {
       body ${JSON.stringify(req.body)}
       session ${JSON.stringify(session.data)}`
     );
+    next();
+  });
+
+  app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof SyntaxError) {
+      return sendJSONStatus<ApiLoginResponse>(res, {
+        code: "BAD_FORM",
+        message: "bad format of json",
+      });
+    }
+    if (err)
+      return sendJSONStatus<ApiLoginResponse>(res, {
+        code: "BAD_FORM",
+        message: "bad form",
+      });
     next();
   });
 
