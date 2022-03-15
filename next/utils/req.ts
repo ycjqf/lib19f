@@ -7,7 +7,7 @@ export async function cookiePost<Req, Res>(
   url: string,
   data: Req
 ): Promise<Res> {
-  const cookie = req.headers;
+  const cookie = req.headers.cookie;
   const headers: HeadersInit =
     typeof cookie === "string"
       ? { "Content-Type": "application/json", cookie }

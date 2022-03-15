@@ -11,9 +11,15 @@ import HeaderBar from "nxt/components/HeaderBar";
 
 type Props = { data: ApiGetArticlesResponse; profile: AuthenticateRes };
 export const getServerSideProps: GetServerSideProps = async context => {
+  const cookie = context.req.headers.cookie;
+  const headers: HeadersInit =
+    typeof cookie === "string"
+      ? { "Content-Type": "application/json", cookie }
+      : { "Content-Type": "application/json" };
+
   const result = await fetch("http://localhost:1337/api/get/articles", {
     method: "post",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({
       page: context.query.page,
       pageSize: context.query.pageSize,

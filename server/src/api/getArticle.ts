@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ApiGetArticleRequest, ApiGetArticleResponse } from "tps/api";
+import { ApiGetArticleResponse } from "tps/api";
 import { sendJSONStatus } from "svr/util";
 import Article from "svr/models/Article";
 import User from "svr/models/User";
@@ -7,26 +7,26 @@ import User from "svr/models/User";
 const router = Router();
 
 router.post("/", async (req, res) => {
-  const parsed: ApiGetArticleRequest = {
+  const payload = new ApiGetArticlePayload({
     id: req.body.id,
-  };
-
-  if (typeof parsed.id !== "string" || !/^[1-9]\d*$/.test(parsed.id))
+  });
+  if (!payload._valid)
     return sendJSONStatus<ApiGetArticleResponse>(res, {
       code: "WRONG_ID",
-      message: "id需为正整数",
+      message: "id should be positive interger string",
     });
 
-  const article = await Article.findOne({ id: parseInt(parsed.id) });
+  const article = await Article.findOne({ id: payload.id });
   if (!article)
     return sendJSONStatus<ApiGetArticleResponse>(res, {
       code: "NO_SUCH_ARTICLE",
-      message: "没有这个文章",
+      message: "no such article",
     });
 
   const { id, title, description, userId, body, createdTime, updatedTime, poster } = article;
   const user = await User.findOne({ id: userId });
-  const { name, avatar } = user;
+  const name = user?.name ?? "unknown";
+  const avatar = user?.avatar ?? "";
   return sendJSONStatus<ApiGetArticleResponse>(res, {
     code: "OK",
     message: "success",
@@ -47,5 +47,21 @@ router.post("/", async (req, res) => {
     },
   });
 });
+
+class ApiGetArticlePayload {
+  _valid = false;
+  _message = "valid";
+  id = 0;
+
+  constructor({ id }: { id: unknown }) {
+    if (typeof id !== "string" || !/^[1-9]\d*$/.test(id)) {
+      this._message = "id is not a number string";
+      return;
+    }
+
+    this.id = parseInt(id);
+    this._valid = true;
+  }
+}
 
 export default router;

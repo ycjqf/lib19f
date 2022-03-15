@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
   return respond(saveResult.message, "OK");
 });
 
-class ApiAddArticlePayload {
+export class ApiAddArticlePayload {
   _valid = false;
   _message = "valid";
   title = "";
@@ -89,7 +89,7 @@ async function savePayload(
   payload: ApiAddArticlePayload,
   userId: number
 ): Promise<{ success: boolean; message: string }> {
-  if (payload._valid) return { success: false, message: "article pattern wrong" };
+  if (!payload._valid) return { success: false, message: "article pattern wrong" };
   try {
     const article = new Article({
       title: payload.title,
