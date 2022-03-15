@@ -6,13 +6,12 @@ export interface AccountCommon {
   createdTime: Date;
   updatedTime: Date;
   avatar: string;
-}
-
-export interface UserDocument extends AccountCommon {
   gender: "unset" | "male" | "female";
   introduction: string;
+  status: "ok" | "baned";
 }
 
+export type UserDocument = AccountCommon;
 export type ReviewerDocument = AccountCommon;
 export type AdminDocument = AccountCommon;
 
@@ -25,6 +24,11 @@ export interface ArticleDocument {
   createdTime: Date;
   updatedTime: Date;
   poster: string;
+  status: "pending" | "approved" | "rejected";
+  changelog: {
+    reviewerId: number | undefined;
+    time: Date;
+  }[];
 }
 
 export const commentTargetTypes = ["comment", "article"] as const;

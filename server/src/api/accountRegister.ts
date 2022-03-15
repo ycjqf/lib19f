@@ -1,10 +1,10 @@
 import type { ApiRegisterResponse } from "tps/api";
 import type { Request, Response } from "express";
 import { Router } from "express";
-import validator from "validator";
-import User from "svr/models/User";
 import { sendJSONStatus } from "svr/util";
 import { NAME_PATTERN, PASSWORD_PATTERN } from "tps/constants";
+import validator from "validator";
+import User from "svr/models/User";
 import isEmail from "validator/lib/isEmail";
 
 const router = Router();
@@ -107,7 +107,7 @@ router.post("/check-email", async (req: Request, res: Response) => {
 
 export default router;
 
-class ApiAccountRegisterPayload {
+class ApiAccountRegisterPayload implements ApiAccountRegisterRequest {
   _valid = false;
   _message = "valid";
   name = "";
@@ -153,4 +153,24 @@ class ApiAccountRegisterPayload {
 
     this._valid = true;
   }
+}
+
+export interface ApiAccountRegisterRequest {
+  name: string;
+  email: string;
+  password: string;
+  passwordRepeat: string;
+}
+
+export interface ApiAccountRegisterCheckNameRequest {
+  name: string;
+}
+
+export interface ApiAccountRegisterCheckEmailRequest {
+  email: string;
+}
+
+export interface ApiAccountRegisterRespond {
+  code: BaseResponseCode;
+  message: string;
 }

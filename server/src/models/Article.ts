@@ -15,6 +15,11 @@ const articleSchema = new Schema<ArticleDocument>({
   createdTime: { type: Date, default: () => new Date() },
   updatedTime: { type: Date, default: () => new Date() },
   poster: { type: String },
+  status: { type: String, default: "pending" },
+  changelog: {
+    type: Object,
+    default: [],
+  },
 });
 articleSchema.plugin(autoIncrement.plugin, { model: "Article", field: "id", startAt: 1 });
 export default model<ArticleDocument>("Article", articleSchema);
