@@ -13,7 +13,7 @@ export interface ApiLoginRequest {
   capacity: AccountCapacity;
 }
 export interface ApiLoginResponse {
-  code: "OK" | "BAD_FORM" | "WRONG_CREDENTIAL" | "INTERNAL_ERROR";
+  code: "OK" | "BAD_FORM" | "WRONG_CREDENTIAL" | "INTERNAL_ERROR" | "LOGGED";
   message: string;
   accessToken?: string;
   refreshToken?: string;

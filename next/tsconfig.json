@@ -3,7 +3,9 @@
     "target": "es5",
     "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "isolatedModules": true,
+    "strict": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../typings"],
   "exclude": ["node_modules"],

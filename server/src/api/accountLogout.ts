@@ -18,6 +18,8 @@ export default Router().all("/", async (req, res) => {
     return req.session.destroy(() => setMsgNReturn("logout success"));
   } catch (e) {
     currentResponse.code = "INTERNAL_ERROR";
-    return req.session.destroy(() => setMsgNReturn(`logout failed ${e.message}`));
+    return req.session.destroy(() =>
+      setMsgNReturn(`logout failed ${e instanceof Error ? e.message : "unknwonw error"}`)
+    );
   }
 });

@@ -31,7 +31,7 @@
     "moment": "^2.29.1",
     "mongoose": "^6.0.10",
     "mongoose-auto-increment": "^5.0.1",
-    "redis": "^4.0.3",
+    "redis": "^4.0.4",
     "validator": "^13.6.0"
   }
 }
