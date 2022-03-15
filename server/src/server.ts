@@ -1,16 +1,20 @@
-import express from "express";
+import express, { Response, Request, NextFunction } from "express";
 import { connect } from "mongoose";
+import moment from "moment";
 import session from "express-session";
 import connectRedis from "connect-redis";
 import API from "svr/api/_router";
+import { ApiLoginResponse, SessionData } from "tps/api";
 import {
   generateSessionId,
   mongoServerString,
   initRedis,
   gRedisClient,
   gRedisMessage,
+  sendJSONStatus,
 } from "svr/util";
 
+moment.locale("zh-cn");
 const PORT = 1337;
 
 void init();
@@ -44,6 +48,31 @@ async function init(): Promise<void> {
       genid: req => `${generateSessionId(req)}/${Date.now()}`,
     })
   );
+
+  app.use((req, res, next) => {
+    const session = req.session as typeof req.session & { data: SessionData | undefined };
+    console.log(
+      `${req.method} [${moment().format("YYYY-MM-DD HH:mm:ss")}] ${req.url}
+      body ${JSON.stringify(req.body)}
+      session ${JSON.stringify(session)}`
+    );
+    next();
+  });
+
+  app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+    if (err instanceof SyntaxError) {
+      return sendJSONStatus<ApiLoginResponse>(res, {
+        code: "BAD_FORM",
+        message: "bad format of json",
+      });
+    }
+    if (err)
+      return sendJSONStatus<ApiLoginResponse>(res, {
+        code: "BAD_FORM",
+        message: "bad form",
+      });
+    next();
+  });
 
   app.disable("x-powered-by").use(API).listen(PORT);
 

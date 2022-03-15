@@ -79,7 +79,7 @@ export default Router().post("/", async (req, res): Promise<void> => {
       await Promise.all(removeKeys);
       session.data = { id: account.id, capacity: payload.capacity };
       return sendJSONStatus<ApiLoginResponse>(res, {
-        code: "LOGGED",
+        code: "OK",
         message: `relogged success`,
       });
     }
