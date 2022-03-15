@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Article from "svr/models/Article";
-import { ApiAddArticleRequest, ApiAddArticleResponse, SessionData } from "tps/api";
+import User from "svr/models/User";
+import { ApiAddArticleResponse, SessionData } from "tps/api";
 import { sendJSONStatus } from "svr/util";
 import {
   MAX_ARTICLE_CHARS,
@@ -9,50 +10,103 @@ import {
   MIN_ARTICLE_CHARS,
   MIN_TITLE_LENGTH,
 } from "tps/constants";
-import User from "svr/models/User";
 
 const router = Router();
 
 router.post("/", async (req, res) => {
+  console.log(req.headers.cookie);
   const respond = (
     message: ApiAddArticleResponse["message"],
     code: ApiAddArticleResponse["code"] = "UNAUTHORIZED"
   ) => sendJSONStatus<ApiAddArticleResponse>(res, { code, message });
-  const inLengthString = (str: unknown, min: number, max: number): boolean =>
-    typeof str === "string" && str.trim().length >= min && str.trim().length <= max;
 
   const session = req.session as typeof req.session & { data: SessionData | undefined };
-  if (!session.data) return respond("未登陆");
-  if (session.data.capacity !== "user") return respond("无权限");
-  if (!(await User.exists({ id: session.data.id }))) return respond("无此用户");
+  if (!session.data || session.data.capacity !== "user") return respond("not logged");
+  if (!(await User.exists({ id: session.data.id })))
+    return session.destroy(() => respond("no such user"));
 
-  if (!inLengthString(req.body.title, MIN_TITLE_LENGTH, MAX_TITLE_LENGTH))
-    return respond(`标题长度在 ${MIN_TITLE_LENGTH}到${MAX_TITLE_LENGTH} 之间`, "BAD_DATA");
-  if (!inLengthString(req.body.description, 0, MAX_DESCRIPTION_LENGTH))
-    return respond(`介绍最长到 ${MAX_DESCRIPTION_LENGTH}`, "BAD_DATA");
-  if (!inLengthString(req.body.body, MIN_ARTICLE_CHARS, MAX_ARTICLE_CHARS))
-    return respond(`内容长度在 ${MIN_ARTICLE_CHARS}到${MAX_ARTICLE_CHARS} 之间`, "BAD_DATA");
-
-  const uploadArticle: ApiAddArticleRequest = {
-    title: req.body.title ? `${req.body.title}` : "",
-    body: req.body.body ? `${req.body.body}` : "",
-    description: req.body.description ? `${req.body.description}` : "",
-  };
-
-  const article = new Article({
-    title: uploadArticle.title,
-    description: uploadArticle.description,
-    body: uploadArticle.body,
-    userId: session.data.id,
-    poster: "",
+  const payload = new ApiAddArticlePayload({
+    title: req.body.title,
+    description: req.body.description,
+    body: req.body.body,
   });
 
-  try {
-    await article.save();
-    return respond("成功", "OK");
-  } catch (error) {
-    return respond("服务器出错", "INTERNAL_ERROR");
-  }
+  if (!payload._valid) return respond(payload._message, "BAD_DATA");
+
+  const saveResult = await savePayload(payload, session.data.id);
+  if (!saveResult.success) return respond(saveResult.message, "INTERNAL_ERROR");
+
+  return respond(saveResult.message, "OK");
 });
+
+class ApiAddArticlePayload {
+  _valid = false;
+  _message = "valid";
+  title = "";
+  description = "";
+  body = "";
+
+  constructor({
+    title,
+    description,
+    body,
+  }: {
+    title: string;
+    description: string;
+    body: unknown;
+  }) {
+    if (
+      typeof title !== "string" ||
+      title.trim().length < MIN_TITLE_LENGTH ||
+      title.trim().length > MAX_TITLE_LENGTH
+    ) {
+      this._message = `title invalid`;
+      return;
+    }
+    this.title = title.trim();
+
+    if (typeof description !== "string" || description.trim().length > MAX_DESCRIPTION_LENGTH) {
+      this._message = `description invalid`;
+      return;
+    }
+    this.description = description.trim();
+
+    if (
+      typeof body !== "string" ||
+      body.trim().length < MIN_ARTICLE_CHARS ||
+      body.trim().length > MAX_ARTICLE_CHARS
+    ) {
+      this._message = `body invalid`;
+      return;
+    }
+    this.body = body.trim();
+
+    this._valid = true;
+  }
+}
+
+async function savePayload(
+  payload: ApiAddArticlePayload,
+  userId: number
+): Promise<{ success: boolean; message: string }> {
+  if (payload._valid) return { success: false, message: "article pattern wrong" };
+  try {
+    const article = new Article({
+      title: payload.title,
+      description: payload.description,
+      body: payload.body,
+      poster: "",
+      userId,
+    });
+
+    await article.save();
+    return { success: true, message: "article saved" };
+  } catch (e) {
+    return {
+      success: false,
+      message: `failed to save article${e instanceof Error && ` :${e.message}`}`,
+    };
+  }
+}
 
 export default router;

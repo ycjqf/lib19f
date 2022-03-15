@@ -39,7 +39,6 @@ export const generateSessionId = (req: Request) => {
 export async function initRedis(): Promise<boolean> {
   try {
     const redisClient = createClient({
-      url: "redis://127.0.0.1:6379/0",
       legacyMode: true,
     });
     await redisClient.connect();
