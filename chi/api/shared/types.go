@@ -6,9 +6,12 @@ type ApiBaseResponse struct {
 }
 
 const (
-	BaseCode_OK           = "OK"
-	BaseCode_Err          = "INTERNAL_ERROR"
-	BaseCode_BadRequest   = "BAD_REQUEST"
-	BaseCode_NotFound     = "NOT_FOUND"
-	BaseCode_Unauthorized = "UNAUTHORIZED"
+	ResCode_OK              = "OK"
+	ResCode_Err             = "ERR"
+	ResCode_BadRequest      = "BAD_REQUEST"
+	ResCode_NotFound        = "NOT_FOUND"
+	ResCode_Unauthorized    = "UNAUTHORIZED"
+	ResCode_WrongCredential = "WRONG_CREDENTIAL"
+	ResCode_Logged          = "LOGGED"
+	ResCode_NotLoggedIn     = "NOT_LOGGED_IN"
 )

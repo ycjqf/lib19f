@@ -38,13 +38,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	parseRequestErr := json.NewDecoder(r.Body).Decode(&request)
 	if parseRequestErr != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		respond(shared.BaseCode_BadRequest, parseRequestErr.Error())
+		respond(shared.ResCode_BadRequest, parseRequestErr.Error())
 		return
 	}
 	payload, payloadErr := genPayload(request)
 	if payloadErr != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		respond(shared.BaseCode_BadRequest, payloadErr.Error())
+		respond(shared.ResCode_BadRequest, payloadErr.Error())
 		return
 	}
 
@@ -52,7 +52,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	nameExistence, nameExistenceErr := findExistence("name", payload.Name)
 	if nameExistenceErr != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		respond(shared.BaseCode_Err, nameExistenceErr.Error())
+		respond(shared.ResCode_Err, nameExistenceErr.Error())
 		return
 	}
 	if nameExistence {
@@ -62,7 +62,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	emailExistence, emailExistenceErr := findExistence("email", payload.Email)
 	if emailExistenceErr != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		respond(shared.BaseCode_Err, emailExistenceErr.Error())
+		respond(shared.ResCode_Err, emailExistenceErr.Error())
 		return
 	}
 	if emailExistence {
@@ -74,12 +74,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	saveErr := savePayload(&payload)
 	if saveErr != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		respond(shared.BaseCode_Err, saveErr.Error())
+		respond(shared.ResCode_Err, saveErr.Error())
 		return
 	}
 
 	// try save here
-	respond(shared.BaseCode_OK, "ok")
+	respond(shared.ResCode_OK, "ok")
 }
 
 func findExistence(key string, value string) (bool, error) {
@@ -98,12 +98,16 @@ func findExistence(key string, value string) (bool, error) {
 
 func savePayload(payload *Payload) error {
 	mdb := shared.Connections.Mdb
+	password, passwordErr := shared.EncryptPassword(payload.Password)
+	if passwordErr != nil {
+		return passwordErr
+	}
 	user := model.User{
 		Mid:          primitive.NewObjectID(),
 		Id:           genUserId(payload),
 		Name:         payload.Name,
 		Email:        payload.Email,
-		Password:     payload.Password,
+		Password:     password,
 		CreatedTime:  primitive.NewDateTimeFromTime(time.Now()),
 		UpdatedTime:  primitive.NewDateTimeFromTime(time.Now()),
 		Gender:       "unset",

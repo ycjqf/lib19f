@@ -2,7 +2,6 @@ package shared
 
 import (
 	"context"
-	"embed"
 	"strings"
 
 	"github.com/go-redis/redis/v8"
@@ -24,22 +23,14 @@ var Connections InitializeResult = InitializeResult{
 	Mdb:     nil,
 }
 
-var fs embed.FS
-
-//go:embed mongo-url.txt
-var mongoDbUrl string
-
-//go:embed session-secret.txt
-var sessionSecret string
-
 func InitConnections() {
 
-	if strings.TrimSpace(mongoDbUrl) == "" {
+	if strings.TrimSpace(MONGO_DB_URL) == "" {
 		Connections.Message = "no 'MONGODB_URI' environment variable found"
 		return
 	}
 
-	mongoClient, connectMongoErr := mongo.Connect(context.Background(), options.Client().ApplyURI(mongoDbUrl))
+	mongoClient, connectMongoErr := mongo.Connect(context.Background(), options.Client().ApplyURI(MONGO_DB_URL))
 	if connectMongoErr != nil {
 		Connections.Message = "unable to connect to mongo"
 		return

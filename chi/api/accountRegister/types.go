@@ -34,19 +34,19 @@ func genPayload(request Request) (Payload, error) {
 
 	nameMatch := shared.NAME_PATTERN.Match([]byte(request.Name))
 	if nameMatch == false {
-		return payload, errors.New("empty name")
+		return payload, errors.New("invalid name")
 	}
 	payload.Name = request.Name
 
 	_, emailMatchErr := mail.ParseAddress(request.Email)
 	if emailMatchErr != nil || len(request.Email) > shared.MAX_EMAIL_LEN {
-		return payload, errors.New("email is not valid")
+		return payload, errors.New("invalid email")
 	}
 	payload.Email = request.Email
 
 	passwordMatch := shared.PASSWORD_PATTERN.Match([]byte(request.Password))
 	if passwordMatch == false {
-		return payload, errors.New("password is not valid")
+		return payload, errors.New("invalid password")
 	}
 	if request.Password != request.PasswordRepeat {
 		return payload, errors.New("password not match")

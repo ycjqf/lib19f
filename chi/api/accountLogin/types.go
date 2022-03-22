@@ -28,16 +28,11 @@ type Payload struct {
 	Relog    bool
 }
 
-const (
-	Code_WrongCredential = "WRONG_CREDENTIAL"
-	Code_Logged          = "LOGGED"
-)
-
 func genPayload(request Request) (Payload, error) {
 	payload := Payload{}
 	payload.Relog = request.Relog
 
-	if !Contains(shared.VALID_CAPACITIES, request.Capacity) {
+	if !shared.Contains(shared.VALID_CAPACITIES, request.Capacity) {
 		return payload, errors.New("capacity invalid")
 	}
 	payload.Capacity = request.Capacity
@@ -64,13 +59,4 @@ func genPayload(request Request) (Payload, error) {
 	}
 
 	return payload, nil
-}
-
-func Contains[T comparable](s []T, e T) bool {
-	for _, v := range s {
-		if v == e {
-			return true
-		}
-	}
-	return false
 }

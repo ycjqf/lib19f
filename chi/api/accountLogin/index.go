@@ -2,10 +2,8 @@ package accountLogin
 
 import (
 	"context"
-	"crypto/sha256"
 	"encoding/json"
 	"fmt"
-	"hash/fnv"
 	"lib19f-go/api/model"
 	"lib19f-go/api/shared"
 	"net/http"
@@ -39,13 +37,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	parseRequestErr := json.NewDecoder(r.Body).Decode(&request)
 	if parseRequestErr != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		respond(shared.BaseCode_BadRequest, parseRequestErr.Error())
+		respond(shared.ResCode_BadRequest, parseRequestErr.Error())
 		return
 	}
 	payload, payloadErr := genPayload(request)
 	if payloadErr != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		respond(shared.BaseCode_BadRequest, payloadErr.Error())
+		respond(shared.ResCode_BadRequest, payloadErr.Error())
 		return
 	}
 
@@ -53,28 +51,28 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	userId, validateErr := validatePayload(&payload)
 	if validateErr != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		respond(shared.BaseCode_BadRequest, validateErr.Error())
+		respond(shared.ResCode_BadRequest, validateErr.Error())
 		return
 	}
 	if userId == 0 {
-		respond(Code_WrongCredential, "wrong password or account not exist")
+		respond(shared.ResCode_WrongCredential, "wrong password or account not exist")
 		return
 	}
 
 	// token logic
 	rdb := shared.Connections.Rdb
-	willUseSessionId, willUseSessionIdEncrypted := genSesionId(payload, userId)
+	willUseSessionId, willUseSessionIdEncrypted := shared.GenSesionId(payload.Capacity, userId)
 	sessionExistence := rdb.Get(context.Background(), willUseSessionId)
 	sessionExistenceErr := sessionExistence.Err()
 	// have bad error
 	if sessionExistenceErr != nil && sessionExistenceErr != redis.Nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		respond(shared.BaseCode_Err, sessionExistenceErr.Error())
+		respond(shared.ResCode_Err, sessionExistenceErr.Error())
 		return
 	}
 	// existed not relog
 	if sessionExistenceErr == nil && !payload.Relog {
-		respond(Code_Logged, "already login")
+		respond(shared.ResCode_Logged, "already login")
 		return
 	}
 	// existed and relog
@@ -94,14 +92,13 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	rdb.Set(context.Background(), willUseSessionId, payload.Name, time.Hour*3)
 	http.SetCookie(w, &session)
 
-	respond(shared.BaseCode_OK, "ok")
+	respond(shared.ResCode_OK, "ok")
 }
 
 func validatePayload(payload *Payload) (uint32, error) {
 	mdb := shared.Connections.Mdb
 
 	var credential primitive.M = bson.M{}
-	credential["password"] = payload.Password
 
 	if payload.Using == "email" {
 		credential["email"] = payload.Email
@@ -114,23 +111,27 @@ func validatePayload(payload *Payload) (uint32, error) {
 		FindOne(nil, credential)
 
 	existenceErr := existence.Err()
+	// have error(mongo related)
 	if existenceErr != nil && existenceErr != mongo.ErrNoDocuments {
 		return 0, existenceErr
 	}
+	// have error(account not exist)
 	if existenceErr != nil && existenceErr == mongo.ErrNoDocuments {
 		return 0, nil
 	}
+
+	// try decode found account
 	account := model.User{}
 	decodeErr := existence.Decode(&account)
 	if decodeErr != nil {
 		return 0, decodeErr
 	}
 
-	return account.Id, nil
-}
+	// whether password match
+	passwordMatch := shared.DoPasswordsMatch(account.Password, payload.Password)
+	if !passwordMatch {
+		return 0, nil
+	}
 
-func genSesionId(payload Payload, id uint32) (string, string) {
-	sessionId := fmt.Sprintf("sess-%v-%v-%x", payload.Capacity, id, fnv.New32a().Sum([]byte(payload.Name)))
-	encrypted := fmt.Sprintf("%x", sha256.Sum256([]byte(sessionId)))
-	return sessionId, encrypted
+	return account.Id, nil
 }

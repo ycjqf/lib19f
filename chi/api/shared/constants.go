@@ -11,6 +11,8 @@ const PASSWORD_MIN_LENGTH = 6
 const PASSWORD_MAX_LENGTH = 20
 const MAX_EMAIL_LEN = 50
 const DEFAULT_DATABASE = "lib19f-data"
+const SESSION_SECRET = "lib19f-session-test"
+const MONGO_DB_URL = "mongodb://127.0.0.1:27017/?compressors=disabled&gssapiServiceName=mongodb"
 
 var VALID_CAPACITIES = []string{"admin", "user", "reviewer"}
 
