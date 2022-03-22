@@ -3,15 +3,14 @@ import { connect } from "mongoose";
 import moment from "moment";
 import session from "express-session";
 import connectRedis from "connect-redis";
-import API from "svr/api/_router";
-import { ApiLoginResponse, SessionData } from "tps/api";
+import API from "svr/api";
+import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import {
   generateSessionId,
   mongoServerString,
   initRedis,
   gRedisClient,
   gRedisMessage,
-  sendJSONStatus,
 } from "svr/util";
 
 moment.locale("zh-cn");
@@ -30,6 +29,7 @@ async function init(): Promise<void> {
   const mode: unknown = app.get("env");
   const RedisStore = connectRedis(session);
 
+  app.disable("x-powered-by");
   app.use(express.json());
   app.use(
     session({
@@ -48,37 +48,46 @@ async function init(): Promise<void> {
       genid: req => `${generateSessionId(req)}/${Date.now()}`,
     })
   );
-
   app.use((req, res, next) => {
-    const session = req.session as typeof req.session & { data: SessionData | undefined };
-    console.log(
-      `${req.method} [${moment().format("YYYY-MM-DD HH:mm:ss")}] ${req.url}
-      body ${JSON.stringify(req.body)}
-      session ${JSON.stringify(session.data)}`
-    );
+    const session = req.session;
+    console.log(`${req.method} [${moment().format("YYYY-MM-DD HH:mm:ss")}] ${req.url}`);
+    console.log("\x1b[36m%s\x1b[0m", ` body ${JSON.stringify(req.body)}`);
+    session.data && console.log("\x1b[33m%s\x1b[0m", ` data ${JSON.stringify(session.data)}`);
     next();
   });
-
   app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
+    const _response: BaseResponse = { code: "BAD_REQUEST", message: "" };
     if (err instanceof SyntaxError) {
-      return sendJSONStatus<ApiLoginResponse>(res, {
-        code: "BAD_FORM",
-        message: "bad format of json",
-      });
+      _response.message = "invalid json payload";
+      res.status(StatusCodes.BAD_REQUEST);
+      res.json(_response).end();
+      return;
     }
-    if (err)
-      return sendJSONStatus<ApiLoginResponse>(res, {
-        code: "BAD_FORM",
-        message: "bad form",
-      });
+    if (err) {
+      _response.code = "INTERNAL_ERROR";
+      _response.message = `${err instanceof Error ? err.message : "unknown error"}`;
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+      res.json(_response).end();
+      return;
+    }
     next();
   });
-
-  app.disable("x-powered-by").use(API).listen(PORT);
+  app.use(API);
+  app.use("*", (_, res) => {
+    res.status(StatusCodes.NOT_FOUND);
+    res.json({ code: "NOT_FOUND", message: getReasonPhrase(StatusCodes.NOT_FOUND) });
+    res.end();
+  });
+  app.listen(PORT);
 
   console.log(
     `🚀 server is running at port ${PORT} in ${
       typeof mode === "string" ? mode : "unknown"
     } mode, view http://localhost:${PORT}`
   );
+}
+
+interface BaseResponse {
+  code: BaseResponseCode;
+  message: string;
 }

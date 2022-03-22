@@ -1,6 +1,9 @@
 node_modules
 .DS_Store
 dist
+tmp
+mongo-url.txt
+session-secret.txt
 server/src/psw.json
 .idea
 next/.next/
