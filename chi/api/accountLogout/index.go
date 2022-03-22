@@ -2,7 +2,7 @@ package accountLogout
 
 import (
 	"encoding/json"
-	"lib19f-go/api/shared"
+	"lib19f-go/api/common"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -15,7 +15,7 @@ func GenApi() *chi.Mux {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	response := shared.ApiBaseResponse{}
+	response := common.ApiBaseResponse{}
 	respond := func(code string, message string) {
 		response.Code = code
 		response.Message = message
@@ -26,12 +26,12 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	gotSessioCookie, gotSessioCookieErr := r.Cookie("account_session")
 	if gotSessioCookieErr != nil {
-		respond(shared.ResCode_NotLoggedIn, "invalid cookie")
+		respond(common.ResCode_NotLoggedIn, "invalid cookie")
 		return
 	}
 
 	println(gotSessioCookie.Value)
 
 	// try save here
-	respond(shared.ResCode_OK, "ok")
+	respond(common.ResCode_OK, "ok")
 }

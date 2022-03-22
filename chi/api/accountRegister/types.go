@@ -2,8 +2,8 @@ package accountRegister
 
 import (
 	"errors"
-	"lib19f-go/api/shared"
-	"net/mail"
+	"lib19f-go/config"
+	"lib19f-go/validators"
 )
 
 type Request struct {
@@ -32,19 +32,18 @@ const (
 func genPayload(request Request) (Payload, error) {
 	payload := Payload{}
 
-	nameMatch := shared.NAME_PATTERN.Match([]byte(request.Name))
+	nameMatch := config.NAME_PATTERN.Match([]byte(request.Name))
 	if nameMatch == false {
 		return payload, errors.New("invalid name")
 	}
 	payload.Name = request.Name
 
-	_, emailMatchErr := mail.ParseAddress(request.Email)
-	if emailMatchErr != nil || len(request.Email) > shared.MAX_EMAIL_LEN {
+	if !validators.IsValidEmail(request.Email) {
 		return payload, errors.New("invalid email")
 	}
 	payload.Email = request.Email
 
-	passwordMatch := shared.PASSWORD_PATTERN.Match([]byte(request.Password))
+	passwordMatch := config.PASSWORD_PATTERN.Match([]byte(request.Password))
 	if passwordMatch == false {
 		return payload, errors.New("invalid password")
 	}

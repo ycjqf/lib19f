@@ -1,4 +1,4 @@
-package shared
+package common
 
 type ApiBaseResponse struct {
 	Code    string `json:"code"`
@@ -7,7 +7,7 @@ type ApiBaseResponse struct {
 
 const (
 	ResCode_OK              = "OK"
-	ResCode_Err             = "ERR"
+	ResCode_Err             = "INTERNAL_ERROR"
 	ResCode_BadRequest      = "BAD_REQUEST"
 	ResCode_NotFound        = "NOT_FOUND"
 	ResCode_Unauthorized    = "UNAUTHORIZED"

@@ -5,7 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"lib19f-go/api"
-	"lib19f-go/api/shared"
+	"lib19f-go/api/common"
+	"lib19f-go/global"
 	"log"
 	"net/http"
 
@@ -14,34 +15,31 @@ import (
 )
 
 func main() {
-	shared.InitConnections()
-	if shared.Connections.Success == false {
-		panic(shared.Connections.Message)
+	global.InitConnections()
+	if global.AllConnectionsValid == false {
+		panic(global.ConnectionsMessage)
 	}
 	fmt.Println("all connections initialized succesfully")
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	r.Mount("/v0/api", api.GetApi())
-	r.NotFound(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(404)
-		res, _ := json.Marshal(&shared.ApiBaseResponse{
-			Code:    "404",
-			Message: "not found",
-		})
-		w.Write(res)
-	})
-	r.MethodNotAllowed(func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(405)
-		res, _ := json.Marshal(&shared.ApiBaseResponse{
-			Code:    "405",
-			Message: "not allowed",
-		})
-		w.Write(res)
-	})
+	r.Mount("/v0/api", api.GetAllApis())
 
+	getCommonHandler := func(code int) http.HandlerFunc {
+		return func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(code)
+			res, _ := json.Marshal(&common.ApiBaseResponse{
+				Code:    common.ResCode_NotFound,
+				Message: "not found",
+			})
+			w.Write(res)
+		}
+	}
+
+	r.NotFound(getCommonHandler(http.StatusNotFound))
+	r.MethodNotAllowed(getCommonHandler(http.StatusMethodNotAllowed))
 	log.Fatal(http.ListenAndServe(":3000", r))
 
-	defer shared.Connections.Rdb.Close()
-	defer shared.Connections.Mdb.Disconnect(context.Background())
+	defer global.RedisClient.Close()
+	defer global.MongoClient.Disconnect(context.Background())
 }
