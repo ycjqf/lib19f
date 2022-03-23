@@ -1,3 +1,8 @@
 package config
 
-const SESSION_SECRET = "lib19f-session-test"
+import (
+	_ "embed"
+)
+
+//go:embed SESSION_SECRET.txt
+var SESSION_SECRET string

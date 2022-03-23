@@ -2,15 +2,12 @@ package common
 
 import (
 	"crypto/sha256"
-	"errors"
 	"fmt"
-	"hash/fnv"
-	"lib19f-go/config"
-	"lib19f-go/global"
+	"net/http"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/go-chi/chi/v5"
+	"github.com/unrolled/render"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,23 +24,29 @@ func DoPasswordsMatch(hashedPassword, currPassword string) bool {
 	return err == nil
 }
 
-func FindExistence(key string, value string) (bool, error) {
-	mdb := global.MongoClient
-	existence := mdb.Database(config.DEFAULT_DATABASE).Collection("users").
-		FindOne(nil, bson.M{key: value})
-	existenceErr := existence.Err()
-	if existenceErr != nil && existenceErr != mongo.ErrNoDocuments {
-		return false, errors.New("unable to find account existence")
-	}
-	if existenceErr != nil && existenceErr == mongo.ErrNoDocuments {
-		return false, nil
-	}
-	return true, nil
+func GenSesionId(capacity string, id uint32) (string, string, string) {
+	preffix := fmt.Sprintf("sess-%v-%v-", capacity, id)
+	sessionId := fmt.Sprintf("sess-%v-%v-%x", capacity, id, time.Now())
+	encrypted := fmt.Sprintf("%x", sha256.Sum256([]byte(sessionId)))
+	return preffix, sessionId, encrypted
 }
 
-func GenSesionId(capacity string, id uint32) (string, string) {
-	sessionId := fmt.Sprintf("sess-%v-%v-%x", capacity, id,
-		fnv.New32a().Sum([]byte(time.Now().String())))
-	encrypted := fmt.Sprintf("%x", sha256.Sum256([]byte(sessionId)))
-	return sessionId, encrypted
+func GenPostApi(handler http.HandlerFunc) *chi.Mux {
+	r := chi.NewRouter()
+	r.Post("/", handler)
+	return r
+}
+
+func JsonRespond(w http.ResponseWriter, status int, data interface{}) {
+	rtr := render.JSON{
+		Head: render.Head{
+			Status:      status,
+			ContentType: fmt.Sprintf("%s; charset=utf-8", render.ContentJSON),
+		},
+	}
+	repondErr := rtr.Render(w, &data)
+	if repondErr != nil {
+		panic(repondErr.Error())
+	}
+	return
 }

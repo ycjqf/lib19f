@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"lib19f-go/api"
 	"lib19f-go/api/common"
+	"lib19f-go/api/types"
 	"lib19f-go/global"
 	"log"
 	"net/http"
@@ -23,16 +23,15 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Use(middleware.ContentCharset("utf-8"))
 	r.Mount("/v0/api", api.GetAllApis())
 
 	getCommonHandler := func(code int) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(code)
-			res, _ := json.Marshal(&common.ApiBaseResponse{
-				Code:    common.ResCode_NotFound,
+			common.JsonRespond(w, code, &types.ApiBaseResponse{
+				Code:    types.ResCode_NotFound,
 				Message: "not found",
 			})
-			w.Write(res)
 		}
 	}
 
