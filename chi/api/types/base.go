@@ -16,4 +16,5 @@ const (
 	ResCode_NotLoggedIn     = "NOT_LOGGED_IN"
 	ResCode_NameTaken       = "NAME_TAKEN"
 	ResCode_EmailTaken      = "EMAIL_TAKEN"
+	ResCode_NoSuchArticle   = "NO_SUCH_ARTICLE"
 )

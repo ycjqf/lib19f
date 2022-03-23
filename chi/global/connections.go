@@ -14,6 +14,7 @@ var AllConnectionsValid = false
 var ConnectionsMessage = "pending"
 var RedisClient *redis.Client = nil
 var MongoClient *mongo.Client = nil
+var MongoDatabase *mongo.Database = nil
 
 func InitConnections() {
 	clientOpt := options.ClientOptions{}
@@ -30,6 +31,7 @@ func InitConnections() {
 		return
 	}
 	MongoClient = mongoClient
+	MongoDatabase = MongoClient.Database(config.DEFAULT_DATABASE)
 
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",

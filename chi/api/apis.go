@@ -12,5 +12,6 @@ func GetAllApis() *chi.Mux {
 	r.Mount("/account/register/check-email", ApiAccountRegisterCheckEmail)
 	r.Mount("/account/register/check-name", ApiAccountRegisterCheckName)
 	r.Mount("/add/article", ApiAddArticle)
+	r.Mount("/delete/article", DeleteArticle)
 	return r
 }

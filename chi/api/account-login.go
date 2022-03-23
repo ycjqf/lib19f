@@ -74,7 +74,6 @@ func apiAccountLoginHandler(w http.ResponseWriter, r *http.Request) {
 			rdb.Del(context.Background(), sessionId)
 		}
 	}
-	fmt.Printf("set session id %v\n", willUseSessionId)
 	// not exist
 	session := http.Cookie{
 		Name:     "account_session",
@@ -102,7 +101,7 @@ func apiAccountLoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func validatePayload(payload *types.AccountLoginPayload) (uint32, error) {
-	mdb := global.MongoClient
+	mdb := global.MongoDatabase
 
 	var credential primitive.M = bson.M{}
 
@@ -112,7 +111,7 @@ func validatePayload(payload *types.AccountLoginPayload) (uint32, error) {
 		credential["name"] = payload.Name
 	}
 
-	existence := mdb.Database(config.DEFAULT_DATABASE).
+	existence := mdb.
 		Collection(fmt.Sprintf("%vs", payload.Capacity)).
 		FindOne(nil, credential)
 

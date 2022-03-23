@@ -6,7 +6,6 @@ import (
 	"hash/fnv"
 	"lib19f-go/api/common"
 	"lib19f-go/api/types"
-	"lib19f-go/config"
 	"lib19f-go/global"
 	"lib19f-go/model"
 	"lib19f-go/validators/r2p"
@@ -74,7 +73,7 @@ func apiAccountRegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func savePayload(payload *types.AccountRegisterPayload) error {
-	mdb := global.MongoClient
+	mdb := global.MongoDatabase
 	password, passwordErr := common.EncryptPassword(payload.Password)
 	if passwordErr != nil {
 		return passwordErr
@@ -92,7 +91,7 @@ func savePayload(payload *types.AccountRegisterPayload) error {
 		Introduction: "",
 		VersionKey:   0,
 	}
-	insertRes, insertErr := mdb.Database(config.DEFAULT_DATABASE).Collection("users").
+	insertRes, insertErr := mdb.Collection("users").
 		InsertOne(context.Background(), &user)
 	if insertErr != nil {
 		return insertErr

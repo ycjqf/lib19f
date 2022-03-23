@@ -6,19 +6,17 @@ import (
 	"lib19f-go/api/common"
 	"lib19f-go/api/types"
 	"lib19f-go/global"
-	"lib19f-go/model"
 	"lib19f-go/validators/r2p"
 	"net/http"
-	"time"
 
 	"github.com/go-redis/redis/v8"
-	"github.com/google/uuid"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var ApiAddArticle = common.GenPostApi(apiAddArticleHandler)
+var DeleteArticle = common.GenPostApi(apiDeleteArticle)
 
-func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
+func apiDeleteArticle(w http.ResponseWriter, r *http.Request) {
 	response := types.ApiBaseResponse{}
 	sessionData := types.SessionData{}
 
@@ -54,38 +52,33 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload, payloadErr := r2p.AddArticle(r.Body)
+	payload, payloadErr := r2p.DeleteCommon(r.Body)
 	if payloadErr != nil {
 		response.Code = types.ResCode_BadRequest
 		response.Message = payloadErr.Error()
+		common.JsonRespond(w, http.StatusBadRequest, &response)
+		return
+	}
+
+	deleteRes := global.MongoDatabase.Collection("articles").
+		FindOneAndDelete(context.Background(), bson.M{"id": payload.Id, "userId": sessionData.Id})
+	deleteErr := deleteRes.Err()
+	if deleteErr == mongo.ErrNoDocuments {
+		response.Code = types.ResCode_Unauthorized
+		response.Message = "no such article or you are not the owner"
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
 
-	article := model.Article{
-		Mid:         primitive.NewObjectID(),
-		Id:          uuid.New().ID(),
-		UserId:      sessionData.Id,
-		Title:       payload.Title,
-		Description: payload.Description,
-		Body:        payload.Body,
-		Poster:      "",
-		Status:      "pending",
-		CreatedTime: primitive.NewDateTimeFromTime(time.Now()),
-		UpdatedTime: primitive.NewDateTimeFromTime(time.Now()),
-		VersionKey:  0,
-	}
-
-	_, insertResErr := global.MongoDatabase.
-		Collection("articles").InsertOne(context.Background(), &article)
-	if insertResErr != nil {
+	if deleteErr != nil {
 		response.Code = types.ResCode_Err
-		response.Message = "can not insert article"
+		response.Message = deleteErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 
 	response.Code = types.ResCode_OK
-	response.Message = "article added"
-	common.JsonRespond(w, http.StatusUnauthorized, &response)
+	response.Message = "ok"
+	common.JsonRespond(w, http.StatusOK, &response)
+	return
 }

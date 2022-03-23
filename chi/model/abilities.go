@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"lib19f-go/config"
 	"lib19f-go/global"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -12,8 +11,8 @@ import (
 )
 
 func IsKVExist(capacity string, key string, value string) (bool, error) {
-	mdb := global.MongoClient
-	existence := mdb.Database(config.DEFAULT_DATABASE).Collection(fmt.Sprintf("%vs", capacity)).
+	mdb := global.MongoDatabase
+	existence := mdb.Collection(fmt.Sprintf("%vs", capacity)).
 		FindOne(context.Background(), bson.M{key: value})
 	existenceErr := existence.Err()
 	if existenceErr != nil && existenceErr != mongo.ErrNoDocuments {
