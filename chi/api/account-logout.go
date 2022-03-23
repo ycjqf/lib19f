@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"crypto/sha256"
-	"fmt"
 	"lib19f-go/api/common"
 	"lib19f-go/api/types"
 	"lib19f-go/global"
@@ -23,8 +22,6 @@ func apiAccountLogoutHandler(w http.ResponseWriter, r *http.Request) {
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
-
-	fmt.Printf("received session id %v\n", gotSessioCookie.Value)
 
 	rdb := global.RedisClient
 	rs := rdb.Get(context.Background(), gotSessioCookie.Value)

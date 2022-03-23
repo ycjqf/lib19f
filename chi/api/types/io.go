@@ -45,7 +45,8 @@ type AccountRegisterCheckEmailRequestRequest struct {
 }
 
 type AccountRegisterCheckCommonRequestResponse struct {
-	Status string `json:"status"`
+	Status  string `json:"status"`
+	Message string `json:"message"`
 }
 
 // Add Article
@@ -55,3 +56,5 @@ type AddArticleRequest struct {
 	Description string `json:"description"`
 	Body        string `json:"body"`
 }
+
+type AddArticlePayload = AddArticleRequest

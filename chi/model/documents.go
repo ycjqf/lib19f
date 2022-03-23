@@ -22,20 +22,17 @@ type Admin = User
 type Reviewer = User
 
 type Article struct {
-	Mid          primitive.ObjectID `bson:"_id"`
-	Id           uint32             `bson:"id"`
-	UserId       uint32             `bson:"userId"`
-	Title        string             `bson:"title"`
-	Description  string             `bson:"decription"`
-	Body         string             `bson:"body"`
-	Poster       string             `bson:"poster"`
-	Status       string             `bson:"status"`
-	CreatedTime  primitive.DateTime `bson:"createdTime"`
-	UpdatedTime  primitive.DateTime `bson:"updatedTime"`
-	Avatar       string             `bson:"avatar"`
-	Gender       string             `bson:"gender"`
-	Introduction string             `bson:"introduction"`
-	VersionKey   uint               `bson:"__v"`
+	Mid         primitive.ObjectID `bson:"_id"`
+	Id          uint32             `bson:"id"`
+	UserId      uint32             `bson:"userId"`
+	Title       string             `bson:"title"`
+	Description string             `bson:"decription"`
+	Body        string             `bson:"body"`
+	Poster      string             `bson:"poster"`
+	Status      string             `bson:"status"`
+	CreatedTime primitive.DateTime `bson:"createdTime"`
+	UpdatedTime primitive.DateTime `bson:"updatedTime"`
+	VersionKey  uint               `bson:"__v"`
 }
 
 type Comment struct {

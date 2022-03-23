@@ -11,12 +11,12 @@ import (
 
 func AccountRegister(body io.ReadCloser) (*types.AccountRegisterPayload, error) {
 	request := types.AccountRegisterRequest{}
-	parseRequestErr := json.NewDecoder(body).Decode(&request)
-	if parseRequestErr != nil {
-		return nil, errors.New("invalid form")
-	}
 	payload := types.AccountRegisterPayload{}
 
+	parseRequestErr := json.NewDecoder(body).Decode(&request)
+	if parseRequestErr != nil {
+		return &payload, errors.New("invalid form")
+	}
 	nameMatch := config.NAME_PATTERN.Match([]byte(request.Name))
 	if nameMatch == false {
 		return &payload, errors.New("invalid name")

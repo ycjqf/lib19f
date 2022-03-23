@@ -12,22 +12,21 @@ import (
 
 func AccountLogin(body io.ReadCloser) (*types.AccountLoginPayload, error) {
 	request := types.AccountLoginRequest{}
+	payload := types.AccountLoginPayload{}
 	parseRequestErr := json.NewDecoder(body).Decode(&request)
 	if parseRequestErr != nil {
-		return nil, errors.New("invalid form")
+		return &payload, errors.New("invalid form")
 	}
-
-	payload := types.AccountLoginPayload{}
 	payload.Relog = request.Relog
 
 	if !utils.Contains(config.VALID_CAPACITIES, request.Capacity) {
-		return nil, errors.New("capacity invalid")
+		return &payload, errors.New("capacity invalid")
 	}
 	payload.Capacity = request.Capacity
 
 	passwordMatch := config.PASSWORD_PATTERN.Match([]byte(request.Password))
 	if passwordMatch == false {
-		return nil, errors.New("password is not valid")
+		return &payload, errors.New("password is not valid")
 	}
 	payload.Password = request.Password
 
@@ -42,7 +41,7 @@ func AccountLogin(body io.ReadCloser) (*types.AccountLoginPayload, error) {
 			payload.Using = "name"
 			payload.Name = request.Name
 		} else {
-			return nil, errors.New("name is not valid")
+			return &payload, errors.New("name is not valid")
 		}
 	}
 
