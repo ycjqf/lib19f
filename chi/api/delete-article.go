@@ -14,7 +14,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var DeleteArticle = common.GenPostApi(apiDeleteArticle)
+var ApiDeleteArticle = common.GenPostApi(apiDeleteArticle)
 
 func apiDeleteArticle(w http.ResponseWriter, r *http.Request) {
 	response := types.ApiBaseResponse{}
@@ -52,7 +52,7 @@ func apiDeleteArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	payload, payloadErr := r2p.DeleteCommon(r.Body)
+	payload, payloadErr := r2p.IdCommon(r.Body)
 	if payloadErr != nil {
 		response.Code = types.ResCode_BadRequest
 		response.Message = payloadErr.Error()

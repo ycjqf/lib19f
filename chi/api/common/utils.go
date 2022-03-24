@@ -1,10 +1,8 @@
 package common
 
 import (
-	"crypto/sha256"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/unrolled/render"
@@ -22,13 +20,6 @@ func DoPasswordsMatch(hashedPassword, currPassword string) bool {
 	err := bcrypt.CompareHashAndPassword(
 		[]byte(hashedPassword), []byte(currPassword))
 	return err == nil
-}
-
-func GenSesionId(capacity string, id uint32) (string, string, string) {
-	preffix := fmt.Sprintf("sess-%v-%v-", capacity, id)
-	sessionId := fmt.Sprintf("sess-%v-%v-%x", capacity, id, time.Now())
-	encrypted := fmt.Sprintf("%x", sha256.Sum256([]byte(sessionId)))
-	return preffix, sessionId, encrypted
 }
 
 func GenPostApi(handler http.HandlerFunc) *chi.Mux {

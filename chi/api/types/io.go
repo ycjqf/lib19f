@@ -58,10 +58,20 @@ type AddArticleRequest struct {
 }
 
 type AddArticlePayload = AddArticleRequest
+type AddArticleResponse struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+	Id      uint32 `json:"id"`
+}
 
-// Delete Common
+// Id Common
 
-type DeleteCommonRequest struct {
+type IdCommonRequest struct {
 	Id uint32 `json:"id"`
 }
-type DeleteCommonPayload = DeleteCommonRequest
+type IdCommonPayload = IdCommonRequest
+
+// Get Articles
+
+type GetArticlesRequest struct {
+}

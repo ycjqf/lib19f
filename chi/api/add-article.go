@@ -13,19 +13,20 @@ import (
 
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var ApiAddArticle = common.GenPostApi(apiAddArticleHandler)
 
 func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
-	response := types.ApiBaseResponse{}
+	response := types.AddArticleResponse{}
 	sessionData := types.SessionData{}
 
 	gotSessioCookie, gotSessioCookieErr := r.Cookie("account_session")
-	if gotSessioCookieErr != nil {
+	if gotSessioCookieErr == http.ErrNoCookie {
 		response.Code = types.ResCode_Unauthorized
-		response.Message = "no cookie found in request"
+		response.Message = "you are not logged in"
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
@@ -34,14 +35,14 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 	getSessionDataResErr := getSessionDataRes.Err()
 	if getSessionDataResErr == redis.Nil {
 		response.Code = types.ResCode_Unauthorized
-		response.Message = "you need to login first to upload an article"
+		response.Message = "your credential is outdated"
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
 
 	if getSessionDataResErr != nil {
-		response.Code = types.ResCode_Unauthorized
-		response.Message = "can not get session data, you may need to log in again"
+		response.Code = types.ResCode_Err
+		response.Message = "can not get session data"
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
@@ -49,7 +50,7 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 	parseErr := json.Unmarshal([]byte(getSessionDataRes.Val()), &sessionData)
 	if parseErr != nil {
 		response.Code = types.ResCode_Unauthorized
-		response.Message = "can not parse session data"
+		response.Message = "session data is corrupted"
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
@@ -76,7 +77,7 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 		VersionKey:  0,
 	}
 
-	_, insertResErr := global.MongoDatabase.
+	insertRes, insertResErr := global.MongoDatabase.
 		Collection("articles").InsertOne(context.Background(), &article)
 	if insertResErr != nil {
 		response.Code = types.ResCode_Err
@@ -85,7 +86,19 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	uploadedDocRes := global.MongoDatabase.Collection("articles").FindOne(context.Background(),
+		bson.M{"_id": insertRes.InsertedID})
+	uploadedDoc := model.Article{}
+	uploadedDocResErr := uploadedDocRes.Decode(&uploadedDoc)
+	if uploadedDocResErr != nil {
+		response.Code = types.ResCode_OK
+		response.Message = "article added but can not get id"
+		common.JsonRespond(w, http.StatusInternalServerError, &response)
+		return
+	}
+
 	response.Code = types.ResCode_OK
 	response.Message = "article added"
+	response.Id = uploadedDoc.Id
 	common.JsonRespond(w, http.StatusUnauthorized, &response)
 }
