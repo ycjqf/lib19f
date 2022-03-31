@@ -4,6 +4,7 @@ dist
 tmp
 mongo-url.txt
 session-secret.txt
-server/src/psw.json
 .idea
-next/.next/
+web/.next/
+.rest
+SESSION_SECRET.txt

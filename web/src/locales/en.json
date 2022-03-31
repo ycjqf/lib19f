@@ -1,0 +1,17 @@
+{
+  "NavSectionEntries": "Entries",
+  "NavSearch": "Search",
+  "NavArticles": "Articles",
+  "NavHome": "Home",
+  "NavAbout": "About",
+  "NavUpload": "Upload",
+  "NavRegister": "Register",
+  "NavLogin": "Login",
+
+  "NavSectionAbout": "About",
+  "NavRepository": "Repository",
+  "global": {
+    "title": "Lib19F",
+    "introduction": "md online library"
+  }
+}

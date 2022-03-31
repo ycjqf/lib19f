@@ -1,31 +1,22 @@
-import { resolve } from "path";
 import { defineConfig } from "vite";
-
-import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueJsx({})],
-  publicDir: "public",
-  base: "",
+  plugins: [react()],
   resolve: {
-    alias: [
-      { find: "@/", replacement: `${resolve("./src")}/` },
-      { find: "@typings/", replacement: `${resolve("../typings")}/` },
-    ],
-  },
-  build: {
-    outDir: "dist",
+    alias: {
+      src: path.resolve(__dirname, "./src"),
+      dist: path.resolve(__dirname, "./dist"),
+    },
   },
   server: {
-    cors: true,
-    open: true,
     proxy: {
       "/api": {
-        target: "http://localhost:1337/api", //代理接口
+        target: "http://localhost:1938/v0/api",
         changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, ""),
+        rewrite: _path => _path.replace(/^\/api/, ""),
       },
     },
   },
