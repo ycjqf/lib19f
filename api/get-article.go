@@ -18,7 +18,7 @@ func apiGetArticleHandler(w http.ResponseWriter, r *http.Request) {
 	response := types.ApiBaseResponse{}
 	payload, payloadErr := r2p.IdCommon(r.Body)
 	if payloadErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
 		common.JsonRespond(w, http.StatusBadRequest, &response)
 		return
@@ -48,7 +48,7 @@ func apiGetArticleHandler(w http.ResponseWriter, r *http.Request) {
 
 	getArticleRes, getArticleErr := global.MongoDatabase.Collection("articles").Aggregate(context.Background(), pipline)
 	if getArticleErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = getArticleErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
@@ -57,20 +57,20 @@ func apiGetArticleHandler(w http.ResponseWriter, r *http.Request) {
 
 	decodeErr := getArticleRes.All(context.Background(), &articles)
 	if decodeErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = decodeErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 	if len(articles) == 0 {
-		response.Code = types.ResCode_NoSuchArticle
+		response.Code = types.ResCodeNotFound
 		response.Message = "no such article"
-		common.JsonRespond(w, http.StatusOK, &response)
+		common.JsonRespond(w, http.StatusNotFound, &response)
 		return
 	}
 
 	responseWithArticle := types.GetArticleResponseWithArticle{}
-	responseWithArticle.Code = types.ResCode_OK
+	responseWithArticle.Code = types.ResCodeOK
 	responseWithArticle.Message = "success"
 	responseWithArticle.Article = articles[0]
 	common.JsonRespond(w, http.StatusOK, &responseWithArticle)

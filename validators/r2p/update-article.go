@@ -15,7 +15,7 @@ func UpdateArticle(body io.ReadCloser) (*types.UpdateArticlePayload, error) {
 	payload := types.UpdateArticlePayload{}
 	parseRequestErr := json.NewDecoder(body).Decode(&request)
 	if parseRequestErr != nil {
-		return &payload, errors.New("invalid form")
+		return &payload, errors.New(config.MAL_JSON_ERORR_MESSAGE)
 	}
 	payload.Id = request.Id
 

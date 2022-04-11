@@ -18,7 +18,7 @@ func apiAdminDashboardHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if sessionData.Capacity != "admin" {
-		response.Code = types.ResCode_Unauthorized
+		response.Code = types.ResCodeUnauthorized
 		response.Message = "you are not authorized to access this resource"
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
@@ -26,5 +26,4 @@ func apiAdminDashboardHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("sessionData: %+v\n", sessionData)
 	common.JsonRespond(w, http.StatusUnauthorized, &response)
-
 }

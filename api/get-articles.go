@@ -16,10 +16,10 @@ import (
 var ApiGetArticles = common.GenPostApi(apiGetArticlesHandler)
 
 func apiGetArticlesHandler(w http.ResponseWriter, r *http.Request) {
-	response := types.GetArticelsResponse{}
+	response := types.GetArticelsResponse{Articles: []model.ClientArticle{}}
 	payload, payloadErr := r2p.GetArticles(r.Body)
 	if payloadErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
 		common.JsonRespond(w, http.StatusBadRequest, &response)
 		return
@@ -53,7 +53,7 @@ func apiGetArticlesHandler(w http.ResponseWriter, r *http.Request) {
 	getArticleRes, getArticleErr := global.MongoDatabase.Collection("articles").Aggregate(context.Background(),
 		pipeline)
 	if getArticleErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = getArticleErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
@@ -61,20 +61,20 @@ func apiGetArticlesHandler(w http.ResponseWriter, r *http.Request) {
 	articles := []model.ClientArticle{}
 	decodeErr := getArticleRes.All(context.Background(), &articles)
 	if decodeErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = decodeErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 	articlesTotal, articlesTotalErr := global.MongoDatabase.Collection("articles").CountDocuments(context.Background(), bson.M{})
 	if articlesTotalErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = articlesTotalErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 
-	response.Code = types.ResCode_OK
+	response.Code = types.ResCodeOK
 	response.Message = "ok"
 	response.Articles = articles
 	response.Total = articlesTotal

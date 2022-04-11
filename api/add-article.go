@@ -25,9 +25,16 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if sessionData.Capacity != "user" {
+		response.Code = types.ResCodeUnauthorized
+		response.Message = "can only user upload article"
+		common.JsonRespond(w, http.StatusUnauthorized, &response)
+		return
+	}
+
 	payload, payloadErr := r2p.AddArticle(r.Body)
 	if payloadErr != nil {
-		response.Code = types.ResCode_BadRequest
+		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
@@ -50,7 +57,7 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 	insertRes, insertResErr := global.MongoDatabase.
 		Collection("articles").InsertOne(context.Background(), &article)
 	if insertResErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = "can not insert article"
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
@@ -61,13 +68,13 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 	uploadedDoc := model.Article{}
 	uploadedDocResErr := uploadedDocRes.Decode(&uploadedDoc)
 	if uploadedDocResErr != nil {
-		response.Code = types.ResCode_OK
+		response.Code = types.ResCodeErr
 		response.Message = "article added but can not get id"
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 
-	response.Code = types.ResCode_OK
+	response.Code = types.ResCodeOK
 	response.Message = "article added"
 	response.Id = uploadedDoc.Id
 	common.JsonRespond(w, http.StatusOK, &response)

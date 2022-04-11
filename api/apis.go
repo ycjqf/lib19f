@@ -21,13 +21,17 @@ func Apis() *chi.Mux {
 	r.Mount("/account/register", ApiAccountRegister)
 	r.Mount("/account/register/check-email", ApiAccountRegisterCheckEmail)
 	r.Mount("/account/register/check-name", ApiAccountRegisterCheckName)
-	r.Mount("/add/article", ApiAddArticle)
-	r.Mount("/delete/article", ApiDeleteArticle)
-	r.Mount("/get/article", ApiGetArticle)
-	r.Mount("/get/articles", ApiGetArticles)
-	r.Mount("/get/user", ApiGetUser)
-	r.Mount("/update/article", ApiUpdateArticle)
-	r.Mount("/authenticate", ApiAuthenticate)
+
+	r.Mount("/article/add", ApiAddArticle)
+	r.Mount("/article/set", ApiUpdateArticle)
+	r.Mount("/article/del", ApiDeleteArticle)
+	r.Mount("/article/get", ApiGetArticle)
+
+	r.Mount("/articles/get", ApiGetArticles)
+
+	r.Mount("/profile/get", ApiGetUser)
+	r.Mount("/profile/auth", ApiAuthenticate)
+
 	r.Mount("/admin/dashboard", ApiAdminDashboard)
 	return r
 }

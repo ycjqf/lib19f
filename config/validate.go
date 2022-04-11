@@ -15,6 +15,7 @@ const MAX_TITLE_LENGTH = 50
 const MAX_DESCRIPTION_LENGTH = 140
 const MIN_ARTICLE_CHARS = 10
 const MAX_ARTICLE_CHARS = 10000
+const MAL_JSON_ERORR_MESSAGE = "a malformed JSON payload is received"
 
 var VALID_CAPACITIES = []string{"admin", "user", "reviewer"}
 var NAME_PATTERN = regexp.MustCompile(

@@ -20,18 +20,11 @@ func apiAccountLogoutHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	gotSessioCookie, gotSessioCookieErr := r.Cookie("account_session")
-	if gotSessioCookieErr != nil {
-		response.Code = types.ResCode_NotLoggedIn
-		response.Message = "no cookie with required name found."
-		common.JsonRespond(w, http.StatusUnauthorized, &response)
-		return
-	}
-
+	gotSessioCookie, _ := r.Cookie("account_session")
 	delRes := global.RedisClient.Del(context.Background(), gotSessioCookie.Value)
 	delErr := delRes.Err()
 	if delErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = "unable to delete session, please try again later."
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
@@ -39,7 +32,7 @@ func apiAccountLogoutHandler(w http.ResponseWriter, r *http.Request) {
 
 	// clear when logout
 	session.ClearCookie(w)
-	response.Code = types.ResCode_OK
+	response.Code = types.ResCodeOK
 	response.Message = "you have been logged out."
 	common.JsonRespond(w, http.StatusOK, &response)
 }

@@ -23,29 +23,27 @@ func apiAuthentidateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	println(fmt.Sprintf("%vs", sessionData.Capacity))
-	println(fmt.Sprintf("%d", sessionData.Id))
-	deleteRes := global.MongoDatabase.Collection(fmt.Sprintf("%vs", sessionData.Capacity)).
+	findRes := global.MongoDatabase.Collection(fmt.Sprintf("%vs", sessionData.Capacity)).
 		FindOne(context.Background(), bson.M{"id": sessionData.Id})
-	deleteErr := deleteRes.Err()
-	if deleteErr == mongo.ErrNoDocuments {
-		response.Code = types.ResCode_Unauthorized
+	findErr := findRes.Err()
+	if findErr == mongo.ErrNoDocuments {
+		response.Code = types.ResCodeUnauthorized
 		response.Message = "no such account in session"
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
 
-	if deleteErr != nil {
-		response.Code = types.ResCode_Err
+	if findErr != nil {
+		response.Code = types.ResCodeErr
 		response.Message = "unable connect to redis"
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 
 	user := model.ClientUser{}
-	decodeErr := deleteRes.Decode(&user)
+	decodeErr := findRes.Decode(&user)
 	if decodeErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = "unable parse to profile"
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
@@ -53,7 +51,7 @@ func apiAuthentidateHandler(w http.ResponseWriter, r *http.Request) {
 
 	responseWithUser := types.GetUserResponseWithUser{}
 	responseWithUser.Capacity = sessionData.Capacity
-	responseWithUser.Code = types.ResCode_OK
+	responseWithUser.Code = types.ResCodeOK
 	responseWithUser.Message = "success"
 	responseWithUser.User = user
 	common.JsonRespond(w, http.StatusOK, &responseWithUser)

@@ -56,7 +56,7 @@ func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request, tryRefresh b
 
 	gotSessioCookie, gotSessioCookieErr := r.Cookie("account_session")
 	if gotSessioCookieErr != nil {
-		response.Code = types.ResCode_Unauthorized
+		response.Code = types.ResCodeUnauthorized
 		response.Message = "no cookie found in request"
 		JsonRespond(w, http.StatusUnauthorized, &response)
 		return nil, false
@@ -65,7 +65,7 @@ func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request, tryRefresh b
 	getSessionDataRes := global.RedisClient.Get(context.Background(), gotSessioCookie.Value)
 	getSessionDataResErr := getSessionDataRes.Err()
 	if getSessionDataResErr == redis.Nil {
-		response.Code = types.ResCode_Unauthorized
+		response.Code = types.ResCodeUnauthorized
 		response.Message = "this token has expired"
 		session.ClearCookie(w)
 		JsonRespond(w, http.StatusUnauthorized, &response)
@@ -73,7 +73,7 @@ func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request, tryRefresh b
 	}
 
 	if getSessionDataResErr != nil {
-		response.Code = types.ResCode_Unauthorized
+		response.Code = types.ResCodeUnauthorized
 		response.Message = "can not get session data"
 		session.ClearCookie(w)
 		JsonRespond(w, http.StatusUnauthorized, &response)
@@ -82,17 +82,19 @@ func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request, tryRefresh b
 
 	parseErr := json.Unmarshal([]byte(getSessionDataRes.Val()), &sessionData)
 	if parseErr != nil {
-		response.Code = types.ResCode_Unauthorized
+		response.Code = types.ResCodeUnauthorized
 		response.Message = "can not parse session data"
 		JsonRespond(w, http.StatusUnauthorized, &response)
 		return nil, false
 	}
 
 	if tryRefresh {
-		println("try to refresh session", gotSessioCookie.Value)
-		execRes := global.RedisClient.Expire(context.Background(), gotSessioCookie.Value, time.Duration(config.LOGIN_EXPIRATION))
+		sessionData.ReauthedTime = sessionData.ReauthedTime + 1
+		sessionData.UpdatedTime = time.Now().String()
+		js, _ := json.Marshal(sessionData)
+		execRes := global.RedisClient.SetEX(context.Background(), gotSessioCookie.Value, js, time.Duration(config.LOGIN_EXPIRATION))
 		if execRes.Err() != nil {
-			response.Code = types.ResCode_Unauthorized
+			response.Code = types.ResCodeUnauthorized
 			response.Message = execRes.Err().Error()
 			JsonRespond(w, http.StatusUnauthorized, &response)
 			return nil, false

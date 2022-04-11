@@ -5,6 +5,7 @@ import (
 	"lib19f/api/common"
 	"lib19f/api/types"
 	"lib19f/global"
+	"lib19f/model"
 	"lib19f/validators/r2p"
 	"net/http"
 	"time"
@@ -23,20 +24,24 @@ func apiUpdateArticleHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if sessionData.Capacity != "user" {
+		response.Code = types.ResCodeUnauthorized
+		response.Message = "can only user update article"
+		common.JsonRespond(w, http.StatusUnauthorized, &response)
+		return
+	}
+
 	payload, payloadErr := r2p.UpdateArticle(r.Body)
 	if payloadErr != nil {
-		response.Code = types.ResCode_BadRequest
+		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
 		common.JsonRespond(w, http.StatusBadRequest, &response)
 		return
 	}
 
-	println("payload:", payload.Id)
-	println("sessionData.Id:", sessionData.Id)
-
 	updateRes := global.MongoDatabase.Collection("articles").
 		FindOneAndUpdate(context.Background(),
-			bson.M{"id": payload.Id, "userId": sessionData.Id},
+			bson.M{"id": payload.Id},
 			bson.M{
 				"$set": bson.M{
 					"title":       payload.Article.Title,
@@ -51,19 +56,37 @@ func apiUpdateArticleHandler(w http.ResponseWriter, r *http.Request) {
 
 	deleteErr := updateRes.Err()
 	if deleteErr == mongo.ErrNoDocuments {
-		response.Code = types.ResCode_Unauthorized
-		response.Message = "no such article or you are not the owner"
+		response.Code = types.ResCodeUnauthorized
+		response.Message = "no such article"
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
 
 	if deleteErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = deleteErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
-	response.Code = types.ResCode_OK
+
+	article := model.Article{}
+
+	decodeErr := updateRes.Decode(&article)
+	if decodeErr != nil {
+		response.Code = types.ResCodeErr
+		response.Message = decodeErr.Error()
+		common.JsonRespond(w, http.StatusInternalServerError, &response)
+		return
+	}
+
+	if article.UserId != sessionData.Id {
+		response.Code = types.ResCodeUnauthorized
+		response.Message = "you are not the author of this article"
+		common.JsonRespond(w, http.StatusUnauthorized, &response)
+		return
+	}
+
+	response.Code = types.ResCodeOK
 	response.Message = "ok"
 	common.JsonRespond(w, http.StatusOK, &response)
 	return

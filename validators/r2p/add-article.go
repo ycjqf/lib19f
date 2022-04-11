@@ -15,7 +15,7 @@ func AddArticle(body io.ReadCloser) (*types.AddArticlePayload, error) {
 	payload := types.AddArticlePayload{}
 	parseRequestErr := json.NewDecoder(body).Decode(&request)
 	if parseRequestErr != nil {
-		return &payload, errors.New("invalid form")
+		return &payload, errors.New(config.MAL_JSON_ERORR_MESSAGE)
 	}
 
 	trimedTitle := strings.TrimSpace(request.Title)

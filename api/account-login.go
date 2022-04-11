@@ -26,22 +26,22 @@ func apiAccountLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	payload, payloadErr := r2p.AccountLogin(r.Body)
 	if payloadErr != nil {
-		response.Code = types.ResCode_BadRequest
+		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
 		common.JsonRespond(w, http.StatusBadRequest, &response)
 		return
 	}
 
 	// check account existence
-	userId, validateErr := validatePayload(payload)
+	userId, validateErr := checkAccountExistence(payload)
 	if validateErr != nil {
-		response.Code = types.ResCode_BadRequest
+		response.Code = types.ResCodeErr
 		response.Message = validateErr.Error()
-		common.JsonRespond(w, http.StatusBadRequest, &response)
+		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 	if userId == 0 {
-		response.Code = types.ResCode_WrongCredential
+		response.Code = types.ResCodeWrongCredential
 		response.Message = "wrong password or account not exist"
 		common.JsonRespond(w, http.StatusOK, response)
 		return
@@ -56,14 +56,14 @@ func apiAccountLoginHandler(w http.ResponseWriter, r *http.Request) {
 
 	// have error
 	if sessionExistenceErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = sessionExistenceErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 	// exist and not attemp to relog
 	if len(sessionExistence.Val()) != 0 && !payload.Relog {
-		response.Code = types.ResCode_Logged
+		response.Code = types.ResCodeLogged
 		response.Message = "already logged in"
 		common.JsonRespond(w, http.StatusOK, &response)
 		return
@@ -95,14 +95,14 @@ func apiAccountLoginHandler(w http.ResponseWriter, r *http.Request) {
 	rdb.Set(context.Background(), willUseSessionId, js, config.LOGIN_EXPIRATION)
 	http.SetCookie(w, &session)
 
-	response.Code = types.ResCode_OK
+	response.Code = types.ResCodeOK
 	response.Message = "ok"
 	response.Capacity = sessionData.Capacity
 	response.Id = sessionData.Id
 	common.JsonRespond(w, http.StatusOK, &response)
 }
 
-func validatePayload(payload *types.AccountLoginPayload) (uint32, error) {
+func checkAccountExistence(payload *types.AccountLoginPayload) (uint32, error) {
 	mdb := global.MongoDatabase
 
 	var credential primitive.M = bson.M{}

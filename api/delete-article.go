@@ -5,6 +5,7 @@ import (
 	"lib19f/api/common"
 	"lib19f/api/types"
 	"lib19f/global"
+	"lib19f/model"
 	"lib19f/validators/r2p"
 	"net/http"
 
@@ -21,32 +22,55 @@ func apiDeleteArticle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if sessionData.Capacity != "user" {
+		response.Code = types.ResCodeUnauthorized
+		response.Message = "can only user update article"
+		common.JsonRespond(w, http.StatusUnauthorized, &response)
+		return
+	}
+
 	payload, payloadErr := r2p.IdCommon(r.Body)
 	if payloadErr != nil {
-		response.Code = types.ResCode_BadRequest
+		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
 		common.JsonRespond(w, http.StatusBadRequest, &response)
 		return
 	}
 
 	deleteRes := global.MongoDatabase.Collection("articles").
-		FindOneAndDelete(context.Background(), bson.M{"id": payload.Id, "userId": sessionData.Id})
+		FindOneAndDelete(context.Background(), bson.M{"id": payload.Id})
 	deleteErr := deleteRes.Err()
 	if deleteErr == mongo.ErrNoDocuments {
-		response.Code = types.ResCode_Unauthorized
-		response.Message = "no such article or you are not the owner"
-		common.JsonRespond(w, http.StatusUnauthorized, &response)
+		response.Code = types.ResCodeNotFound
+		response.Message = "no such article"
+		common.JsonRespond(w, http.StatusNotFound, &response)
 		return
 	}
 
 	if deleteErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = deleteErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
+	article := model.Article{}
 
-	response.Code = types.ResCode_OK
+	decodeErr := deleteRes.Decode(&article)
+	if decodeErr != nil {
+		response.Code = types.ResCodeErr
+		response.Message = decodeErr.Error()
+		common.JsonRespond(w, http.StatusInternalServerError, &response)
+		return
+	}
+
+	if article.UserId != sessionData.Id {
+		response.Code = types.ResCodeUnauthorized
+		response.Message = "you are not the author of this article"
+		common.JsonRespond(w, http.StatusUnauthorized, &response)
+		return
+	}
+
+	response.Code = types.ResCodeOK
 	response.Message = "ok"
 	common.JsonRespond(w, http.StatusOK, &response)
 	return

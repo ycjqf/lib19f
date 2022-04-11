@@ -21,7 +21,7 @@ func apiAccountRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	response := types.ApiBaseResponse{}
 	payload, payloadErr := r2p.AccountRegister(r.Body)
 	if payloadErr != nil {
-		response.Code = types.ResCode_BadRequest
+		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
 		common.JsonRespond(w, http.StatusBadRequest, &response)
 		return
@@ -31,13 +31,13 @@ func apiAccountRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	nameExistence, nameExistenceErr := model.IsKVExist("user", "name", payload.Name)
 
 	if nameExistenceErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = nameExistenceErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 	if nameExistence {
-		response.Code = types.ResCode_NameTaken
+		response.Code = types.ResCodeNameTaken
 		response.Message = "name taken"
 		common.JsonRespond(w, http.StatusOK, &response)
 		return
@@ -45,13 +45,13 @@ func apiAccountRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	emailExistence, emailExistenceErr := model.IsKVExist("user", "email", payload.Email)
 
 	if emailExistenceErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = emailExistenceErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 	if emailExistence {
-		response.Code = types.ResCode_EmailTaken
+		response.Code = types.ResCodeEmailTaken
 		response.Message = "email taken"
 		common.JsonRespond(w, http.StatusOK, &response)
 		return
@@ -60,14 +60,14 @@ func apiAccountRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	// try to save
 	saveErr := savePayload(payload)
 	if saveErr != nil {
-		response.Code = types.ResCode_Err
+		response.Code = types.ResCodeErr
 		response.Message = saveErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
 
 	// try save here
-	response.Code = types.ResCode_OK
+	response.Code = types.ResCodeOK
 	response.Message = "ok"
 	common.JsonRespond(w, http.StatusOK, &response)
 }
