@@ -20,7 +20,7 @@ var ApiAddArticle = common.GenPostApi(apiAddArticleHandler)
 func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 	response := types.AddArticleResponse{}
 
-	sessionData, sessionDataSuccess := common.GetSessinDataOrRespond(w, r)
+	sessionData, sessionDataSuccess := common.GetSessinDataOrRespond(w, r, true)
 	if !sessionDataSuccess {
 		return
 	}

@@ -1,9 +1,9 @@
-import { Link, useLocation } from "react-router-dom";
-import { ExternalLinkIcon, TranslateIcon } from "@heroicons/react/outline";
-import { useTranslation } from "react-i18next";
+import { hideHeaderFooterPaths } from "_/config/ui";
 import { Listbox } from "@headlessui/react";
+import { ExternalLinkIcon, TranslateIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
-import { hideHeaderFooterPaths } from "src/config/ui";
+import { useTranslation } from "react-i18next";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Footer() {
   const location = useLocation();
@@ -14,7 +14,7 @@ export default function Footer() {
   ];
   const localLanguage = i18n.language;
   const [language, setLanguage] = useState<typeof languageOptions[number]>(
-    languageOptions.find(i => i.id === localLanguage) || languageOptions[0]
+    languageOptions.find((i) => i.id === localLanguage) || languageOptions[0]
   );
 
   useEffect(() => {
@@ -52,11 +52,11 @@ export default function Footer() {
     >
       <div className="max-w-[1200px] mx-auto">
         <div className="flex gap-x-60 flex-wrap gap-y-12 mb-24">
-          {staticSections.map(section => (
+          {staticSections.map((section) => (
             <div key={section.key}>
               <div className="text-[#999999] mb-6 text-base">{section.title}</div>
               <div className="flex flex-col gap-y-3">
-                {section.child.map(child =>
+                {section.child.map((child) =>
                   child.outside ? (
                     <a
                       key={child.link}
@@ -90,7 +90,7 @@ export default function Footer() {
                 {language.name}
               </Listbox.Button>
               <Listbox.Options className="text-white text-base flex flex-col gap-y-2">
-                {languageOptions.map(languageItem => (
+                {languageOptions.map((languageItem) => (
                   <Listbox.Option
                     className="text-white text-base cursor-pointer hover:text-[#61dafb]
                     flex items-center"

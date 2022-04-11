@@ -2,7 +2,6 @@ package api
 
 import (
 	"context"
-	"fmt"
 	"lib19f/api/common"
 	"lib19f/api/types"
 	"lib19f/global"
@@ -66,9 +65,6 @@ func apiGetArticlesHandler(w http.ResponseWriter, r *http.Request) {
 		response.Message = decodeErr.Error()
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
-	}
-	for getArticleRes.Next(context.TODO()) {
-		fmt.Printf("%+v\n", getArticleRes.Current)
 	}
 	articlesTotal, articlesTotalErr := global.MongoDatabase.Collection("articles").CountDocuments(context.Background(), bson.M{})
 	if articlesTotalErr != nil {

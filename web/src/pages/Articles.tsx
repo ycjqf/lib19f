@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { defaultHeader } from "src/config/request";
-import ArticlePeek from "src/components/ArticlePeek";
-import axios from "axios";
+import ArticlePeek from "_/components/ArticlePeek";
+import { defaultHeader } from "_/config/request";
 import { Pagination } from "@mui/material";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 
 export default function Articles() {
   const { t } = useTranslation();
@@ -28,10 +28,10 @@ export default function Articles() {
 
     axios
       .post<GetArticleResponse>("/api/get/articles", requestData, { headers: defaultHeader })
-      .then(response => {
+      .then((response) => {
         setFinalResponse(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }, [searchParams]);
@@ -39,7 +39,7 @@ export default function Articles() {
     <div className="px-12 py-28">
       <div className="max-w-[1200px] mx-auto ">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-6 gap-y-12">
-          {finalResponse?.articles?.map(article => (
+          {finalResponse?.articles?.map((article) => (
             <ArticlePeek article={article} key={article.id} />
           ))}
         </div>

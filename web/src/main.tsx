@@ -1,22 +1,23 @@
+import "_/generated/output.css";
+
+import Footer from "_/components/Footer";
+import Header from "_/components/Header";
+import { defaultHeader } from "_/config/request";
+import { ProfileContext, ProfileContextType } from "_/contexts";
+import Article from "_/pages/Article";
+import Articles from "_/pages/Articles";
+import Home from "_/pages/Home";
+import Login from "_/pages/Login";
+import Register from "_/pages/Register";
+import Upload from "_/pages/Upload";
+import translations from "_/translations";
+import axios from "axios";
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "dist/output.css";
-import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import Home from "src/pages/Home";
-import Articles from "src/pages/Articles";
-import Article from "src/pages/Article";
-import Register from "src/pages/Register";
-import Login from "src/pages/Login";
-import Upload from "src/pages/Upload";
-import { ProfileContext, ProfileContextType } from "src/contexts";
-import axios from "axios";
-import Footer from "src/components/Footer";
-import { defaultHeader } from "src/config/request";
-import { translations } from "src/translations";
-import Header from "src/components/Header";
-import LanguageDetector from "i18next-browser-languagedetector";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 async function loadI18N() {
   await i18n
@@ -39,7 +40,7 @@ function App() {
     if (localStorage.getItem("isLoggedIn") !== "true") return;
     axios
       .post<AuthenticateResponse>("/api/authenticate", {}, { headers: defaultHeader })
-      .then(res => {
+      .then((res) => {
         if (res.data.code === "OK") {
           setProfile({
             capacity: res.data.capacity,

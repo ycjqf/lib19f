@@ -2,49 +2,44 @@ package api
 
 import (
 	"context"
-	"crypto/sha256"
 	"lib19f/api/common"
+	"lib19f/api/session"
 	"lib19f/api/types"
 	"lib19f/global"
 	"net/http"
-
-	"github.com/go-redis/redis/v8"
 )
 
 var ApiAccountLogout = common.GenPostApi(apiAccountLogoutHandler)
 
 func apiAccountLogoutHandler(w http.ResponseWriter, r *http.Request) {
+	// check token existence in request
 	response := types.ApiBaseResponse{}
+
+	_, sessionDataSuccess := common.GetSessinDataOrRespond(w, r, false)
+	if !sessionDataSuccess {
+		return
+	}
+
 	gotSessioCookie, gotSessioCookieErr := r.Cookie("account_session")
 	if gotSessioCookieErr != nil {
 		response.Code = types.ResCode_NotLoggedIn
-		response.Message = "invalid cookie"
+		response.Message = "no cookie with required name found."
 		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
 
-	rdb := global.RedisClient
-	rs := rdb.Get(context.Background(), gotSessioCookie.Value)
-	rsErr := rs.Err()
-	if rsErr == redis.Nil {
-		response.Code = types.ResCode_NotLoggedIn
-		response.Message = "token not exist"
-		common.JsonRespond(w, http.StatusUnauthorized, &response)
-		return
-	}
-	if rsErr != nil {
+	delRes := global.RedisClient.Del(context.Background(), gotSessioCookie.Value)
+	delErr := delRes.Err()
+	if delErr != nil {
 		response.Code = types.ResCode_Err
-		response.Message = "error when validate"
+		response.Message = "unable to delete session, please try again later."
 		common.JsonRespond(w, http.StatusInternalServerError, &response)
 		return
 	}
-	rdb.Del(context.Background(), gotSessioCookie.Value)
-	response.Code = types.ResCode_OK
-	response.Message = "logged out"
-	common.JsonRespond(w, http.StatusOK, &response)
-}
 
-func NewSHA256(data []byte) []byte {
-	hash := sha256.Sum256(data)
-	return hash[:]
+	// clear when logout
+	session.ClearCookie(w)
+	response.Code = types.ResCode_OK
+	response.Message = "you have been logged out."
+	common.JsonRespond(w, http.StatusOK, &response)
 }

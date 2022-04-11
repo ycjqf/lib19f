@@ -20,24 +20,26 @@ func main() {
 		panic(global.ConnectionsMessage)
 	}
 	fmt.Println("all connections initialized succesfully")
+	const port = 1938
+	addr := fmt.Sprintf(":%d", port)
+	fmt.Printf("starting serer in port %v\n", port)
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	// r.Use(middleware.ContentCharset("utf-8"))
 	r.Mount("/", api.Route())
 
-	getCommonHandler := func(code int) http.HandlerFunc {
+	getCommonHandler := func(status int, code string, message string) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			common.JsonRespond(w, code, &types.ApiBaseResponse{
-				Code:    types.ResCode_NotFound,
-				Message: "not found",
+			common.JsonRespond(w, status, &types.ApiBaseResponse{
+				Code:    code,
+				Message: message,
 			})
 		}
 	}
 
-	r.NotFound(getCommonHandler(http.StatusNotFound))
-	r.MethodNotAllowed(getCommonHandler(http.StatusMethodNotAllowed))
-	log.Fatal(http.ListenAndServe(":1938", r))
+	r.NotFound(getCommonHandler(http.StatusNotFound, "not found", "this page can not be reached"))
+	r.MethodNotAllowed(getCommonHandler(http.StatusMethodNotAllowed, "method not allowed", "this method can not be used"))
+	log.Fatal(http.ListenAndServe(addr, r))
 
 	defer global.RedisClient.Close()
 	defer global.MongoClient.Disconnect(context.Background())

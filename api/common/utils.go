@@ -4,9 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"lib19f/api/session"
 	"lib19f/api/types"
+	"lib19f/config"
 	"lib19f/global"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-redis/redis/v8"
@@ -47,7 +50,7 @@ func JsonRespond(w http.ResponseWriter, status int, data interface{}) {
 	return
 }
 
-func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request) (*types.SessionData, bool) {
+func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request, tryRefresh bool) (*types.SessionData, bool) {
 	response := types.ApiBaseResponse{}
 	sessionData := types.SessionData{}
 
@@ -64,6 +67,7 @@ func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request) (*types.Sess
 	if getSessionDataResErr == redis.Nil {
 		response.Code = types.ResCode_Unauthorized
 		response.Message = "this token has expired"
+		session.ClearCookie(w)
 		JsonRespond(w, http.StatusUnauthorized, &response)
 		return nil, false
 	}
@@ -71,6 +75,7 @@ func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request) (*types.Sess
 	if getSessionDataResErr != nil {
 		response.Code = types.ResCode_Unauthorized
 		response.Message = "can not get session data"
+		session.ClearCookie(w)
 		JsonRespond(w, http.StatusUnauthorized, &response)
 		return nil, false
 	}
@@ -81,6 +86,20 @@ func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request) (*types.Sess
 		response.Message = "can not parse session data"
 		JsonRespond(w, http.StatusUnauthorized, &response)
 		return nil, false
+	}
+
+	if tryRefresh {
+		println("try to refresh session", gotSessioCookie.Value)
+		execRes := global.RedisClient.Expire(context.Background(), gotSessioCookie.Value, time.Duration(config.LOGIN_EXPIRATION))
+		if execRes.Err() != nil {
+			response.Code = types.ResCode_Unauthorized
+			response.Message = execRes.Err().Error()
+			JsonRespond(w, http.StatusUnauthorized, &response)
+			return nil, false
+		}
+
+		gotSessioCookie.Expires = time.Now().Add(time.Duration(config.LOGIN_EXPIRATION))
+		http.SetCookie(w, gotSessioCookie)
 	}
 
 	return &sessionData, true

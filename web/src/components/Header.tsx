@@ -1,10 +1,10 @@
-import { useContext, useEffect } from "react";
-import { ProfileContext } from "src/contexts";
-import { Avatar, Button, IconButton } from "@mui/material";
-import { Link, useLocation } from "react-router-dom";
-import MuiLink from "@mui/material/Link";
+import { hideHeaderFooterPaths } from "_/config/ui";
+import { ProfileContext } from "_/contexts";
 import Logout from "@mui/icons-material/Logout";
-import { hideHeaderFooterPaths } from "src/config/ui";
+import { Avatar, Button, IconButton } from "@mui/material";
+import MuiLink from "@mui/material/Link";
+import { useContext } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 async function logout() {
   const response = await fetch("/api/logout", { method: "get" });
@@ -31,7 +31,7 @@ export default function Header() {
             name: "文章",
             href: "/articles",
           },
-        ].map(item => (
+        ].map((item) => (
           <MuiLink underline="hover" key={item.href} component="div">
             <Link to={item.href}>{item.name}</Link>
           </MuiLink>
@@ -48,7 +48,7 @@ export default function Header() {
             </Avatar>
           </>
         ) : (
-          <Link to={"/login"}>
+          <Link to="/login">
             <Button variant="contained" disableElevation>
               登陆
             </Button>

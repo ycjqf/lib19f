@@ -1,16 +1,15 @@
-import { Button, TextField, Typography, Alert, Collapse } from "@mui/material";
-import { useState } from "react";
 import {
-  NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
+  NAME_MIN_LENGTH,
   NAME_PATTERN,
-  PASSWORD_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
   PASSWORD_PATTERN,
-} from "src/config/validates";
+} from "_/config/validates";
+import { Alert, Button, Collapse,TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { Link , useNavigate } from "react-router-dom";
 import validator from "validator";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [result, setResult] = useState<AccountRegisterReqsponse>();
@@ -28,11 +27,10 @@ export default function Register() {
     validator.equals(registerForm.password, registerForm.passwordRepeat);
 
   return (
-    <>
-      <div className="absolute z-10 w-screen h-screen overflow-hidden flex items-center justify-center">
+    <div className="absolute z-10 w-screen h-screen overflow-hidden flex items-center justify-center">
         <div className="absolute w-screen h-screen bg-[#f0f0f0]" />
         <form
-          onSubmit={async e => {
+          onSubmit={async (e) => {
             e.preventDefault();
             const response = await fetch("/api/register", {
               method: "post",
@@ -83,14 +81,14 @@ export default function Register() {
                   type="text"
                   size="small"
                   value={registerForm.name}
-                  onChange={event => {
+                  onChange={(event) => {
                     registerForm.name = event.target.value;
-                    setRegisterForm(Object.assign({}, registerForm));
+                    setRegisterForm({ ...registerForm});
                   }}
                 />
                 <TextField
                   error={registerForm.email !== "" && !validator.isEmail(registerForm.email)}
-                  helperText={`请输入邮箱地址`}
+                  helperText="请输入邮箱地址"
                   fullWidth
                   name="email"
                   label="邮箱"
@@ -98,9 +96,9 @@ export default function Register() {
                   type="email"
                   size="small"
                   value={registerForm.email}
-                  onChange={event => {
+                  onChange={(event) => {
                     registerForm.email = event.target.value;
-                    setRegisterForm(Object.assign({}, registerForm));
+                    setRegisterForm({ ...registerForm});
                   }}
                 />
               </div>
@@ -125,14 +123,14 @@ export default function Register() {
                   type="password"
                   size="small"
                   value={registerForm.password}
-                  onChange={event => {
+                  onChange={(event) => {
                     registerForm.password = event.target.value;
-                    setRegisterForm(Object.assign({}, registerForm));
+                    setRegisterForm({ ...registerForm});
                   }}
                 />
                 <TextField
                   error={registerForm.passwordRepeat !== registerForm.password}
-                  helperText={`确认密码一致`}
+                  helperText="确认密码一致"
                   fullWidth
                   name="passwordRepeat"
                   label="确认"
@@ -140,9 +138,9 @@ export default function Register() {
                   type="password"
                   size="small"
                   value={registerForm.passwordRepeat}
-                  onChange={event => {
+                  onChange={(event) => {
                     registerForm.passwordRepeat = event.target.value;
-                    setRegisterForm(Object.assign({}, registerForm));
+                    setRegisterForm({ ...registerForm});
                   }}
                 />
               </div>
@@ -160,13 +158,12 @@ export default function Register() {
           </div>
         </form>
       </div>
-    </>
   );
 }
 
 // import axios, { AxiosError } from "axios";
 // import { useState } from "react";
-// import { defaultHeader } from "src/config/request";
+// import { defaultHeader } from "_/config/request";
 
 // export default function Register() {
 //   const [registerForm, setRegisterForm] = useState<AccountRegisterRequest>({

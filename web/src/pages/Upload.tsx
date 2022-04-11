@@ -1,6 +1,6 @@
+import { defaultHeader } from "_/config/request";
 import axios, { AxiosError } from "axios";
 import { useState } from "react";
-import { defaultHeader } from "src/config/request";
 
 export default function Upload() {
   const [uploadForm, setUploadForm] = useState<AddArticleRequest>({
@@ -14,7 +14,7 @@ export default function Upload() {
       .post<AddArticleRequest>("/api/add/article", uploadForm, {
         headers: defaultHeader,
       })
-      .then(response => {
+      .then((response) => {
         console.log("response");
         console.log(response.data);
       })
@@ -36,8 +36,8 @@ export default function Upload() {
         type="text"
         value={uploadForm.title}
         placeholder="title"
-        onChange={event =>
-          setUploadForm(prev => ({
+        onChange={(event) =>
+          setUploadForm((prev) => ({
             ...prev,
             title: event.target.value,
           }))
@@ -47,8 +47,8 @@ export default function Upload() {
         type="text"
         value={uploadForm.description}
         placeholder="description"
-        onChange={event =>
-          setUploadForm(prev => ({
+        onChange={(event) =>
+          setUploadForm((prev) => ({
             ...prev,
             description: event.target.value,
           }))
@@ -58,8 +58,8 @@ export default function Upload() {
         type="text"
         value={uploadForm.body}
         placeholder="body"
-        onChange={event =>
-          setUploadForm(prev => ({
+        onChange={(event) =>
+          setUploadForm((prev) => ({
             ...prev,
             body: event.target.value,
           }))

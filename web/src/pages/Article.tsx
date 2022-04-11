@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useSearchParams, useParams } from "react-router-dom";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function Article() {
   const { id } = useParams();
@@ -8,7 +8,7 @@ export default function Article() {
 
   useEffect(() => {
     const requestData: GetArticleRequest = {
-      id: parseInt(id || "0"),
+      id: parseInt(id || "0", 10),
     };
 
     axios
@@ -17,10 +17,10 @@ export default function Article() {
           "Content-Type": "application/json; charset=utf-8",
         },
       })
-      .then(response => {
+      .then((response) => {
         setResponse(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   }, [id]);

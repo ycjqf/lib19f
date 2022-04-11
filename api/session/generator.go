@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 	"lib19f/config"
+	"net/http"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -19,4 +21,13 @@ func GenerateSessionId(capacity string, id uint32) string {
 
 func GenerateSessionIdPrefix(capacity string, id uint32) string {
 	return fmt.Sprintf("%v-%v-", capacity, id)
+}
+
+func ClearCookie(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:    "account_session",
+		MaxAge:  -1,
+		Expires: time.Now(),
+		Path:    "/",
+	})
 }

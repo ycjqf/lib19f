@@ -1,8 +1,8 @@
+import en from "_/locales/en.json";
+import zhCN from "_/locales/zh-CN.json";
 import { Resource } from "i18next";
-import en from "src/locales/en.json";
-import zhCN from "src/locales/zh-CN.json";
 
-export const translations: Resource = {
+const translations: Resource = {
   en: {
     translation: en,
   },
@@ -10,3 +10,5 @@ export const translations: Resource = {
     translation: zhCN,
   },
 };
+
+export default translations;

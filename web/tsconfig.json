@@ -17,9 +17,9 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "src/*": ["./src/*"],
-      "dist/*": ["./dist/*"]
-    }
+      "_/*": ["src/*"]
+    },
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "include": ["./**/*.ts", "./**/*.tsx"]
 }

@@ -16,7 +16,7 @@ var ApiDeleteArticle = common.GenPostApi(apiAuthentidateHandler)
 
 func apiDeleteArticle(w http.ResponseWriter, r *http.Request) {
 	response := types.ApiBaseResponse{}
-	sessionData, sessionDataSuccess := common.GetSessinDataOrRespond(w, r)
+	sessionData, sessionDataSuccess := common.GetSessinDataOrRespond(w, r, true)
 	if !sessionDataSuccess {
 		return
 	}

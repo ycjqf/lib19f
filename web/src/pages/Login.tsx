@@ -1,18 +1,18 @@
-import axios, { AxiosError } from "axios";
-import { useState, useEffect } from "react";
-import { Button, TextField, Typography, Alert, Collapse } from "@mui/material";
+import { defaultHeader } from "_/config/request";
 import {
-  NAME_MIN_LENGTH,
   NAME_MAX_LENGTH,
+  NAME_MIN_LENGTH,
   NAME_PATTERN,
-  PASSWORD_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
+  PASSWORD_MIN_LENGTH,
   PASSWORD_PATTERN,
-} from "src/config/validates";
+} from "_/config/validates";
+import { Alert, Button, Collapse,TextField, Typography } from "@mui/material";
+import axios, { AxiosError } from "axios";
+import { useEffect,useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import SwipeableViews from "react-swipeable-views";
-import { useTranslation } from "react-i18next";
-import { defaultHeader } from "src/config/request";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -45,7 +45,7 @@ export default function Login() {
       .post<AccountLoginResponse>("/api/account/login", loginForm, {
         headers: defaultHeader,
       })
-      .then(response => {
+      .then((response) => {
         if (response.data.code === "OK") {
           localStorage.setItem("isLoggedIn", "true");
           const from = searchParams.get("from");
@@ -121,7 +121,7 @@ export default function Login() {
                 variant="outlined"
                 type="text"
                 value={loginForm.name}
-                onChange={event => {
+                onChange={(event) => {
                   loginForm.name = event.target.value;
                   setLoginForm({ ...loginForm });
                 }}
@@ -135,7 +135,7 @@ export default function Login() {
                 variant="outlined"
                 type="password"
                 value={loginForm.password}
-                onChange={event => {
+                onChange={(event) => {
                   loginForm.password = event.target.value;
                   setLoginForm({ ...loginForm });
                 }}
@@ -173,7 +173,7 @@ export default function Login() {
               className="w-fit"
               type="button"
               disabled={!NAME_PATTERN.test(loginForm.name)}
-              onClickCapture={event => {
+              onClickCapture={(event) => {
                 event.preventDefault();
                 const from = searchParams.get("from");
                 if (typeof from === "string") {

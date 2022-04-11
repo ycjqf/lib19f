@@ -41,6 +41,7 @@ type AccountRegisterPayload struct {
 	Name     string
 	Email    string
 	Password string
+	Capacity string
 }
 
 // Account Register Check

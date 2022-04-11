@@ -19,7 +19,7 @@ func apiAccountRegisterCheckEmailHandler(w http.ResponseWriter, r *http.Request)
 	if parseRequestErr != nil {
 		response.Status = "error"
 		response.Message = "json format error"
-		common.JsonRespond(w, http.StatusInternalServerError, &response)
+		common.JsonRespond(w, http.StatusBadRequest, &response)
 		return
 	}
 
