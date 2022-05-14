@@ -5,15 +5,16 @@ import { Link } from "react-router-dom";
 
 interface Props {
   article: Article;
+  review: boolean;
 }
-export default function ArticlePeek({ article }: Props) {
+export default function ArticlePeek({ article, review = false }: Props) {
   return (
     <div>
       {/* top */}
       <div className="mb-6">
         {/* title and actions */}
         <div className="inline-flex items-center justify-between w-full mb-2">
-          <Link to={`/article/${article.id}`}>
+          <Link to={`/${review ? "review" : "article"}/${article.id}`}>
             <span className="text-2xl cursor-pointer text-[#333333] inline-block truncate">
               {article.title}
             </span>

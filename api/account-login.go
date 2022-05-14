@@ -80,7 +80,7 @@ func apiAccountLoginHandler(w http.ResponseWriter, r *http.Request) {
 		Value:    willUseSessionId,
 		Expires:  time.Now().Add(config.LOGIN_EXPIRATION),
 		Path:     "/",
-		Secure:   false,
+		Secure:   true,
 		HttpOnly: true,
 	}
 	sessionData := types.SessionData{

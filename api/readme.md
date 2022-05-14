@@ -171,6 +171,28 @@ Response Code Enums
 | NOT_FOUND      | can not found this article                    | 404    |
 | OK             | success                                       | 200    |
 
+```typescript
+type GetArticleResponse = (
+  | {
+      code:
+        | "BAD_REQUEST" // 400
+        | "INTERNAL_ERROR" // 500
+        | "NOT_FOUND"; // 404
+    }
+  | {
+      code: "OK"; // 200
+      article: Article;
+    }
+) & {
+  message: string;
+  total: number;
+  current: number;
+  pageSize: number;
+};
+```
+
+
+
 ### 🪐 /add 🔒
 
 Request <u>AddArticleRequest</u>
@@ -290,6 +312,43 @@ Response Code Enums
 | INTERNAL_ERROR | internal error,etc cannot connect to database | 500    |
 | OK             | success                                       | 200    |
 
+```typescript
+interface GetArticlesRequest {
+  page: number;
+  pageSize: number;
+  search: string;
+  userId: number;
+  userName: string;
+  since: number;
+  till: number;
+  status: string;
+  sort: string;
+}
+
+interface Article {
+  id: number;
+  title: string;
+  description: string;
+  body: string;
+  poster: string;
+  status: string;
+  createdTime: string;
+  updatedTime: string;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    createdTime: string;
+    updatedTime: string;
+    avatar: string;
+    gender: string;
+    introduction: string;
+  };
+}
+```
+
+
+
 ## /profile
 
 ### 🪐 /get
@@ -340,4 +399,32 @@ Response Code Enums
 | INTERNAL_ERROR | internal error,etc cannot connect to database | 500    |
 | OK             | success                                       | 200    |
 | UNAUTHORIZED   | cookie invalid                                | 401    |
+
+# TODOS
+
+## /about ✅
+
+## /home ✅
+
+
+
+## /article/:id ✅
+
++ /api/article/get
+
+## /articles ✅
+
++ /api/articles/get
+
+## /login ✅
+
+## /register ✅
+
+## /review/dashboard
+
+## /admin/dashboard
+
+## /upload
+
+## /update
 

@@ -1,12 +1,14 @@
 import { hideHeaderFooterPaths } from "_/config/ui";
+import { ProfileContext } from "_/contexts";
 import { Listbox } from "@headlessui/react";
 import { ExternalLinkIcon, TranslateIcon } from "@heroicons/react/outline";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 
 export default function Footer() {
   const location = useLocation();
+  const profile = useContext(ProfileContext);
   const { t, i18n } = useTranslation();
   const languageOptions = [
     { id: "en", name: "English" },
@@ -27,20 +29,33 @@ export default function Footer() {
       title: t("NavSectionEntries"),
       child: [
         { title: t("NavHome"), link: "/", outside: false },
-        { title: t("NavArticles"), link: "/articles", outside: false },
         { title: t("NavAbout"), link: "/about", outside: false },
-        { title: t("NavSearch"), link: "/search", outside: false },
-        { title: t("NavUpload"), link: "/upload", outside: false },
-        { title: t("NavRegister"), link: "/register", outside: false },
-        { title: t("NavLogin"), link: "/login", outside: false },
-      ],
+        { title: t("NavArticles"), link: "/articles", outside: false },
+      ]
+        .concat(
+          profile.capacity === "reviewer"
+            ? [{ title: t("NavReviews"), link: "/reviews", outside: false }]
+            : []
+        )
+        .concat(
+          profile.capacity === "user"
+            ? [{ title: t("NavUpload"), link: "/upload", outside: false }]
+            : []
+        )
+        .concat(
+          !profile.account
+            ? [
+                { title: t("NavLogin"), link: "/login", outside: false },
+                { title: t("NavRegister"), link: "/register", outside: false },
+              ]
+            : []
+        ),
     },
     {
       key: "externals",
       title: t("NavSectionAbout"),
       child: [
         { title: t("NavRepository"), link: "https://github.com/ycjqf/lib19f", outside: true },
-        { title: "ycjqf", link: "https://github.com/ycjqf", outside: true },
       ],
     },
   ];
@@ -54,14 +69,14 @@ export default function Footer() {
         <div className="flex gap-x-60 flex-wrap gap-y-12 mb-24">
           {staticSections.map((section) => (
             <div key={section.key}>
-              <div className="text-[#999999] mb-6 text-base">{section.title}</div>
+              <div className="text-[#999999] mb-6 text-sm">{section.title}</div>
               <div className="flex flex-col gap-y-3">
                 {section.child.map((child) =>
                   child.outside ? (
                     <a
                       key={child.link}
-                      className="text-white text-base cursor-pointer hover:text-[#61dafb]
-                    inline-flex items-center gap-x-2"
+                      className="text-white cursor-pointer hover:text-[#61dafb]
+                    inline-flex items-center gap-x-2 text-xs"
                       href={child.link}
                       target="_blank"
                       rel="noreferrer"
@@ -72,7 +87,7 @@ export default function Footer() {
                   ) : (
                     <Link
                       key={child.link}
-                      className="text-white text-base cursor-pointer hover:text-[#61dafb]
+                      className="text-white text-xs cursor-pointer hover:text-[#61dafb]
                       flex items-center"
                       to={child.link}
                     >
@@ -83,21 +98,21 @@ export default function Footer() {
               </div>
             </div>
           ))}
-          <div className="">
+          <div className="px-2">
             <Listbox value={language} onChange={setLanguage}>
-              <Listbox.Button className="text-[#999999] mb-6 text-base inline-flex gap-x-2 items-center">
+              <Listbox.Button className="text-[#999999] mb-2 text-xs inline-flex gap-x-2 items-center">
                 <TranslateIcon className="h-4 w-4 text-gray-500" />
                 {language.name}
               </Listbox.Button>
-              <Listbox.Options className="text-white text-base flex flex-col gap-y-2">
+              <Listbox.Options className="text-white text-xs flex flex-col gap-y-2 bg-gray-600 rounded-sm p-2">
                 {languageOptions.map((languageItem) => (
                   <Listbox.Option
-                    className="text-white text-base cursor-pointer hover:text-[#61dafb]
-                    flex items-center"
+                    className="text-white justify-end text-xs cursor-pointer hover:text-[#61dafb]
+                    inline-flex items-center"
                     key={languageItem.id}
                     value={languageItem}
                   >
-                    {languageItem.name}
+                    <span className="text-xs">{languageItem.name}</span>
                   </Listbox.Option>
                 ))}
               </Listbox.Options>
@@ -112,7 +127,7 @@ export default function Footer() {
             href="https://github.com/ycjqf"
             rel="noreferrer"
           >
-            ycjqf
+            AJ.
           </a>
         </div>
       </div>

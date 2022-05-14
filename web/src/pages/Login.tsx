@@ -7,12 +7,22 @@ import {
   PASSWORD_MIN_LENGTH,
   PASSWORD_PATTERN,
 } from "_/config/validates";
-import { Alert, Button, Collapse,TextField, Typography } from "@mui/material";
-import axios, { AxiosError } from "axios";
-import { useEffect,useState } from "react";
+import {
+  Alert,
+  Button,
+  Collapse,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import SwipeableViews from "react-swipeable-views";
 
 export default function Login() {
   const { t } = useTranslation();
@@ -32,7 +42,6 @@ export default function Login() {
 
   const onFail = () => {
     loginForm.password = "";
-
     const from = searchParams.get("from");
     if (typeof from === "string") {
       return setSearchParams({ from });
@@ -47,18 +56,18 @@ export default function Login() {
       })
       .then((response) => {
         if (response.data.code === "OK") {
-          localStorage.setItem("isLoggedIn", "true");
-          const from = searchParams.get("from");
-          navigate(from || "/");
-          window.location.reload();
+          setTimeout(() => {
+            const from = searchParams.get("from");
+            navigate(from || "/");
+            localStorage.setItem("isLoggedIn", "true");
+            window.location.reload();
+          }, 1000);
           return;
         }
         setResult(response.data);
         onFail();
       })
-      .catch((error: AxiosError<AccountRegisterReqsponse>) => {
-        onFail();
-      });
+      .catch(onFail);
   };
 
   useEffect(() => {
@@ -106,11 +115,7 @@ export default function Login() {
             <Typography variant="body1">登陆到{t("global.title")}</Typography>
           </div>
           <div className="flex flex-col gap-y-8 mb-4">
-            <SwipeableViews
-              index={inputingPassword ? 1 : 0}
-              style={{ overflowX: "clip" }}
-              slideStyle={{ overflow: "unset" }}
-            >
+            {!inputingPassword && (
               <TextField
                 autoFocus
                 error={loginForm.name !== "" && !NAME_PATTERN.test(loginForm.name)}
@@ -126,6 +131,8 @@ export default function Login() {
                   setLoginForm({ ...loginForm });
                 }}
               />
+            )}
+            {inputingPassword && (
               <TextField
                 error={loginForm.password !== "" && !PASSWORD_PATTERN.test(loginForm.password)}
                 helperText={`${PASSWORD_MIN_LENGTH}-${PASSWORD_MAX_LENGTH}位，仅含字母数字和下划线`}
@@ -140,7 +147,7 @@ export default function Login() {
                   setLoginForm({ ...loginForm });
                 }}
               />
-            </SwipeableViews>
+            )}
           </div>
           <div className="flex">
             <Link to="/forget">
@@ -187,77 +194,26 @@ export default function Login() {
           )}
         </div>
       </div>
+      <div className="fixed bottom-1 left-2 z-10">
+        <FormControl>
+          <InputLabel>{t("Capacities")}</InputLabel>
+          <Select
+            value={loginForm.capacity}
+            label={t("Capacities")}
+            size="small"
+            variant="outlined"
+            onChange={(event: SelectChangeEvent) => {
+              // @ts-ignore
+              loginForm.capacity = event.target.value;
+              setLoginForm({ ...loginForm });
+            }}
+          >
+            <MenuItem value="user">{t("Capacity.User")}</MenuItem>
+            <MenuItem value="reviewer">{t("Capacity.Reviewer")}</MenuItem>
+            <MenuItem value="admin">{t("Capacity.Admin")}</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
     </div>
   );
 }
-
-// export default function Login() {
-//   const [loginForm, setLoginForm] = useState<AccountLoginRequest>({
-//     name: "zhangyoucai",
-//     email: "",
-//     password: "zhangyoucai",
-//     capacity: "user",
-//     relog: true,
-//   });
-
-//   const login = () => {
-//     axios
-//       .post<AccountLoginResponse>("/api/account/login", loginForm, {
-//         headers: defaultHeader,
-//       })
-//       .then(response => {
-//         if (response.data.code === "OK") {
-//           localStorage.setItem("isLoggedIn", "true");
-//         }
-//       })
-//       .catch((error: AxiosError<AccountRegisterReqsponse>) => {
-//         console.log("error");
-//         if (error.response?.status === 400) {
-//           // wrong format request
-//           // usually validations need to be done in front end
-//           alert(error.response.data.message);
-//           return;
-//         }
-//         console.log(error);
-//       });
-//   };
-
-//   return (
-//     <div>
-//       <input
-//         type="text"
-//         value={loginForm.name}
-//         placeholder="name"
-//         onChange={event =>
-//           setLoginForm(prev => ({
-//             ...prev,
-//             name: event.target.value,
-//           }))
-//         }
-//       />
-//       <input
-//         type="email"
-//         value={loginForm.email}
-//         placeholder="email"
-//         onChange={event =>
-//           setLoginForm(prev => ({
-//             ...prev,
-//             email: event.target.value,
-//           }))
-//         }
-//       />
-//       <input
-//         type="password"
-//         placeholder="password"
-//         value={loginForm.password}
-//         onChange={event =>
-//           setLoginForm(prev => ({
-//             ...prev,
-//             password: event.target.value,
-//           }))
-//         }
-//       />
-//       <button onClick={login}>login</button>
-//     </div>
-//   );
-// }

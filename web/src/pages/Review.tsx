@@ -3,14 +3,44 @@ import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import ReactHtmlParser from "react-html-parser";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function Article() {
+export default function Review() {
   const { id } = useParams();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [finalResponse, setFinalResponse] = useState<GetArticleResponse>();
   const [pageStatus, setPageStatus] = useState<PageStatus>("loading");
   const [pageMessage, setPageMessage] = useState<string>(t("errorMessage.Loading"));
+  const [updating, setUpdating] = useState(false);
+
+  function setStatus(status: string) {
+    if (updating || !id) return;
+    setUpdating(true);
+    axios
+      .post(
+        "/api/review/set",
+        { id: parseInt(id, 10), status },
+        {
+          headers: defaultHeader,
+          validateStatus: () => true,
+        }
+      )
+      .then((response) => {
+        if (response.data.code === "BAD_REQUEST") throw new Error(t("errorMessage.BadRequest"));
+        if (response.data.code === "INTERNAL_ERROR")
+          throw new Error(t("errorMessage.InternalServerError"));
+        if (response.data.code === "NOT_FOUND") throw new Error(t("errorMessage.NotFound"));
+        if (response.data.code !== "OK") throw new Error(t("errorMessage.UnknownError"));
+        navigate("/reviews");
+      })
+      .catch((error) => {
+        document.title =
+          error instanceof Error ? error.message : t("errorMessage.UnknownError");
+        setPageStatus("error");
+        setPageMessage(error instanceof Error ? error.message : t("errorMessage.UnknownError"));
+      });
+  }
 
   useEffect(() => {
     document.title = t("errorMessage.Loading");
@@ -25,7 +55,7 @@ export default function Article() {
 
     axios
       .post<GetArticleResponse, AxiosResponse<GetArticleResponse>, GetArticleRequest>(
-        "/api/article/get",
+        "/api/review/get",
         { id: idInQuery },
         {
           headers: defaultHeader,
@@ -68,9 +98,26 @@ export default function Article() {
 
       {pageStatus === "ready" && finalResponse && finalResponse.code === "OK" && (
         <div className="container mx-auto">
+          <div>
+            测试状态
+            <button
+              type="button"
+              className="bg-green-400 text-white"
+              onClick={() => setStatus("published")}
+            >
+              通过
+            </button>
+            <button
+              type="button"
+              className="bg-red-400 text-white"
+              onClick={() => setStatus("rejected")}
+            >
+              未通过
+            </button>
+          </div>
           <h3>{finalResponse.article.title}</h3>
           <p>{finalResponse.article.description}</p>
-          <p>{ReactHtmlParser(finalResponse.article.body)}</p>{" "}
+          <p>{ReactHtmlParser(finalResponse.article.body)}</p>
         </div>
       )}
     </div>

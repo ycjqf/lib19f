@@ -36,6 +36,12 @@ func GenPostApi(handler http.HandlerFunc) *chi.Mux {
 	return r
 }
 
+func GenGetApi(handler http.HandlerFunc) *chi.Mux {
+	r := chi.NewRouter()
+	r.Get("/", handler)
+	return r
+}
+
 func JsonRespond(w http.ResponseWriter, status int, data interface{}) {
 	rtr := render.JSON{
 		Head: render.Head{
@@ -100,7 +106,10 @@ func GetSessinDataOrRespond(w http.ResponseWriter, r *http.Request, tryRefresh b
 			return nil, false
 		}
 
-		gotSessioCookie.Expires = time.Now().Add(time.Duration(config.LOGIN_EXPIRATION))
+		gotSessioCookie.Expires = time.Now().Add(config.LOGIN_EXPIRATION)
+		gotSessioCookie.Path = "/"
+		gotSessioCookie.Secure = true
+		gotSessioCookie.HttpOnly = true
 		http.SetCookie(w, gotSessioCookie)
 	}
 

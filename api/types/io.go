@@ -31,6 +31,7 @@ type AccountLoginResponse struct {
 // Account Register
 
 type AccountRegisterRequest struct {
+	Capacity       string
 	Name           string `json:"name"`
 	Email          string `json:"email"`
 	Password       string `json:"password"`
@@ -125,5 +126,10 @@ type GetUserResponseWithUser struct {
 type UpdateArticleRequest struct {
 	Id      uint32            `json:"id"`
 	Article AddArticleRequest `json:"article"`
+}
+
+type UpdateReviewRequest struct {
+	Id     uint32 `json:"id"`
+	Status string `json:"status"`
 }
 type UpdateArticlePayload = UpdateArticleRequest

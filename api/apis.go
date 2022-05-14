@@ -29,6 +29,10 @@ func Apis() *chi.Mux {
 
 	r.Mount("/articles/get", ApiGetArticles)
 
+	r.Mount("/reviews/get", ApiGetReviews)
+	r.Mount("/review/get", ApiGetReview)
+	r.Mount("/review/set", ApiUpdateReview)
+
 	r.Mount("/profile/get", ApiGetUser)
 	r.Mount("/profile/auth", ApiAuthenticate)
 

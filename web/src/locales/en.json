@@ -7,11 +7,35 @@
   "NavUpload": "Upload",
   "NavRegister": "Register",
   "NavLogin": "Login",
-
   "NavSectionAbout": "About",
   "NavRepository": "Repository",
   "global": {
     "title": "Lib19F",
-    "introduction": "md online library"
-  }
+    "introduction": "Online library",
+    "brief": "This project implements a data sharing system used within the campus, and provides a background review interface, which can realize the function of uploading articles after uploading, and can only go online after being reviewed. It also has user account status management and other empty management functions. \nThe functions of members and administrators are fully layered."
+  },
+  "Upload": {
+    "InitialText": "Type something...",
+    "Key": {
+      "Description": "description",
+      "Content": "Content",
+      "Title": "title"
+    }
+  },
+  "errorMessage": {
+    "BadRequest": "params error",
+    "OK": "request success",
+    "InternalServerError": "internal server error",
+    "NotFound": "page you request is not found",
+    "UnknownError": "unknown error",
+    "Loading": "loading..."
+  },
+  "Capacity": {
+    "Reviewer": "Reviewer",
+    "User": "User",
+    "Admin": "Admin"
+  },
+  "Capacities": "Capacity",
+  "NavReviews": "Review",
+  "NavDashboard": "Dashboard"
 }

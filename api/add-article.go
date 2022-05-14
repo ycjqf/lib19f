@@ -36,7 +36,7 @@ func apiAddArticleHandler(w http.ResponseWriter, r *http.Request) {
 	if payloadErr != nil {
 		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
-		common.JsonRespond(w, http.StatusUnauthorized, &response)
+		common.JsonRespond(w, http.StatusBadRequest, &response)
 		return
 	}
 

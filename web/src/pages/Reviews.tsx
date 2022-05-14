@@ -2,12 +2,12 @@ import ArticlePeek from "_/components/ArticlePeek";
 import { defaultHeader } from "_/config/request";
 import { POSITIVE_INTEGER_REGEX } from "_/config/validates";
 import { Pagination } from "@mui/material";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 
-export default function Articles() {
+export default function Reviews() {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
   const [finalResponse, setFinalResponse] = useState<GetArticlesResponse>();
@@ -39,7 +39,7 @@ export default function Articles() {
     };
 
     axios
-      .post<GetArticlesResponse>("/api/articles/get", requestData, { headers: defaultHeader })
+      .post<GetArticlesResponse>("/api/reviews/get", requestData, { headers: defaultHeader })
       .then((response) => {
         if (response.data.code !== "OK") throw new Error(t("errorMessage.BadRequest"));
         setFinalResponse(response.data);
@@ -47,9 +47,9 @@ export default function Articles() {
         setPageMessage("all data has been loaded");
         window.scrollTo({ top: 0, behavior: "smooth" });
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         setPageStatus("error");
-        setPageMessage(error instanceof Error ? error.message : t("errorMessage.UnknownError"));
+        setPageMessage(error.response?.data.message || t("errorMessage.UnknownError"));
       });
   }, [searchParams]);
 
@@ -82,7 +82,7 @@ export default function Articles() {
         {pageStatus === "ready" && finalResponse && (
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-6 gap-y-12">
             {finalResponse.articles.map((article) => (
-              <ArticlePeek article={article} key={article.id} review={false} />
+              <ArticlePeek article={article} key={article.id} review />
             ))}
           </div>
         )}

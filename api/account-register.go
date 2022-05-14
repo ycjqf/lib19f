@@ -28,7 +28,7 @@ func apiAccountRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// whether the account exists
-	nameExistence, nameExistenceErr := model.IsKVExist("user", "name", payload.Name)
+	nameExistence, nameExistenceErr := model.IsKVExist(payload.Capacity, "name", payload.Name)
 
 	if nameExistenceErr != nil {
 		response.Code = types.ResCodeErr
@@ -42,7 +42,7 @@ func apiAccountRegisterHandler(w http.ResponseWriter, r *http.Request) {
 		common.JsonRespond(w, http.StatusOK, &response)
 		return
 	}
-	emailExistence, emailExistenceErr := model.IsKVExist("user", "email", payload.Email)
+	emailExistence, emailExistenceErr := model.IsKVExist(payload.Capacity, "email", payload.Email)
 
 	if emailExistenceErr != nil {
 		response.Code = types.ResCodeErr
@@ -91,7 +91,7 @@ func savePayload(payload *types.AccountRegisterPayload) error {
 		Introduction: "",
 		VersionKey:   0,
 	}
-	insertRes, insertErr := mdb.Collection("users").
+	insertRes, insertErr := mdb.Collection(fmt.Sprintf("%vs", payload.Capacity)).
 		InsertOne(context.Background(), &user)
 	if insertErr != nil {
 		return insertErr

@@ -4,17 +4,22 @@ import Footer from "_/components/Footer";
 import Header from "_/components/Header";
 import { defaultHeader } from "_/config/request";
 import { ProfileContext, ProfileContextType } from "_/contexts";
+import About from "_/pages/About";
 import Article from "_/pages/Article";
 import Articles from "_/pages/Articles";
+import Dashboard from "_/pages/Dashboard";
 import Home from "_/pages/Home";
 import Login from "_/pages/Login";
+import NotFount from "_/pages/NotFound";
 import Register from "_/pages/Register";
+import Review from "_/pages/Review";
+import Reviews from "_/pages/Reviews";
 import Upload from "_/pages/Upload";
 import translations from "_/translations";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import { useEffect, useState } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { initReactI18next } from "react-i18next";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -37,9 +42,12 @@ function App() {
   });
 
   useEffect(() => {
-    if (localStorage.getItem("isLoggedIn") !== "true") return;
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+      setProfile({ loading: false });
+      return;
+    }
     axios
-      .post<AuthenticateResponse>("/api/authenticate", {}, { headers: defaultHeader })
+      .post<AuthenticateResponse>("/api/profile/auth", {}, { headers: defaultHeader })
       .then((res) => {
         if (res.data.code === "OK") {
           setProfile({
@@ -48,33 +56,39 @@ function App() {
             loading: false,
           });
         } else {
-          localStorage.removeItem("isLoggedIn");
           setProfile({ loading: false });
         }
       })
-      .catch(() => {
-        localStorage.removeItem("isLoggedIn");
+      .catch((error: AxiosError) => {
+        if (error.response?.status === 401) {
+          localStorage.removeItem("isLoggedIn");
+        }
         setProfile({ loading: false });
       });
   }, []);
 
   return (
-    // <React.StrictMode>
-    <ProfileContext.Provider value={profile}>
-      <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/articles" element={<Articles />} />
-          <Route path="/article/:id" element={<Article />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
-    </ProfileContext.Provider>
-    // </React.StrictMode>
+    <StrictMode>
+      <ProfileContext.Provider value={profile}>
+        <BrowserRouter>
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/articles" element={<Articles />} />
+            <Route path="/reviews" element={<Reviews />} />
+            <Route path="/article/:id" element={<Article />} />
+            <Route path="/review/:id" element={<Review />} />
+            <Route path="/*" element={<NotFount />} />
+          </Routes>
+          <Footer />
+        </BrowserRouter>
+      </ProfileContext.Provider>
+    </StrictMode>
   );
 }
 

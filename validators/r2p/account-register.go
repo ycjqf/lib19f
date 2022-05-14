@@ -6,6 +6,7 @@ import (
 	"io"
 	"lib19f/api/types"
 	"lib19f/config"
+	"lib19f/utils"
 	"lib19f/validators"
 )
 
@@ -17,6 +18,12 @@ func AccountRegister(body io.ReadCloser) (*types.AccountRegisterPayload, error) 
 	if parseRequestErr != nil {
 		return &payload, errors.New("invalid form")
 	}
+
+	if !utils.Contains(config.VALID_CAPACITIES, request.Capacity) {
+		return &payload, errors.New("capacity invalid")
+	}
+	payload.Capacity = request.Capacity
+
 	nameMatch := config.NAME_PATTERN.Match([]byte(request.Name))
 	if nameMatch == false {
 		return &payload, errors.New("invalid name")

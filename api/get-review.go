@@ -12,16 +12,28 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-var ApiGetArticle = common.GenPostApi(apiGetArticleHandler)
+var ApiGetReview = common.GenPostApi(apiGetReviewHandler)
 
-func apiGetArticleHandler(w http.ResponseWriter, r *http.Request) {
-	status := "published"
+func apiGetReviewHandler(w http.ResponseWriter, r *http.Request) {
+	status := "pending"
 	response := types.ApiBaseResponse{}
 	payload, payloadErr := r2p.IdCommon(r.Body)
 	if payloadErr != nil {
 		response.Code = types.ResCodeBadRequest
 		response.Message = payloadErr.Error()
 		common.JsonRespond(w, http.StatusBadRequest, &response)
+		return
+	}
+
+	sessionData, sessionDataSuccess := common.GetSessinDataOrRespond(w, r, true)
+	if !sessionDataSuccess {
+		return
+	}
+
+	if sessionData.Capacity != "reviewer" {
+		response.Code = types.ResCodeUnauthorized
+		response.Message = "can only reviewer review article"
+		common.JsonRespond(w, http.StatusUnauthorized, &response)
 		return
 	}
 

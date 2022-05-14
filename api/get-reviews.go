@@ -13,9 +13,9 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-var ApiGetArticles = common.GenPostApi(ApiGetArticlesHandler)
+var ApiGetReviews = common.GenPostApi(ApiGetReviewssHandler)
 
-func ApiGetArticlesHandler(w http.ResponseWriter, r *http.Request) {
+func ApiGetReviewssHandler(w http.ResponseWriter, r *http.Request) {
 	response := types.GetArticelsResponse{Articles: []model.ClientArticle{}}
 	payload, payloadErr := r2p.GetArticles(r.Body)
 	if payloadErr != nil {
@@ -27,10 +27,22 @@ func ApiGetArticlesHandler(w http.ResponseWriter, r *http.Request) {
 	response.Current = payload.Page
 	response.PageSize = payload.PageSize
 
+	sessionData, sessionDataSuccess := common.GetSessinDataOrRespond(w, r, true)
+	if !sessionDataSuccess {
+		return
+	}
+
+	if sessionData.Capacity != "reviewer" {
+		response.Code = types.ResCodeUnauthorized
+		response.Message = "can only reviewer review article"
+		common.JsonRespond(w, http.StatusUnauthorized, &response)
+		return
+	}
+
 	pipeline := mongo.Pipeline{
 		bson.D{
 			{Key: "$match", Value: bson.M{
-				"status": "published",
+				"status": "pending",
 			}},
 		},
 		bson.D{
@@ -73,7 +85,7 @@ func ApiGetArticlesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	articlesTotal, articlesTotalErr := global.MongoDatabase.Collection("articles").
 		CountDocuments(context.Background(), bson.M{
-			"status": "published",
+			"status": "pending",
 		})
 	if articlesTotalErr != nil {
 		response.Code = types.ResCodeErr

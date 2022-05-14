@@ -2,16 +2,40 @@
   "NavSectionEntries": "入口",
   "NavSearch": "搜索",
   "NavArticles": "文章",
+  "NavReviews": "审查",
   "NavHome": "主页",
   "NavAbout": "关于",
   "NavUpload": "上传",
   "NavRegister": "注册",
   "NavLogin": "登录",
-
   "NavSectionAbout": "关于",
   "NavRepository": "仓库",
   "global": {
     "title": "库19F",
-    "introduction": "在线共享资料库"
-  }
+    "introduction": "在线共享资料库",
+    "brief": "本项目实现了一个校园内部使用的的资料共享系统，并提供了后台的审查接口，能实现文章上传后的上传后需经过审核方可上线的功能，具备用户账户状态管理等管空功能，审查员、管理员功能分层完备。"
+  },
+  "errorMessage": {
+    "BadRequest": "请求参数有误",
+    "OK": "请求成功",
+    "UnknownError": "未知错误",
+    "Loading": "加载中",
+    "InternalServerError": "服务器出错",
+    "NotFound": "找不到请求的页面"
+  },
+  "Upload": {
+    "InitialText": "写点什么...",
+    "Key": {
+      "Title": "标题",
+      "Description": "文章简介",
+      "Content": "内容"
+    }
+  },
+  "Capacity": {
+    "User": "普通用户",
+    "Reviewer": "审查员",
+    "Admin": "管理员"
+  },
+  "Capacities": "身份",
+  "NavDashboard": "控制板"
 }

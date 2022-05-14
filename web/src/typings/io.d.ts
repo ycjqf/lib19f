@@ -66,12 +66,23 @@ interface GetArticleRequest {
   id: number;
 }
 
-interface GetArticleResponse extends BaseResponse {
-  articles?: Article[];
+type GetArticleResponse = (
+  | {
+      code:
+        | "BAD_REQUEST" // 400
+        | "INTERNAL_ERROR" // 500
+        | "NOT_FOUND"; // 404
+    }
+  | {
+      code: "OK"; // 200
+      article: Article;
+    }
+) & {
+  message: string;
   total: number;
   current: number;
   pageSize: number;
-}
+};
 
 // /api/delete/article
 
