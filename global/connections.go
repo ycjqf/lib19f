@@ -3,7 +3,7 @@ package global
 import (
 	"context"
 	"lib19f/config"
-	"time"
+	"os"
 
 	"github.com/go-redis/redis/v8"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,35 +17,35 @@ var MongoClient *mongo.Client = nil
 var MongoDatabase *mongo.Database = nil
 
 func InitConnections() {
-	clientOpt := options.ClientOptions{}
-	clientOpt.SetServerSelectionTimeout(time.Millisecond * 10).ApplyURI(config.MONGO_DB_URL)
-	mongoClient, connectMongoErr := mongo.Connect(context.Background(), &clientOpt)
-	if connectMongoErr != nil {
-		ConnectionsMessage = "unable to initialize mongo connection"
+	// connect redis
+	redisClient := redis.NewClient(&redis.Options{})
+	_, redisPongErr := redisClient.Ping(context.Background()).Result()
+	if redisPongErr != nil {
+		ConnectionsMessage = "unable to connect to redis"
 		return
 	}
+	RedisClient = redisClient
 
+	// connect mongo
+	mongoClientOpt := options.ClientOptions{
+		Auth: &options.Credential{
+			Username: os.Getenv("MONGO_INITDB_ROOT_USERNAME"),
+			Password: os.Getenv("MONGO_INITDB_ROOT_PASSWORD"),
+		},
+	}
+	mongoClientOpt.SetServerSelectionTimeout(config.SELECTION_TIMEOUT)
+	mongoClient, connectMongoErr := mongo.Connect(context.Background(), &mongoClientOpt)
+	if connectMongoErr != nil {
+		ConnectionsMessage = "unable to init mongo connection"
+		return
+	}
 	mongoPongErr := mongoClient.Ping(context.Background(), nil)
 	if mongoPongErr != nil {
 		ConnectionsMessage = "unable to connect to mongo"
 		return
 	}
 	MongoClient = mongoClient
-	MongoDatabase = MongoClient.Database(config.DEFAULT_DATABASE)
+	MongoDatabase = MongoClient.Database(os.Getenv("DEFAULT_DB_NAME"))
 
-	redisClient := redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-	})
-
-	_, pongErr := redisClient.Ping(context.Background()).Result()
-	if pongErr != nil {
-		mongoClient.Disconnect(context.Background())
-		ConnectionsMessage = "unable to connect to redis"
-		return
-	}
-
-	RedisClient = redisClient
 	AllConnectionsValid = true
 }

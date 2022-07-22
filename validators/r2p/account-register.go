@@ -6,7 +6,6 @@ import (
 	"io"
 	"lib19f/api/types"
 	"lib19f/config"
-	"lib19f/utils"
 	"lib19f/validators"
 )
 
@@ -19,13 +18,15 @@ func AccountRegister(body io.ReadCloser) (*types.AccountRegisterPayload, error) 
 		return &payload, errors.New("invalid form")
 	}
 
-	if !utils.Contains(config.VALID_CAPACITIES, request.Capacity) {
-		return &payload, errors.New("capacity invalid")
-	}
-	payload.Capacity = request.Capacity
+	// if !utils.Contains(config.VALID_CAPACITIES, request.Capacity) {
+	// 	return &payload, errors.New("capacity invalid")
+	// }
+	// payload.Capacity = request.Capacity
+
+	payload.Capacity = "user"
 
 	nameMatch := config.NAME_PATTERN.Match([]byte(request.Name))
-	if nameMatch == false {
+	if !nameMatch {
 		return &payload, errors.New("invalid name")
 	}
 	payload.Name = request.Name
@@ -36,7 +37,7 @@ func AccountRegister(body io.ReadCloser) (*types.AccountRegisterPayload, error) 
 	payload.Email = request.Email
 
 	passwordMatch := config.PASSWORD_PATTERN.Match([]byte(request.Password))
-	if passwordMatch == false {
+	if !passwordMatch {
 		return &payload, errors.New("invalid password")
 	}
 	if request.Password != request.PasswordRepeat {

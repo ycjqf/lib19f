@@ -1,8 +1,7 @@
 package config
 
 import (
-	_ "embed"
+	"os"
 )
 
-//go:embed SESSION_SECRET.txt
-var SESSION_SECRET string
+var SESSION_SECRET string = os.Getenv("SESSION_SECRET")

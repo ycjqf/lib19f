@@ -1,25 +1,14 @@
-## start project
-
-mongo
+## Set up for dev environment
 
 ```shell
-/Applications/mongodb/bin/mongod -dbpath ~/mongo
-```
+# start databases with docker
+docker-compose -f ./db-docker-compose.yaml up -d
+# apis
+# run `go install github.com/cosmtrek/air@latest` if air not installed
+air
+# ui
+cd ./web && tyarn dev
 
-redis
-
-```shell
-brew services restart redis
-```
-
-back-end
-
-```shell
-cd ~/Developer/lib19f && air
-```
-
-front-end
-
-```shell
-cd ~/Developer/lib19f/web && tyarn dev
+# shut down databases
+docker-compose -f ./db-docker-compose.yaml down
 ```

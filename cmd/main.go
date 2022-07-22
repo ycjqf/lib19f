@@ -12,14 +12,24 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// load enviroment variables
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("error loading .env file")
+	}
+
+	// init all database connections
 	global.InitConnections()
-	if global.AllConnectionsValid == false {
+	if !global.AllConnectionsValid {
 		panic(global.ConnectionsMessage)
 	}
 	fmt.Println("all connections initialized succesfully")
+
+	// start api server
 	const port = 1938
 	addr := fmt.Sprintf(":%d", port)
 	fmt.Printf("starting serer in port %v\n", port)
